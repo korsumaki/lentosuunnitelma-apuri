@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<gpx
+ version="1.1"
+ creator="PDI Manager 1.149.0.610 - https://ais.fi"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns="http://www.topografix.com/GPX/1/1"
+ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+
+<metadata>
+ <name>Aeronautical data</name>
+ <desc>Aeronautical data from Finland</desc>
+ <author>
+  <name>Finavia</name>
+  <email id="ais" domain="finavia.fi"/>
+  <link href="https://ais.fi">
+   <text>AIS FINLAND, Finavia</text>
+  </link>
+ </author>
+ <time>2011-11-17T00:00:00Z</time>
+ <bounds minlat="59.0000000" minlon="19.0800000" maxlat="70.1000000" maxlon="31.5900000"/>
+</metadata>
+
+<wpt lat="63.0755556" lon="22.4694444">
+  <name>AITTA</name>
+  <desc>On request</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.9652778" lon="24.7258333">
+  <name>APILA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="68.6191667" lon="26.7716667">
+  <name>APPIS</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="60.2663889" lon="25.2091667">
+  <name>DEGER</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="63.6447222" lon="23.3711111">
+  <name>EMETT</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="60.2591667" lon="25.1255556">
+  <name>FAZER</name>
+  <desc>On request</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="63.3275000" lon="23.4444444">
+  <name>HAAPA</name>
+  <desc>On request</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="63.1455556" lon="27.9361111">
+  <name>HAARA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="60.2086111" lon="24.9000000">
+  <name>HAGIS</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="60.2786111" lon="25.0916667">
+  <name>HAKKI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="60.6322222" lon="22.5652778">
+  <name>HALLA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="60.2155556" lon="19.7352778">
+  <name>HAMMA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="60.9702778" lon="26.6600000">
+  <name>HARJU</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.5541667" lon="25.6819444">
+  <name>HIETA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.8213889" lon="27.3102778">
+  <name>HIIRO</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.7711111" lon="24.4988889">
+  <name>HIRSI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.9758333" lon="24.9569444">
+  <name>HOPSU</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="67.6225000" lon="25.1686111">
+  <name>HORMA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.2972222" lon="21.9408333">
+  <name>HORMI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.1180556" lon="27.9400000">
+  <name>HUTTU</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.5527778" lon="22.7438889">
+  <name>JALAS</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="67.4944444" lon="24.7147222">
+  <name>JAUHO</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="67.6886111" lon="24.6063889">
+  <name>JOLHI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.8525000" lon="27.7263889">
+  <name>KALLA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="64.5713889" lon="28.2930556">
+  <name>KARPI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="68.9150000" lon="27.7447222">
+  <name>KASAR</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="63.2255556" lon="23.2436111">
+  <name>KASKI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="68.5441667" lon="27.9358333">
+  <name>KATTA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.7825000" lon="29.5755556">
+  <name>KATTI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.9825000" lon="27.5583333">
+  <name>KEHVO</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="69.4161111" lon="25.8202778">
+  <name>KESAG</name>
+  <desc>On request</desc>
+  <type>Border crossing point</type>
+</wpt>
+<wpt lat="67.5836111" lon="23.5438889">
+  <name>KESUN</name>
+  <desc>On request</desc>
+  <type>Border crossing point</type>
+</wpt>
+<wpt lat="65.8508083" lon="29.2375028">
+  <name>KOIVI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="60.4511111" lon="25.0186111">
+  <name>KOLIS</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="63.6388889" lon="22.9166667">
+  <name>KOLPI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="67.3322222" lon="23.7666667">
+  <name>KOLUP</name>
+  <desc>On request</desc>
+  <type>Border crossing point</type>
+</wpt>
+<wpt lat="61.6872222" lon="28.9627778">
+  <name>KONGO</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="68.4422222" lon="22.4969444">
+  <name>KUGIT</name>
+  <desc>On request</desc>
+  <type>Border crossing point</type>
+</wpt>
+<wpt lat="61.3736111" lon="23.7969444">
+  <name>KULJU</name>
+  <desc>On request</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.4661111" lon="22.1780556">
+  <name>KULLA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="65.9682417" lon="28.8954778">
+  <name>KURKI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.5063889" lon="26.1750000">
+  <name>KYNSI</name>
+  <desc>On request</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.6850000" lon="25.7369444">
+  <name>LAAJA</name>
+  <desc>On request</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="63.7775000" lon="23.3683333">
+  <name>LAHNA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.9644444" lon="22.0683333">
+  <name>LAIHA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.7486111" lon="24.8463889">
+  <name>LANKI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="60.0661111" lon="20.0927778">
+  <name>LEMLA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.3122222" lon="23.7094444">
+  <name>LEMPO</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="68.5569444" lon="23.3225000">
+  <name>LEPPI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="60.3238889" lon="25.2086111">
+  <name>LILJA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="64.8008333" lon="25.4163889">
+  <name>LIMIS</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="60.3797222" lon="24.6844444">
+  <name>LINTU</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.5700000" lon="29.4727778">
+  <name>LIPRI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="66.3177778" lon="23.6547222">
+  <name>LIRVO</name>
+  <desc>On request</desc>
+  <type>Border crossing point</type>
+</wpt>
+<wpt lat="60.9419444" lon="28.0702778">
+  <name>LOUHI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="64.8513889" lon="25.1611111">
+  <name>LUMIO</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="63.0991667" lon="22.7625000">
+  <name>LUOMA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.6166667" lon="22.7508333">
+  <name>LUOPA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="63.7430556" lon="22.8591667">
+  <name>LUOTO</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.3744444" lon="21.6422222">
+  <name>LUVIA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="63.1588889" lon="21.9569444">
+  <name>MAKSA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.9294444" lon="21.5933333">
+  <name>MALAX</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.1955556" lon="29.0794444">
+  <name>MONNI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="67.9675000" lon="23.6294444">
+  <name>MOVUK</name>
+  <desc>On request</desc>
+  <type>Border crossing point</type>
+</wpt>
+<wpt lat="63.9919444" lon="27.3972222">
+  <name>MURTO</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="63.0105556" lon="23.2222222">
+  <name>MUSTA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.1683333" lon="25.4177778">
+  <name>MUURA</name>
+  <desc>On request</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="60.7877778" lon="26.7183333">
+  <name>MYLLY</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.3008333" lon="27.3127778">
+  <name>NAARA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.6322222" lon="23.3294444">
+  <name>NIINI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="65.9875028" lon="29.5136556">
+  <name>NILON</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="64.4969444" lon="27.3097222">
+  <name>NISKA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.5080556" lon="29.8311111">
+  <name>NITTY</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="60.1833333" lon="25.0225000">
+  <name>NOKKA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.5977778" lon="21.7925000">
+  <name>NOORA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.7422222" lon="22.3700000">
+  <name>NOPPA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="66.6780556" lon="25.7033333">
+  <name>NORVA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="68.3936111" lon="23.1030556">
+  <name>NUNAS</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="66.5516667" lon="26.1886111">
+  <name>OLKKA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.0477778" lon="28.2933333">
+  <name>OSIKO</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.6497222" lon="27.0650000">
+  <name>OTAVA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.0244444" lon="29.4747222">
+  <name>PAASI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="68.6636111" lon="23.3183333">
+  <name>PABVO</name>
+  <desc>On request</desc>
+  <type>Border crossing point</type>
+</wpt>
+<wpt lat="60.4038889" lon="22.1091667">
+  <name>PALVA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.4591667" lon="27.2950000">
+  <name>PELNI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="66.8033333" lon="23.9863889">
+  <name>PELOP</name>
+  <desc>On request</desc>
+  <type>Border crossing point</type>
+</wpt>
+<wpt lat="62.8030556" lon="22.8641667">
+  <name>POHJA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="68.2013889" lon="23.7761111">
+  <name>PUOLI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="68.8177778" lon="27.3616667">
+  <name>RANTA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.9097222" lon="26.9016667">
+  <name>RAUHA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="60.6202778" lon="22.0650000">
+  <name>RAUPO</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="67.7333333" lon="25.1100000">
+  <name>RIIKO</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="65.7661111" lon="24.1388889">
+  <name>ROTUS</name>
+  <desc>On request</desc>
+  <type>Border crossing point</type>
+</wpt>
+<wpt lat="66.1384889" lon="29.2176361">
+  <name>RUKAA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.0836111" lon="28.0983333">
+  <name>RUOHO</name>
+  <desc>On request</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="63.1036111" lon="27.4675000">
+  <name>RUOKO</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="60.8330556" lon="27.2455556">
+  <name>SAARA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="65.9097222" lon="24.7708333">
+  <name>SAARI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.1594444" lon="28.2366667">
+  <name>SAIMA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="60.4416667" lon="22.6147222">
+  <name>SALPA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.2955556" lon="25.5186111">
+  <name>SANKA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="64.9508333" lon="25.6694444">
+  <name>SANKI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.8997222" lon="23.3936111">
+  <name>SEURU</name>
+  <desc>On request</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="66.4430556" lon="25.9655556">
+  <name>SIERI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.5652778" lon="23.7816667">
+  <name>SIILI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.4741667" lon="23.3347222">
+  <name>SIURO</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.4388889" lon="23.4758333">
+  <name>SORVA</name>
+  <desc>On request</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="64.0622222" lon="28.3086111">
+  <name>SOTKA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.8405556" lon="28.4283333">
+  <name>SULKA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.4411111" lon="27.7986111">
+  <name>TAKKU</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="65.7758333" lon="24.3172222">
+  <name>TALJA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="68.4158333" lon="23.9636111">
+  <name>TALVA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="68.2244444" lon="27.1836111">
+  <name>TANKA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="68.6677778" lon="23.6705556">
+  <name>TERMI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.5411111" lon="26.8838889">
+  <name>TIILI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="65.0630556" lon="25.4000000">
+  <name>TOPPI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="63.0655556" lon="21.9986111">
+  <name>TORKO</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="65.7097222" lon="24.8158333">
+  <name>TOUKO</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="61.0158333" lon="27.1700000">
+  <name>TUOHI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="69.9172222" lon="27.0288889">
+  <name>UTESI</name>
+  <desc>On request</desc>
+  <type>Border crossing point</type>
+</wpt>
+<wpt lat="61.3455556" lon="23.5633333">
+  <name>VAKKA</name>
+  <desc>On request</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.9252778" lon="28.1013889">
+  <name>VARTI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.4641667" lon="25.8983333">
+  <name>VATIA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="66.5786111" lon="25.4888889">
+  <name>VIKSI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.0219444" lon="27.6269444">
+  <name>VIRMA</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+<wpt lat="62.2194444" lon="28.0655556">
+  <name>VUORI</name>
+  <desc>Compulsory</desc>
+  <type>VFR REP</type>
+</wpt>
+</gpx>
