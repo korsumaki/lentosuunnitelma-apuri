@@ -269,14 +269,67 @@
 					<label for="flightTime55">55 min</label>
 				</fieldset>
 			</div>
-
-
 			
 			<button onclick="onClickFlightPlanLinkButton()" data-mini="true">Jatka lentosuunnitelmaan...</button>
-
+			
+			<div data-role="collapsible" data-mini="true" data-theme="b" data-content-theme="d">
+				<h4>Tehdyt lentosuunnitelmat</h4>
+				<ul id="storedPlanList" data-role="listview" data-split-theme="d" data-icon="false" data-split-icon="info">
+				</ul>
+			</div>
 		</div><!-- content -->
 
 	</div>
+
+	<div data-role="page" id="page-stored-plan"> 
+		<div data-role="header" data-position="inline" data-theme="b">
+			<a href="#page-main" data-direction="reverse" data-icon="arrow-l">Takaisin</a>
+			<h1>Tallennettu FPL</h1>
+			<a href="#page-main" id="deleteCurrentStoredPlanButton" onclick="deleteCurrentStoredPlan()" data-icon="delete">Poista</a>
+			<!--button id="deleteCurrentStoredPlanButton" onclick="deleteCurrentStoredPlan()" data-icon="delete">Poista</button-->
+		</div> 
+		<div data-role="content">
+			<!--div id="storedPlanAircraftIdentification"></div-->
+			<div data-role="fieldcontain">
+				<label for="storedPlanAircraftIdentification">Tunnus</label>
+				<input id="storedPlanAircraftIdentification" type="text" data-mini="true">
+			</div> <!-- fieldcontain -->
+			<div data-role="fieldcontain">
+				<label for="storedPlanDeparture">Lähtöpaikka</label>
+				<input id="storedPlanDeparture" type="text" data-mini="true">
+			</div> <!-- fieldcontain -->
+			<div data-role="fieldcontain">
+				<label for="storedPlanDestination">Laskupaikka</label>
+				<input id="storedPlanDestination" type="text" data-mini="true">
+			</div> <!-- fieldcontain -->
+			<div data-role="fieldcontain">
+				<label for="storedPlanRoute">Reitti</label>
+				<input id="storedPlanRoute" type="text" data-mini="true">
+			</div> <!-- fieldcontain -->
+			<div data-role="fieldcontain">
+				<label for="storedPlanTakeoffTime">Lähtöaika</label>
+				<input id="storedPlanTakeoffTime" type="text" data-mini="true">
+			</div> <!-- fieldcontain -->
+			<div data-role="fieldcontain">
+				<label for="storedPlanFlightTime">Lentoaika</label>
+				<input id="storedPlanFlightTime" type="text" data-mini="true">
+			</div> <!-- fieldcontain -->
+			<div data-role="fieldcontain">
+				<label for="storedPlanDepMethod">Aktivointi</label>
+				<input id="storedPlanDepMethod" type="text" data-mini="true">
+			</div> <!-- fieldcontain -->
+			<div data-role="fieldcontain">
+				<label for="storedPlanArrMethod">Päättäminen</label>
+				<input id="storedPlanArrMethod" type="text" data-mini="true">
+			</div> <!-- fieldcontain -->
+			<!--button id='openNotamButton' onclick="openNotam()" data-mini="true">Notam</button--> <!-- data-inline='true' -->
+			<!--button onclick="onCallArrForEfes()" data-inline='true' data-mini="true">Metar</button-->
+			<!--button onclick="openAip()" data-mini="true">AIP/VFR suomi (ei vielä käytössä)</button-->
+			<a href="tel:+35832865172" id='callAccButton' data-role="button" data-mini="true">Soita ACC<br>+35832865172</a>
+			<!--a href="tel:+358982774111" data-role="button" data-mini="true">Soita Briefing<br>+358982774111</a-->
+		
+		</div> <!-- content -->
+	</div> 
 
 	<div data-role="page" id="page-plan-settings"> 
 		<div data-role="header" data-position="inline">

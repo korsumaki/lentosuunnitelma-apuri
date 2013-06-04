@@ -26,18 +26,28 @@
  * /- lisää tallenna -nappi
  * - tallennetaan plaanin tiedot (localstorageen) (ilman virallista plaanin jättämistä)
  * 		+- tallenna storageen
- * 			- epävirallisen nimi
+ * 			- epävirallisen nimi + koordinaatit?
  * 		+- lue storagesta ja muodosta plaanilista etusivulle
  * 			- (epävirallisen) kentän nimi
  * 			- kaikki tiedot näkyvyllä (tai täpättävissä näkyviin), ei linkkiä
- * 		?- lataa storagesta koko plaani storedPlan sivulle
+ * 		+ lataa storagesta koko plaani storedPlan sivulle
  * 		- lisää napit (poisto, ...)
  * 		- lisää linkit
- * 			- notam
+ * 			+ notam
  * 			- vfr suomi/aip
  * 			- efes
  * 			- metar
- * - jätä johonkin talteen plaanin aktivointi- ja lopetustavat (puh/jakso), ettei tarvisi kirjoittaa muistiin
+ * 			- ZZZZ kenttien hanskaus
+ * 		- session storage -> local storage
+ * 		- nappien teksti 2 riville?
+ * 		- plaanin deletointi
+ * - käyttöohjesivu
+ * 		- käyttö
+ * 		- toteutuksen tekniset yksityiskohdat
+ * + jätä johonkin talteen plaanin aktivointi- ja lopetustavat (puh/jakso), ettei tarvisi kirjoittaa muistiin
+ * 
+ * - refresh jossain muualla kuin pääsivulla aiheuttaa erroreita -> jquery vaiheessa voisi koittaa korjata
+ * 
  * - lisää koodin muuttamispäivämäärä lokitukseen?
  * - poista html koodit input kentistä ennen tiedon käyttämistä!
  * 
@@ -55,7 +65,9 @@ var gPosition_lat;
 var gPosition_lon;
 
 var flightPlanLink; // created link to flight plan
-var GlobalFlyingTimeStr;
+//var GlobalFlyingTimeStr;
+var gCalculatedFlyingTimeStr;
+var gSelectedFlyingTimeStr;
 
 // constants
 var VFRPortFilename = "17NOV2011.xml";
@@ -65,10 +77,9 @@ var ZZZZFieldsFilename = "zzzz_fields.xml";
 var UNOFFICIAL_AERODROME="ZZZZ";
 var UNOFFICIAL_AERODROME_INDEX=0; // This field index is used when ZZZZ place name was written manually, not from xml.
 
-//var BY_PHONE_ON_GROUND_STR = "PHONE EFES ACC 032865172 "; 
-//var BY_RTF_ON_AIR_STR = "RTF EFES ACC "; // ACC freq is updated later
 var BY_PHONE_ON_GROUND_STR = "PHONE ACC 032865172 "; 
 var BY_RTF_ON_AIR_STR = "RTF ACC "; // ACC freq is updated later
+var BY_TWR = "- (torni)";
 
 var overrideFlightTime = true;
 
@@ -113,6 +124,8 @@ function setFlightTimeOverride(value) {
 		for(var i = 0; i < minSel.length; i++) {
 			$( '#flightTime' + minSel[i].value ).removeAttr('checked').checkboxradio( "refresh" );
 		}
+		// Forget also previous override flying time
+		gSelectedFlyingTimeStr = gCalculatedFlyingTimeStr;
 	}
 }
 
@@ -1274,7 +1287,7 @@ function isAllSettingsAvailable() {
 		var tel = document.getElementById("pilotTel").value;
 		var color = document.getElementById("aircraftColor").value;
 		
-		if (GlobalFlyingTimeStr===undefined) {
+		if (/*gSelectedFlyingTimeStr===undefined && */ gCalculatedFlyingTimeStr===undefined) { //GlobalFlyingTimeStr
 			//alert("GlobalFlyingTimeStr");
 			return false;
 		}
@@ -1298,6 +1311,179 @@ function isAllSettingsAvailable() {
 }
 
 
+function getPlansFromStorage() {
+	var storedPlansStr = localStorage.getItem("storedPlans");
+	var storedPlans;
+	if (storedPlansStr == null) {
+		storedPlans = [];
+	}
+	else {
+		storedPlans = JSON.parse(storedPlansStr);
+	}
+	return storedPlans;
+}
+
+function addPlanToStorage(plan) {
+	var storedPlans = getPlansFromStorage();
+	storedPlans.push(plan);
+	
+	//debug_log("addPlanToStorage lkm=" + storedPlans.length ); // TODO remove me
+	localStorage.setItem( "storedPlans", JSON.stringify(storedPlans));
+}
+
+// TODO implement
+function deleteCurrentStoredPlan() {
+	var storedPlans = getPlansFromStorage();
+	var ind = localStorage.getItem('selectedStoredPlanIndex');
+	storedPlans.splice(ind, 1);
+	localStorage.setItem( "storedPlans", JSON.stringify(storedPlans));
+	
+	updateStoredPlanList();
+}
+
+
+
+function removeOldPlansFromStorage() {
+	var storedPlans = getPlansFromStorage();
+	var newStoredPlans = [];
+	
+	var now = new Date();
+	var hour_in_ms = 1000*60*60;
+	var yesterday = new Date();
+	yesterday.setTime(now.getTime()-24*hour_in_ms);
+
+	//debug_log("removeOldPlansFromStorage: now=" + now );
+	//debug_log("removeOldPlansFromStorage: yesterday=" + yesterday );
+	
+	for (var i=0; i<storedPlans.length; i++) {
+		var takeoffDate = new Date(storedPlans[i].takeoff_time);
+		if (takeoffDate >= yesterday) {
+			//debug_log("removeOldPlansFromStorage: included=" + takeoffDate );
+			newStoredPlans.push(storedPlans[i]);
+		}
+		else {
+			//debug_log("removeOldPlansFromStorage: removed=" + takeoffDate );
+		}
+	}
+	localStorage.setItem( "storedPlans", JSON.stringify(newStoredPlans));
+}
+
+function getTimeIn4digits(takeoffDate) {
+	//var takeoffDate = new Date(storedPlans[i].takeoff_time);
+	
+	var timeStr="";
+	//var hours = takeoffDate.getUTCHours();
+	var hours = takeoffDate.getHours();
+	//var minutes = takeoffDate.getUTCMinutes();
+	var minutes = takeoffDate.getMinutes();
+	
+	if (hours<10) timeStr += "0";
+	timeStr += hours;
+	if (minutes<10) timeStr += "0";
+	timeStr += minutes;
+	
+	return timeStr;
+}
+
+
+function setSelectedStoredPlanIndex(ind) {
+	localStorage.setItem('selectedStoredPlanIndex', ind);
+}
+
+
+
+function updateStoredPlanList() {
+	removeOldPlansFromStorage();
+	var storedPlans = getPlansFromStorage();
+	
+	// Clear old list
+	$('#storedPlanList').find('li').remove();
+	localStorage.removeItem('selectedStoredPlanIndex');
+	
+	for (var i=0; i<storedPlans.length; i++) {
+		var timeStr=getTimeIn4digits(new Date(storedPlans[i].takeoff_time));
+		/*var takeoffDate = new Date(storedPlans[i].takeoff_time);
+		
+		var timeStr="";
+		//var hours = takeoffDate.getUTCHours();
+		var hours = takeoffDate.getHours();
+		//var minutes = takeoffDate.getUTCMinutes();
+		var minutes = takeoffDate.getMinutes();
+		
+		if (hours<10) timeStr += "0";
+		timeStr += hours;
+		if (minutes<10) timeStr += "0";
+		timeStr += minutes;*/
+
+		var route = ""
+		if (storedPlans[i].dep_route !== undefined) {
+			route += storedPlans[i].dep_route + " " 
+		}
+		if (storedPlans[i].route !== undefined) {
+			route += storedPlans[i].route + " " 
+		}
+		if (storedPlans[i].dest_route !== undefined) {
+			route += storedPlans[i].dest_route
+		}
+		
+		var text = "<li class='storedPlanListItem'>" //<a href='#'>
+			+ "<a href='#page-stored-plan' onClick='setSelectedStoredPlanIndex(" + i + ")'>"
+			+ "<h2>"+ storedPlans[i].departure + "-" + storedPlans[i].destination + "</h2>"
+			+ "<p class='ui-li-aside'>Lähtöaika: <strong>" + timeStr +"</strong> (sa)</p>"
+			+ "<p><strong>Reitti: " + route + "</strong></p>"
+			+ "<p>Lentoaika: " + storedPlans[i].flight_time + "</p>"
+			+ "<p>Päättäminen: " + storedPlans[i].completion_method + "</p>"
+			+ "</a>";
+		if (storedPlans[i].destination !== UNOFFICIAL_AERODROME) {
+			text += "<a href='" + getNotamLink(storedPlans[i].destination) + "' rel='external'>Notam</a>";
+		}
+		text += "</li>";
+
+			//+ "<div class='buttonContainer'>"
+			//+ "<p>"
+			//+ "<button data-role='button' data-inline='true'>Aloita</button>"
+			//+ "<button data-role='button' data-inline='true'>Lopeta</button>"
+			//+ "<button data-role='button' data-inline='true'>Poista</button>"
+			//+ "</p>"
+			//+ "</div>"
+			//+ "<a href='#page-stored-plan'>Näytä lentosuunnitelma</a></li>";
+
+		$('#storedPlanList').append( $(text) );
+	}
+	$('.buttonContainer').hide();
+	$("#storedPlanList").listview('refresh');
+}
+
+// TODO this should be finally in some document.ready() handler?
+function initStoredPlanPageHandler() {
+	// jQuery( ".selector" ).on( "pagebeforeshow", function( event ) { ... } )
+	// Fill fields for stored plan page
+	$('#page-stored-plan').on('pagebeforeshow', function(event) {
+		var storedPlans = getPlansFromStorage();
+		var ind = localStorage.getItem('selectedStoredPlanIndex');
+		$('#storedPlanAircraftIdentification').val( storedPlans[ind].identification );
+		
+		$('#storedPlanDeparture').val( storedPlans[ind].departure );
+		$('#storedPlanDestination').val( storedPlans[ind].destination );
+		$('#storedPlanRoute').val( storedPlans[ind].dep_route +' '+ storedPlans[ind].route +' '+ storedPlans[ind].dest_route);
+
+		$('#storedPlanTakeoffTime').val( getTimeIn4digits(new Date(storedPlans[ind].takeoff_time)) + " (sa)" );
+		$('#storedPlanFlightTime').val( storedPlans[ind].flight_time );
+		$('#storedPlanDepMethod').val( storedPlans[ind].activation_method );
+		$('#storedPlanArrMethod').val( storedPlans[ind].completion_method );
+		// TODO if destination alkaa !ZZZZ
+		//$('#openNotamButton').text("Notam: " + storedPlans[ind].destination); //( "<button onclick='openNotam('" + storedPlans[ind].destination + "')' data-inline='true' data-mini='true'>Notam: " + storedPlans[ind].destination + "</button>");
+		//$('#openNotamButton').button('refresh');
+		
+		if (storedPlans[ind].activation_method !== BY_PHONE_ON_GROUND_STR && 
+			storedPlans[ind].completion_method !== BY_PHONE_ON_GROUND_STR) {
+			$('#callAccButton').hide();
+		}
+		else {
+			$('#callAccButton').show();
+		}
+	});
+}
 
 
 function onLoad()
@@ -1319,6 +1505,11 @@ function onLoad()
 	
 	updateFromLocalStorage();
 	onChangeFlightLv();
+	
+	updateStoredPlanList();
+
+	initStoredPlanPageHandler();
+
 }
 
 
@@ -1385,7 +1576,7 @@ function updatePlanActivationMethods(elSelection, ad) {
 	removeOptions(elSelection);
 
 	if (ad.atc == "yes") {
-		appendOption(elSelection, "- (torni)", "twr");
+		appendOption(elSelection, BY_TWR, "twr");
 	}
 	appendOption(elSelection, "Puhelimella maassa (EFES)", "phoneOnGound");
 	appendOption(elSelection, "Radiolla ilmassa (EFES, " + ad.acc + ")", "rtfOnAir");
@@ -1636,7 +1827,7 @@ function createFlyingTimeTable() {
 		flyingTime = 10;
 	}
 
-	GlobalFlyingTimeStr = convertFlyingTimeToString( flyingTime );
+	gCalculatedFlyingTimeStr = convertFlyingTimeToString( flyingTime );
 	
 	// Hide FlightTimeOverride controls because we just calculated new flight time
 	setFlightTimeOverride(false);
@@ -1650,6 +1841,39 @@ function convertScandinavianLetters( str ) {
 	retStr = retStr.replace(/ö/g, "o");
 	retStr = retStr.replace(/Ö/g, "O");
 	return retStr;
+}
+
+
+function updateFlyingTimeValues() {
+	gSelectedFlyingTimeStr = gCalculatedFlyingTimeStr;
+	if (getFlightTimeOverride()) {
+		var flightTimeOverrideStr="";
+
+		var hourSel = document.getElementsByName("flightTimeHour");
+		for(var i = 0; i < hourSel.length; i++) {
+			if (hourSel[i].checked == true ) {
+				flightTimeOverrideStr = hourSel[i].value;
+				break;
+			}
+		}
+		
+		var minSel = document.getElementsByName("flightTimeMin");
+		for(var i = 0; i < minSel.length; i++) {
+			if (minSel[i].checked == true ) {
+				flightTimeOverrideStr += minSel[i].value;
+				break;
+			}
+		}
+		if (flightTimeOverrideStr.length !== 4) {
+			alert("Lentoaikaan täytyy antaa sekä tunnit että minuutit!");
+			return false;
+		}
+		if (Number(flightTimeOverrideStr) < Number(gSelectedFlyingTimeStr)) {
+			alert("Lentoajaksi ei voi antaa vähempää kuin laskelmassa on laskettu!");
+			return false;
+		}
+		gSelectedFlyingTimeStr = flightTimeOverrideStr;
+	}
 }
 
 
@@ -1738,37 +1962,9 @@ function updateFlightPlanLink() {
 	linkString += "&dad=" + getAerodromeByIndex( document.getElementById("destination").value ).icao;
 	
 	// Check FlightTimeOverride
-	var flightTimeStr = GlobalFlyingTimeStr;
-	if (getFlightTimeOverride()) {
-		var flightTimeOverrideStr="";
-
-		var hourSel = document.getElementsByName("flightTimeHour");
-		for(var i = 0; i < hourSel.length; i++) {
-			if (hourSel[i].checked == true ) {
-				flightTimeOverrideStr = hourSel[i].value;
-				break;
-			}
-		}
-		
-		var minSel = document.getElementsByName("flightTimeMin");
-		for(var i = 0; i < minSel.length; i++) {
-			if (minSel[i].checked == true ) {
-				flightTimeOverrideStr += minSel[i].value;
-				break;
-			}
-		}
-		if (flightTimeOverrideStr.length !== 4) {
-			alert("Lentoaikaan täytyy antaa sekä tunnit että minuutit!");
-			return false;
-		}
-		if (Number(flightTimeOverrideStr) < Number(flightTimeStr)) {
-			alert("Lentoajaksi ei voi antaa vähempää kuin laskelmassa on laskettu!");
-			return false;
-		}
-		flightTimeStr = flightTimeOverrideStr;
-	}
+	updateFlyingTimeValues();
 	
-	linkString += "&eet=" + flightTimeStr;
+	linkString += "&eet=" + gSelectedFlyingTimeStr;
 
 	var other="";
 	
@@ -1902,10 +2098,122 @@ function updateFlightPlanLink() {
 }
 
 
+/* 
+ * Plan storing
+ * 
+ * JSON data
+ * - identification
+ * - takeoff_time
+ * - departure
+ * - dep_route
+ * - route
+ * - dest_route
+ * - destination
+ * - flight_time
+ * - completion_method
+ */
+function getPlanForStoring() {
+	debug_log("getPlanForStoring");
+	
+	var plan = {};
+	// Get current time and add time offset
+	var departureTimeHourSelection = document.getElementsByName("departureTimeHour");
+	var departureTimeHour=0;
+	for(var i = 0; i < departureTimeHourSelection.length; i++) {
+		if(departureTimeHourSelection[i].checked) {
+			departureTimeHour = Number(departureTimeHourSelection[i].value);
+			break;
+		}
+	}
+	var departureTimeMinSelection = document.getElementsByName("departureTimeMin");
+	var departureTimeMin=0;
+	for(var i = 0; i < departureTimeMinSelection.length; i++) {
+		if(departureTimeMinSelection[i].checked) {
+			departureTimeMin = Number(departureTimeMinSelection[i].value);
+			break;
+		}
+	}
+	if (departureTimeHour + departureTimeMin === 0) {
+		alert("Lähtöaika ei voi olla heti.\nMuuta lähtöaika järkeväksi.");
+		return false;
+	}
+	var d = new Date();
+	var timeStr="";
+	
+	d.setMinutes( timeNext5mins( d.getMinutes() ) + departureTimeMin );
+	d.setHours( d.getHours() + departureTimeHour);
+	var hours = d.getUTCHours();
+	var minutes = d.getUTCMinutes();
+	
+	if (hours<10) timeStr += "0";
+	timeStr += hours;
+	if (minutes<10) timeStr += "0";
+	timeStr += minutes;
+	
+	if (document.getElementById("planActivationMethod").value == "phoneOnGound") {
+		plan.activation_method = BY_PHONE_ON_GROUND_STR;
+	}
+	else if (document.getElementById("planActivationMethod").value == "rtfOnAir") {
+		var dep=document.getElementById("departure");
+		var depAerodrome = getAerodromeByIndex( dep.value );
+		plan.activation_method = BY_RTF_ON_AIR_STR + depAerodrome.acc + " ";
+	}
+	else {
+		plan.activation_method = BY_TWR;
+	}
+
+	if (document.getElementById("planCompletionMethod").value == "phoneOnGound") {
+		plan.completion_method = BY_PHONE_ON_GROUND_STR;
+	}
+	else if (document.getElementById("planCompletionMethod").value == "rtfOnAir") {
+		var dest=document.getElementById("destination");
+		var destAerodrome = getAerodromeByIndex( dest.value );
+		plan.completion_method = BY_RTF_ON_AIR_STR + destAerodrome.acc + " ";
+	}
+	else {
+		plan.completion_method = BY_TWR;
+	}
+	
+	
+	plan.takeoff_time = d.toJSON();
+	//plan.takeoff_time = timeStr;
+	plan.identification = document.getElementById("aircraftIdentification").value;
+	// TODO add coordinates to departure and destination (later)
+	plan.departure = getAerodromeByIndex( document.getElementById("departure").value ).icao;
+	plan.dep_route = document.getElementById("route_departure_rep").value;
+	var route = document.getElementById("route").value;
+	plan.route = $( '<p>'+ route +'</p>').text(); // Remove html from input field...
+	plan.dest_route = document.getElementById("route_destination_rep").value;
+	plan.destination = getAerodromeByIndex( document.getElementById("destination").value ).icao;
+	
+	// Use override flight time when needed
+	updateFlyingTimeValues();
+	plan.flight_time = gSelectedFlyingTimeStr;
+
+	//debug_log("getPlanForStoring - " + JSON.stringify(plan));
+	return plan;
+}
+
+function storeCurrentPlan() {
+    var plan = getPlanForStoring();
+    addPlanToStorage(plan);
+    updateStoredPlanList();
+    //debug_log("stringify = " + JSON.stringify(plan));
+}
+
+/*function onClickFlightPlanShareButton() {
+    var plan = getPlanForStoring();
+    addPlanToStorage(plan);
+    updateStoredPlanList();
+    //debug_log("stringify = " + JSON.stringify(plan));
+}*/
+
+
 function onClickFlightPlanLinkButton() {
 	if ( isAllSettingsAvailable() ) {
 		try {
 			if (updateFlightPlanLink()) {
+				storeCurrentPlan();
 				window.open( flightPlanLink );
 			}
 		} catch(err) {
@@ -1916,3 +2224,39 @@ function onClickFlightPlanLinkButton() {
 		window.open( "#page-plan-settings", "_self" );
 	}
 }
+
+
+
+function getNotamLink(icao) {
+	if (icao >= 'EFAA' && icao <='EFLP') {
+		return "http://www.ais.fi/ais/bulletins/envfra.htm#" + icao;
+	}
+	else if (icao >= 'EFMA' && icao <='EFYL') {
+		return "http://www.ais.fi/ais/bulletins/envfrm.htm#" + icao;
+	}
+}
+
+/*function openNotam() {
+	var storedPlans = getPlansFromStorage();
+	var ind = localStorage.getItem('selectedStoredPlanIndex');
+	var icao = storedPlans[ind].destination;
+	var link="";
+	if (icao >= 'EFAA' && icao <='EFLP') {
+		//debug_log("openNotam 1 - " + icao);
+		window.open("http://www.ais.fi/ais/bulletins/envfra.htm#" + icao);
+	}
+	else if (icao >= 'EFMA' && icao <='EFYL') {
+		//debug_log("openNotam 2 - " + icao);
+		window.open("http://www.ais.fi/ais/bulletins/envfrm.htm#" + icao);
+	}
+	//debug_log("openNotam 3 - " + link);
+	//window.open( link );
+}*/
+
+//function openAip() {
+	//https://ais.fi/ais/vfr/aerodromes/EFAA.html
+	//https://ais.fi/ais/vfr/pdf/EFAA.pdf
+	
+	//https://ais.fi/ais/eaip/html/efet.htm
+//}
+
