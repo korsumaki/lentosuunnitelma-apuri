@@ -70,8 +70,17 @@ var gCalculatedFlyingTimeStr;
 var gSelectedFlyingTimeStr;
 
 // constants
-var VFRPortFilename = "17NOV2011.xml";
-var AerodromesFilename = "aerodromes.xml";
+
+// Date when update is taken into use.
+var dateOfUpdateStr = "2013-09-19T00:00:00Z";
+
+// These names are used before update
+var VFRPortFilename_before_2013_sep_19 = "17NOV2011.xml";
+var AerodromesFilename_before_2013_sep_19 = "aerodromes.xml";
+
+// Current (new) filenames
+var VFRPortFilename = "EF_VFRREP_19SEP2013.xml";
+var AerodromesFilename = "aerodromes_19SEP2013.xml";
 var ZZZZFieldsFilename = "zzzz_fields.xml";
 
 var UNOFFICIAL_AERODROME="ZZZZ";
@@ -1491,8 +1500,15 @@ function onLoad()
 	//debug_log( "Sivua on muutettu viimeksi " + document.lastModified );
 	//debug_log( "Loading aerodromes and VFR REP points...");
 
+	// Check whether we should still load old not-yet-updated files
+	var today = new Date();
+	var dateOfUpdate = new Date(dateOfUpdateStr);
+	if (today.getTime() < dateOfUpdate.getTime()) {
+		VFRPortFilename = VFRPortFilename_before_2013_sep_19;
+		AerodromesFilename = AerodromesFilename_before_2013_sep_19;
+	}
+
 	loadXMLDoc(AerodromesFilename, aerodromeXmlResponseHandler);
-	//loadXMLDoc(VFRPortFilename, vfrPortXmlResponseHandler);
 
 	if (navigator.geolocation) {
 		updateCurrentLocation();
@@ -2113,7 +2129,7 @@ function updateFlightPlanLink() {
  * - completion_method
  */
 function getPlanForStoring() {
-	debug_log("getPlanForStoring");
+	//debug_log("getPlanForStoring");
 	
 	var plan = {};
 	// Get current time and add time offset
