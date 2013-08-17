@@ -31,7 +31,7 @@
  * 			- (epävirallisen) kentän nimi
  * 			- kaikki tiedot näkyvyllä (tai täpättävissä näkyviin), ei linkkiä
  * 		+ lataa storagesta koko plaani storedPlan sivulle
- * 		- lisää napit (poisto, ...)
+ * 		/- lisää napit (poisto, ...)
  * 		- lisää linkit
  * 			+ notam
  * 			- vfr suomi/aip
@@ -39,8 +39,13 @@
  * 			- metar
  * 			- ZZZZ kenttien hanskaus
  * 		- session storage -> local storage
- * 		- nappien teksti 2 riville?
- * 		- plaanin deletointi
+ * 		+ nappien teksti 2 riville?
+ * 		+ plaanin deletointi
+ * 		+ lisää tietojen tallennusta
+ * 			+ zzzz kentän selväkielinen nimi
+ * 			+ korkeus
+ * 			+ toiminta-aika
+ * 			+ hlö määrä
  * - käyttöohjesivu
  * 		- käyttö
  * 		- toteutuksen tekniset yksityiskohdat
@@ -1336,11 +1341,9 @@ function addPlanToStorage(plan) {
 	var storedPlans = getPlansFromStorage();
 	storedPlans.push(plan);
 	
-	//debug_log("addPlanToStorage lkm=" + storedPlans.length ); // TODO remove me
 	localStorage.setItem( "storedPlans", JSON.stringify(storedPlans));
 }
 
-// TODO implement
 function deleteCurrentStoredPlan() {
 	var storedPlans = getPlansFromStorage();
 	var ind = localStorage.getItem('selectedStoredPlanIndex');
@@ -1472,12 +1475,15 @@ function initStoredPlanPageHandler() {
 		var ind = localStorage.getItem('selectedStoredPlanIndex');
 		$('#storedPlanAircraftIdentification').val( storedPlans[ind].identification );
 		
-		$('#storedPlanDeparture').val( storedPlans[ind].departure );
-		$('#storedPlanDestination').val( storedPlans[ind].destination );
+		$('#storedPlanDeparture').val( storedPlans[ind].departure + " "+ storedPlans[ind].dep_name );
+		$('#storedPlanDestination').val( storedPlans[ind].destination + " " + storedPlans[ind].dest_name );
 		$('#storedPlanRoute').val( storedPlans[ind].dep_route +' '+ storedPlans[ind].route +' '+ storedPlans[ind].dest_route);
 
+		$('#storedPlanFlightLevel').val( storedPlans[ind].flight_level );
 		$('#storedPlanTakeoffTime').val( getTimeIn4digits(new Date(storedPlans[ind].takeoff_time)) + " (sa)" );
 		$('#storedPlanFlightTime').val( storedPlans[ind].flight_time );
+		$('#storedPlanEndurance').val( storedPlans[ind].endurance );
+		$('#storedPlanPersons').val( storedPlans[ind].persons );
 		$('#storedPlanDepMethod').val( storedPlans[ind].activation_method );
 		$('#storedPlanArrMethod').val( storedPlans[ind].completion_method );
 		// TODO if destination alkaa !ZZZZ
@@ -2127,6 +2133,19 @@ function updateFlightPlanLink() {
  * - destination
  * - flight_time
  * - completion_method
+ * ----
+ * - dep_name
+ * 		- normal ad
+ * 		- zzzz from db
+ * 		/- zzzz freetext
+ * - dest_name
+ * 		- normal ad
+ * 		- zzzz from db
+ * 		/- zzzz freetext
+ * - flight_level
+ * - endurance
+ * - persons
+ * 
  */
 function getPlanForStoring() {
 	//debug_log("getPlanForStoring");
@@ -2196,11 +2215,45 @@ function getPlanForStoring() {
 	plan.identification = document.getElementById("aircraftIdentification").value;
 	// TODO add coordinates to departure and destination (later)
 	plan.departure = getAerodromeByIndex( document.getElementById("departure").value ).icao;
+	plan.dep_name = getAerodromeByIndex( document.getElementById("departure").value ).name;
 	plan.dep_route = document.getElementById("route_departure_rep").value;
 	var route = document.getElementById("route").value;
 	plan.route = $( '<p>'+ route +'</p>').text(); // Remove html from input field...
 	plan.dest_route = document.getElementById("route_destination_rep").value;
 	plan.destination = getAerodromeByIndex( document.getElementById("destination").value ).icao;
+	plan.dest_name = getAerodromeByIndex( document.getElementById("destination").value ).name;
+	
+	var flight_level = document.getElementById("flight_lv").value;
+	if (flight_level !== "VFR") {
+		flight_level += document.getElementById("flight_level").value;
+	}
+	plan.flight_level = flight_level;
+	
+	var endurance="";
+	var enduranceSelection = document.getElementsByName("enduranceHour");
+	for(var i = 0; i < enduranceSelection.length; i++) {
+		if(enduranceSelection[i].checked) {
+			endurance = enduranceSelection[i].value;
+			break;
+		}
+	}
+	enduranceSelection = document.getElementsByName("enduranceMin");
+	for(var i = 0; i < enduranceSelection.length; i++) {
+		if(enduranceSelection[i].checked) {
+			endurance += enduranceSelection[i].value;
+			break;
+		}
+	}
+	plan.endurance = endurance;
+	
+	var personsSelection = document.getElementsByName("persons");
+	for(var i = 0; i < personsSelection.length; i++) {
+		if(personsSelection[i].checked) {
+			plan.persons = personsSelection[i].value;
+			break;
+		}
+	}
+
 	
 	// Use override flight time when needed
 	updateFlyingTimeValues();
