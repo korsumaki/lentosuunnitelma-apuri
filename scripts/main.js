@@ -1942,7 +1942,7 @@ function updateFlightPlanLink() {
 	if (minutes<10) timeStr += "0";
 	timeStr += minutes;
 	
-	var linkStart = "http://www.finavia.fi/C/flightplan/efpl_lomake/";
+	var linkStart = "http://ais.fi/C/flightplan/efpl_lomake/";
 	var linkString = "&id=" + 		document.getElementById("aircraftIdentification").value;
 	linkString += "&rules=V"; // + 		document.getElementById("flightRules").value;
 	linkString += "&type=G"; // + 		document.getElementById("flightType").value;

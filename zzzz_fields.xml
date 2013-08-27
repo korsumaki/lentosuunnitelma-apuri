@@ -2,7 +2,7 @@
 <gpx
 version="1.1"
 creator="Markku Korsumaki"
-created="2013-03-26"
+created="2013-08-17"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/1"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
@@ -17,6 +17,7 @@ name = kohtaan 18 tuleva DEP/ tai DEST/ paikannimi
 <aerodrome lat="623047N" lon="0240403E"><icao>ZZZZ</icao><name>Karhukangas Ähtäri</name><atc>no</atc><acc>127.100</acc></aerodrome>
 <aerodrome lat="620052N" lon="0230329E"><icao>ZZZZ</icao><name>Parkano</name><atc>no</atc><acc>127.100</acc></aerodrome>
 <aerodrome lat="621828N" lon="0223047E"><icao>ZZZZ</icao><name>Nummijärvi</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="621700N" lon="0222900E"><icao>ZZZZ</icao><name>Jokela Nummijärvi</name><atc>no</atc><acc>127.100</acc></aerodrome>
 <aerodrome lat="651800N" lon="0252500E"><icao>ZZZZ</icao><name>Sorosenperä Ii</name><atc>no</atc><acc>124.200</acc></aerodrome>
 <aerodrome lat="653358N" lon="0253631E"><icao>ZZZZ</icao><name>YliOlhava Ii</name><atc>no</atc><acc>124.200</acc></aerodrome>
 <aerodrome lat="604526N" lon="0264421E"><icao>ZZZZ</icao><name>Ummeljoki</name><atc>no</atc><acc>135.525</acc></aerodrome>
