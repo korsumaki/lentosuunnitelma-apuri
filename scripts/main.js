@@ -91,7 +91,8 @@ var ZZZZFieldsFilename = "zzzz_fields.xml";
 var UNOFFICIAL_AERODROME="ZZZZ";
 var UNOFFICIAL_AERODROME_INDEX=0; // This field index is used when ZZZZ place name was written manually, not from xml.
 
-var BY_PHONE_ON_GROUND_STR = "PHONE ACC 032865172 "; 
+var BY_PHONE_ON_GROUND_STR = "PHONE ACC ";
+var BY_PHONE_ON_GROUND_STR_WITH_PHONE = "PHONE ACC 032865172 "; 
 var BY_RTF_ON_AIR_STR = "RTF ACC "; // ACC freq is updated later
 var BY_TWR = "- (torni)";
 
@@ -1490,8 +1491,8 @@ function initStoredPlanPageHandler() {
 		//$('#openNotamButton').text("Notam: " + storedPlans[ind].destination); //( "<button onclick='openNotam('" + storedPlans[ind].destination + "')' data-inline='true' data-mini='true'>Notam: " + storedPlans[ind].destination + "</button>");
 		//$('#openNotamButton').button('refresh');
 		
-		if (storedPlans[ind].activation_method !== BY_PHONE_ON_GROUND_STR && 
-			storedPlans[ind].completion_method !== BY_PHONE_ON_GROUND_STR) {
+		if (storedPlans[ind].activation_method !== BY_PHONE_ON_GROUND_STR_WITH_PHONE && 
+			storedPlans[ind].completion_method !== BY_PHONE_ON_GROUND_STR_WITH_PHONE) {
 			$('#callAccButton').hide();
 		}
 		else {
@@ -1600,8 +1601,8 @@ function updatePlanActivationMethods(elSelection, ad) {
 	if (ad.atc == "yes") {
 		appendOption(elSelection, BY_TWR, "twr");
 	}
-	appendOption(elSelection, "Puhelimella maassa (EFES)", "phoneOnGound");
-	appendOption(elSelection, "Radiolla ilmassa (EFES, " + ad.acc + ")", "rtfOnAir");
+	appendOption(elSelection, "Puhelimella maassa (ACC)", "phoneOnGound");
+	appendOption(elSelection, "Radiolla ilmassa (ACC, " + ad.acc + ")", "rtfOnAir");
 }
 
 
@@ -2186,7 +2187,7 @@ function getPlanForStoring() {
 	timeStr += minutes;
 	
 	if (document.getElementById("planActivationMethod").value == "phoneOnGound") {
-		plan.activation_method = BY_PHONE_ON_GROUND_STR;
+		plan.activation_method = BY_PHONE_ON_GROUND_STR_WITH_PHONE;
 	}
 	else if (document.getElementById("planActivationMethod").value == "rtfOnAir") {
 		var dep=document.getElementById("departure");
@@ -2198,7 +2199,7 @@ function getPlanForStoring() {
 	}
 
 	if (document.getElementById("planCompletionMethod").value == "phoneOnGound") {
-		plan.completion_method = BY_PHONE_ON_GROUND_STR;
+		plan.completion_method = BY_PHONE_ON_GROUND_STR_WITH_PHONE;
 	}
 	else if (document.getElementById("planCompletionMethod").value == "rtfOnAir") {
 		var dest=document.getElementById("destination");
