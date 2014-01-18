@@ -86,7 +86,8 @@ var AerodromesFilename_before_2013_sep_19 = "aerodromes.xml";
 // Current (new) filenames
 var VFRPortFilename = "EF_VFRREP_19SEP2013.xml";
 var AerodromesFilename = "aerodromes_19SEP2013.xml";
-var ZZZZFieldsFilename = "zzzz_fields.xml";
+//var ZZZZFieldsFilename = "zzzz_fields.xml";
+var ZZZZFieldsFilename = "zzzz_fields_18JAN2014.xml";
 
 var UNOFFICIAL_AERODROME="ZZZZ";
 var UNOFFICIAL_AERODROME_INDEX=0; // This field index is used when ZZZZ place name was written manually, not from xml.
@@ -1198,7 +1199,7 @@ function updateFromLocalStorage() {
 	var currentId = localStorage.getItem( "currentSettingsId");
 	if (currentId == null) {
 		//debug_log("updateFromLocalStorage() - Old settings, converting...");
-		convertOldSettings()
+		convertOldSettings();
 		currentId = localStorage.getItem( "currentSettingsId");
 	}
 	
@@ -1428,15 +1429,15 @@ function updateStoredPlanList() {
 		if (minutes<10) timeStr += "0";
 		timeStr += minutes;*/
 
-		var route = ""
+		var route = "";
 		if (storedPlans[i].dep_route !== undefined) {
-			route += storedPlans[i].dep_route + " " 
+			route += storedPlans[i].dep_route + " ";
 		}
 		if (storedPlans[i].route !== undefined) {
-			route += storedPlans[i].route + " " 
+			route += storedPlans[i].route + " ";
 		}
 		if (storedPlans[i].dest_route !== undefined) {
-			route += storedPlans[i].dest_route
+			route += storedPlans[i].dest_route;
 		}
 		
 		var text = "<li class='storedPlanListItem'>" //<a href='#'>
