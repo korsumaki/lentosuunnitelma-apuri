@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+	<head> 
+		<meta charset="ISO-8859-1">
+		<title>Tietoja Lentosuunnitelma-apurista</title> 
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"> 
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.css" />
+		<link rel="stylesheet" href="mystyle.css" />
+		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>
+		
+		<script src="scripts/storage.remy.js"></script>
+		<!-- local-storage from https://gist.github.com/remy/350433 -->
+		
+		<!--script src="scripts/main.js" ></script-->
+	</head> 
+
+<body>
+	<div data-role="page" id="page-help"> 
+		<div data-role="header" data-position="inline">
+			<a href="javascript:history.back()" data-direction="reverse" data-icon="arrow-l">Takaisin</a>
+			<h1>Tietoja Apurista</h1>
+			<!--a href="#page-plan-settings" data-icon="gear" class="ui-btn-right">Perustiedot</a-->
+		</div> 
+
+		<div data-role="content">
+			
+<h2>Yleistä</h2>
+	<p>Tällä ohjesivulla kerrotaan mihin ja miten Lentosuunnitelma-apuria (myöhemmin "Apuri") käytetään.</p>
+	<p>Apuri on tehty helpottamaan ja nopeuttamaan VFR-lentosuunnitelman tekemistä, erityisesti puhelimella tai tabletilla reissun päällä. 
+		Apuri poistaa kaiken turhan kirjoittamisen ja nopeuttaa lentosuunnitelman tekemistä arvaamalla älykkäästi mitä lentäjä todennäköisesti on tekemässä.
+		Apuri tekee lentosuunnitelmasta lähes poikkeuksetta virheettömän, koska se tietää lentokenttien sijainnit, ilmoittautumispisteet, ACC sektorit yms.</p>
+<hr>
+<h2>Ensimmäinen käyttökerta</h2>
+	<h3>Sijainnin käyttäminen</h3>
+		<p>Apuri hyödyntää käyttäjän nykyistä sijaintia, että lähimmät lentokentät saadaan näytettyä listan alussa. 
+			Käyttäjän kannattaa sallia Apurin käyttää sijaintia. 
+			Mikäli Apuri ei saa sijantia tietoonsa, olettaa se käyttäjän olevan Tampereella.</p>
+	<h3>Perustiedot</h3>
+		<p>Toinen oleellinen asia Apurin toiminnalle on "Perustiedot" sivulle täytettävät lentokoneen ja lentäjän tiedot. 
+			Nämä tiedot on sellaisia mitkä eivät yleensä muutu lentopäivän tai edes lentokauden aikana, esim. koneen laitteet ja nopeus sekä lentäjän nimi ja puhelinnumero.
+			Perustiedot tarvitsee syöttää vain kerran, koska ne tallennetaan automaattisesti selaimeen (localStorage) 
+			ja ne pysyvät tallessa vaikka selain ja puhelin sammutetaan välillä.</p>
+    
+<hr>
+<h2>Peruskäyttö</h2>
+	<h3>Perusplaani</h3>
+		<p>Yksinkertaisin ja yleisin lentosuunnitelma tehdään niin, että Apuri tietää miltä kentältä ollaan lähdössä (Lähtöpaikka).
+			Käyttäjä varmistaa että Laskupaikka on oikea, ja valitsee oikean toiminta-ajan ja henkilömäärän. 
+			Apuri on valinnut reitille parhaiten sopivat ilmoittautumispisteet ja laskenut lentoajan valmiiksi.
+			Sitten painetaan "Jatka lentosuunnitelmaan...", 
+			jolloin Apuri täyttää lentosuunnitelman Finavian viralliselle lentosuunnitelmalomakkeella tarkistusta ja lähettämistä varten.</p>
+		<p>Apuri olettaa että laskupaikka on sama kuin lähtöpaikka. Jos lento on matkalento, valitaan listalta oikea Laskupaikka. 
+			Lähtö- ja Laskupaikat on lajiteltu niin että lähimmät kentät on ensimmäisenä, joten todennäköisesti haluttu kenttä löytyy läheltä listan alkua.</p>
+	<h3>VFR pisteet</h3>
+		<p>Apuri tietää lennonjohtokenttien ilmoittautumispisteet, ja se valitsee reitille parhaiten sopivat pisteet. 
+			Käyttäjä voi vaihtaa reitin kulkemaan haluamiensa ilmoittautumispisteiden kautta, jolloin Apuri laskee uudelle reitille lentoajat.</p>
+	<h3>Lentoajan muuttaminen</h3>
+		<p>Apuri laskee lentoajan suorinta reittiä lähtöpaikalta ilmoittautumispisteiden kautta laskupaikalle. 
+			Käyttäjä voi muuttaa Apurin laskemaa lentoaikaa valitsemalla "Lentoajan muuttaminen..." ja valitsemalla haluttu tunti- ja minuuttimäärä.
+			Käyttäjä voi haluta pidemmän lentoajan, esim. reitin mutkittelun tai tuulen takia.
+			Myös paikallislennoille lentoajan muuttaminen on usein tarpeen, koska Apuri käyttää paikallislennon kestona oletuksena 10 minuuttia.
+			</p>
+	
+<hr>
+<h2>Erikoistilanteet</h2>
+	<h3>Tunnetut epäviralliset lentopaikat</h3>
+		<p>Apuri tunnistaa myös useita epävirallisia lentopaikkoja ("ZZZZ"), mm. kevytlentopaikat, jääkenttiä ja muita peltokenttiä. 
+			Nämä kentät saa näkyviin Perustiedot sivulta kääntämällä "Näytä myös epäviralliset lentopaikat" valinta päälle.
+			Tämän jälkeen epäviralliset lentopaikat tulee näkyviin Lähtö- ja Laskupaikkojen luetteloon.</p>
+		<p>Apuri täyttää näidenkin lentopaikkojen tiedot oikein lentosuunnitelmaan (mm. koordinaatit), laskee lentoajat ja tietää ACC sektorit.</p>
+		<p>Lentäjän tulee aina varmistua itse siitä onko epävirallinen lentopaikka käytettävissä ja täyttääkö se koneen ja lentäjän vaatimukset.
+			Vaikka Apuri tunnistaa jonkun epävirallisen lentopaikan, se ei tarkoita että paikka olisi käytettävissä.
+			</p>
+
+	<h3>Tuntemattomat epäviralliset lentopaikat</h3>
+		<p>Apurille tuntematon epävirallinen lentopaikka voidaan syöttää valitsemalla lähtö- tai laskupaikaksi listan ensimmäinen kenttä "ZZZZ (Epävirallinen)".
+			Nyt sen alle avautuu tekstikenttä mihin kirjoitetaan paikan nimi.</p>
+		<p>Jos Lähtöpaikaksi valitaan "ZZZZ (Epävirallinen)", osaa Apuri laittaa käyttäjän tämänhetkiset koordinaatit tämän paikan sijainniksi. 
+			Tämä toimii hyvin silloin kun lentosuunnitelmaa tehdään lähtöpaikalla.
+			</p>
+		<p>Jos Laskupaikaksi valitaan "ZZZZ (Epävirallinen)", täytyy laskupaikan koordinaatit kirjoittaa nimen perään että ne tulevat lentosuunnitelmaan mukaan (esim. 6217N 02226E).
+			Koska Apuri ei tiedä tässä tapauksessa laskupaikan sijaintia, se ei osaa laskea myöskään lentomatkaa ja -aikaa oikein. 
+			Oikea lentoaika täytyy asettaa kohdasta "Lentoajan muuttaminen...".
+			</p>
+		<p>Tuntemattomista epävirallisista lentopaikoista Apuri ei tiedä ACC sektoria, eikä siten osaa täyttää ACC radiojaksoa lentosuunnitelman aktivointia tai päättämistä varten.
+			Jakso täytyy kirjoittaa itse Finavian lomakkeelle (kohdassa 18 lukee "LISAA_ACC_JAKSO").</p>
+		
+	<h3>Useamman koneen tiedot</h3>
+		<p>Apurille voidaan antaa useamman lentokoneen perustiedot. 
+			Tämä tapahtuu Perustiedot sivulta Koneen valinta -listasta valitsemalla "Lisää kone".
+			Tällöin voidaan syöttää uuden lentokoneen tiedot lomakkeelle. Tiedot tallentuvat automaattisesti selaimen muistiin.
+			Valitun koneen tunnus näkyy myös pääsivulla olevan lentomatka- ja lentoaikataulukon yläpuolella, että lentosuunnitelmaan tehdessä voidaan varmistua oikeasta koneesta.</p>
+		
+	<h3>Tallennetut lentosuunnitelmat</h3>
+		<p>Pääsivun alareunassa on avattava lista "Tehdyt lentosuunnitelmat", missä näkyy viimeisen vuorokauden aikana tehdyt lentosuunnitelmat.</p>
+		
+		<p>Listassa näkyy muutamia perustietoja lentosuunnitelmista. Oikeassa reunassa olevaa i-nappia painamalla aukeaa laskupaikan Notam-sivu.
+			Listaa klikkaamalla (muualla kuin i-napista) aukeaa "Tallennettu FPL" sivu missä näkyy on lentosuunnitelman täydellisemmät tiedot.
+			Täältä voi tarkistaa jälkeenpäin mitä tietoja lentosuunnitelmaan valittiin.
+			Jos aktivointi- tai päättämistavaksi on valittu "Puhelimella maassa (ACC)", tällä sivulla on nappi, mistä voi soittaa helposti ACC:lle.
+			</p>
+			
+	<h3>DCT reitti</h3>
+		<p>VFR ilmoittautumispisteen voi jättää tyhjäksi valitsemalla "-", jolloin reitin voi kirjoittaa vapaamuotoisemmin Reitti -kohdassa olevaan tekstikenttään. </p>
+	<h3>Virhetilanteet</h3>
+		<p>On havaittu että jos iPhonessa tai iPadissa on Private Browsing (yksityinen selaus) asetus päällä, Apuri ei pysty toimimaan. Ota Private Browsing pois päältä.</p>
+	<h3>HAKKI puuttuu Malmin ja Vantaan välistä?</h3>
+		<p>Apurista on poistettu VFR piste HAKKI Malmin ja Vantaan välistä, 
+			siksi ettei Apuri ehdottaisi reittiä Vantaan alueen kautta. Perus-VFR lennot harvemmin menee sen kautta (yleensäkin harvemmin Vantaalle, joka muuten sekin puuttuu).
+			</p>
+	<h3>Apuri ei tunne ilmatilarajoja</h3>
+		<p>Apuri ei tunne ilmatilarajoja. Tämä täytyy ottaa huomioon, kun lentoreitti kiertää jotain rajoittavaa ilmatilaa, esim. Malmilta toimittaessa Vantaan ilmatila.
+			Käyttäjän täytyy itse huomioida paljonko lentoaikaa täytyy lisätä kiertämisen takia, ja lisätä lentoaikaa kohdasta "Lentoajan muuttaminen...".
+			</p>
+	<!--h3>Erikoiset laitteet</h3>
+		<p>Jos koneen laitteissa on "R", niin alle aukeaa lisäkenttä "PBN/" tiedon syöttämiseen.</p-->
+
+<hr>
+<h2>Yksityiskohtia toteutuksesta</h2>
+	<p>Lähtöaika ja lentoaika pyöristetään seuraavaan 5 minuuttiin. Esimerkiksi lähtöaika 14:26 pyöristyy ajaksi 14:30.</p>
+	<p>Jos lentokoneen nopeus on ilmoitettu solmuina, näytetään pääsivun taulukon lentomatka merimaileina (NM). Jos nopeus on yksikössä km/h näytetään matkat kilometreinä.</p>
+	<!--p>algoritmit?</p-->
+
+<hr>
+<h2>Kiitokset</h2>
+	<p>Kiitokset kaikille jotka ovat ehdottaneet parannuksia, korjauksia ja antaneet palautetta Apurin toimivuudesta. 
+		Pääasiassa keskustelua on käyty <a href="http://www.flightforum.fi/">FlightForumin</a> <a href="http://www.flightforum.fi/forum/index.php/topic,106262.0.html">Lentosuunnitelma-apuri</a> -ketjussa.</p>
+
+<hr>
+<h2>Tekijä</h2>
+	<p>Markku Korsumäki - 2011-2014</p>
+	<p>Lähdekoodi on saatavilla: <a href="https://github.com/korsumaki/lentosuunnitelma-apuri">https://github.com/korsumaki/lentosuunnitelma-apuri</a></p>
+
+		</div><!-- content -->
+
+	</div>
+</body>
+</html>
