@@ -46,9 +46,9 @@
  * 			+ korkeus
  * 			+ toiminta-aika
  * 			+ hlö määrä
- * - käyttöohjesivu
- * 		- käyttö
- * 		- toteutuksen tekniset yksityiskohdat
+ * + käyttöohjesivu
+ * 		+ käyttö
+ * 		+ toteutuksen tekniset yksityiskohdat
  * + jätä johonkin talteen plaanin aktivointi- ja lopetustavat (puh/jakso), ettei tarvisi kirjoittaa muistiin
  * 
  * - refresh jossain muualla kuin pääsivulla aiheuttaa erroreita -> jquery vaiheessa voisi koittaa korjata
@@ -1212,9 +1212,15 @@ function updateFromLocalStorage() {
 		document.getElementById("aircraftType").value = type;
 	}
 	var equipment = localStorage.getItem(currentId + "_equipment");
+	if (equipment === null) {
+		//debug_log("updateFromLocalStorage() - force equipment V"); // TODO
+		equipment = "V"; //TODO
+		localStorage.setItem( currentId + "_equipment", equipment);
+	}
 	if (equipment !== null) {
 		document.getElementById("equipment").value = equipment;
-	}
+	} 
+	
 	var ssr = localStorage.getItem(currentId + "_ssr");
 	if (ssr !== null) {
 		document.getElementById("ssr").value = ssr;
