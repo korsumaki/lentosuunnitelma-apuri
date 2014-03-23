@@ -21,7 +21,6 @@
  * + lentolaskelmataulukon yhteyteen valitun koneen tunnus näkyviin
  * + zzzz kentän koordinaatit 4+5 numerolla. ConvertToDM()
  * + lentoajan antaminen itse (paikallislennoille tai jos muuten haluaa kierrellä enemmän)
- * -
  * 
  * /- lisää tallenna -nappi
  * - tallennetaan plaanin tiedot (localstorageen) (ilman virallista plaanin jättämistä)
@@ -54,7 +53,25 @@
  * - refresh jossain muualla kuin pääsivulla aiheuttaa erroreita -> jquery vaiheessa voisi koittaa korjata
  * 
  * - lisää koodin muuttamispäivämäärä lokitukseen?
+ * 
+ * 
+ * + iframe kokeilu idebug.html
+ * 		+ http://stackoverflow.com/questions/17223469/how-to-preserve-responsive-design-in-mobile-browsers-iframe
+ * 		+ näyttää siltä että uudempi jquerymobile auttaa
+ * + Sijainti... -> Sijainti OK
+ * 		+ näkeekö onko tarkka vai karkea?
+ * 		= handlePositionUpdateCallback
+ * + jos huomataan että käyttäjän täytyy modata jotain tietoa lomakkeella, kerro se messageboxissa (acc jakso, /zzzz koordinaatit)
+ * + tuntematon epävirallinen laskupaikka -> avaa lentoajan muuttaminen...
+ * - tee samat oikeellisuustarkistukset kuin finavialla on?
+ * 		- tutki mitä siellä tarkistetaan.
+ * - jos reitti kenttään on syötetty jotain, pakota tai ohjaa käyttäjä muuttamaan lentoaikaa.
  * - poista html koodit input kentistä ennen tiedon käyttämistä!
+ * 
+ * - Jatka Lentosuunnitelmaan... napin yläpuolelle punainen huomautuslaatikko muistuttamaan mitä pitää modata?
+ * - avaa notam linkki uuteen ikkunaan?
+ * 
+ * - review and update comments
  * 
  * + minimization: http://closure-compiler.appspot.com/home
  */
@@ -96,6 +113,8 @@ var BY_PHONE_ON_GROUND_STR = "PHONE ACC ";
 var BY_PHONE_ON_GROUND_STR_WITH_PHONE = "PHONE ACC 032865172 "; 
 var BY_RTF_ON_AIR_STR = "RTF ACC "; // ACC freq is updated later
 var BY_TWR = "- (torni)";
+
+var NOTE_TO_ADD_ACC_FREQ_STR = "LISÄÄ_ACC_JAKSO";
 
 var overrideFlightTime = true;
 
@@ -186,6 +205,7 @@ function continueIfEverythingIsReady() {
 
 
 function handlePositionError(error) {
+	document.getElementById("locationUpdateButtonText").innerHTML = "Ei sijaintia";
 	switch(error.code)
 	{
 	case error.PERMISSION_DENIED:
@@ -208,6 +228,19 @@ function handlePositionError(error) {
 
 function handlePositionUpdateCallback(position) {
 	handlePositionUpdate(position.coords.latitude, position.coords.longitude);
+	var accuracy;
+	if (position.coords.accuracy<1000) {
+		accuracy = "(" + Math.round(position.coords.accuracy) + "m)";
+	} else {
+		accuracy = "(" + Math.round(position.coords.accuracy/1000) + "km)";
+	}
+	/*if (position.coords.accuracy<500) {
+		accuracy = "(m)";
+	} else {
+		accuracy = "(km)";
+	}*/
+
+	document.getElementById("locationUpdateButtonText").innerHTML = "Sijainti " + accuracy;
 }
 
 function handlePositionUpdate(lat, lon) {
@@ -604,7 +637,7 @@ function aerodromeReadyHandler(xmlDoc) {
 				"000000N", 
 				"0000000E",
 				"no",
-				"LISÄÄ_ACC_JAKSO",
+				NOTE_TO_ADD_ACC_FREQ_STR,
 				new Array() ));
 
 		for (var i=0; i<ad_list.length; ++i) {
@@ -1449,24 +1482,18 @@ function updateStoredPlanList() {
 		var text = "<li class='storedPlanListItem'>" //<a href='#'>
 			+ "<a href='#page-stored-plan' onClick='setSelectedStoredPlanIndex(" + i + ")'>"
 			+ "<h2>"+ storedPlans[i].departure + "-" + storedPlans[i].destination + "</h2>"
-			+ "<p class='ui-li-aside'>Lähtöaika: <strong>" + timeStr +"</strong> (sa)</p>"
+			+ "<p class='ui-li-aside'>Lähtöaika:<br><strong>" + timeStr +"</strong> (sa)</p>"
 			+ "<p><strong>Reitti: " + route + "</strong></p>"
 			+ "<p>Lentoaika: " + storedPlans[i].flight_time + "</p>"
 			+ "<p>Päättäminen: " + storedPlans[i].completion_method + "</p>"
 			+ "</a>";
+		//onclick="onClickFlightPlanLinkButton()"
+		//indow.open( flightPlanLink );
 		if (storedPlans[i].destination !== UNOFFICIAL_AERODROME) {
 			text += "<a href='" + getNotamLink(storedPlans[i].destination) + "' rel='external'>Notam</a>";
+			//text += "<a href='#' onclick='window.open(" + getNotamLink(storedPlans[i].destination) + ");' rel='external'>Notam</a>";
 		}
 		text += "</li>";
-
-			//+ "<div class='buttonContainer'>"
-			//+ "<p>"
-			//+ "<button data-role='button' data-inline='true'>Aloita</button>"
-			//+ "<button data-role='button' data-inline='true'>Lopeta</button>"
-			//+ "<button data-role='button' data-inline='true'>Poista</button>"
-			//+ "</p>"
-			//+ "</div>"
-			//+ "<a href='#page-stored-plan'>Näytä lentosuunnitelma</a></li>";
 
 		$('#storedPlanList').append( $(text) );
 	}
@@ -1511,9 +1538,6 @@ function initStoredPlanPageHandler() {
 
 function onLoad()
 {
-	//debug_log( "Sivua on muutettu viimeksi " + document.lastModified );
-	//debug_log( "Loading aerodromes and VFR REP points...");
-
 	// Check whether we should still load old not-yet-updated files
 	var today = new Date();
 	var dateOfUpdate = new Date(dateOfUpdateStr);
@@ -1531,6 +1555,7 @@ function onLoad()
 		// Hide updateCurrentLocationButton
 		debug_log( "Geolocation ei ole tuettu selaimessa.");
 		fakeCurrentLocation();
+		document.getElementById("locationUpdateButtonText").innerHTML = "Ei sijaintia";
 	}
 	
 	updateFromLocalStorage();
@@ -1556,6 +1581,7 @@ function updateCurrentLocation() {
 	//debug_log("updateCurrentLocation");
 	if (navigator.geolocation) {
 		//debug_log("geolocation is supported");
+		document.getElementById("locationUpdateButtonText").innerHTML = "Sijainti...";
 		navigator.geolocation.getCurrentPosition(handlePositionUpdateCallback, handlePositionError );
 	}
 }
@@ -1670,10 +1696,12 @@ function onChangeDestinationAd() {
 	if (dest.value == UNOFFICIAL_AERODROME_INDEX) {
 		//document.getElementById("zzzz_destination_container").style.display = '';
 		$('#zzzz_destination_container').slideDown();
+		setFlightTimeOverride(true);
 	}
 	else {
 		//document.getElementById("zzzz_destination_container").style.display = 'none';
 		$('#zzzz_destination_container').slideUp();
+		setFlightTimeOverride(false);
 	}
 }
 
@@ -1769,7 +1797,8 @@ function createFlyingTimeTable() {
 	}
 	
 	if (aircraftSpeed == 0) {
-		document.getElementById("flyingTime").innerHTML = '<a href="#page-plan-settings" class="ui-btn-right">Täytä Perustiedot sivulle puuttuvat tiedot!</a>';
+		//document.getElementById("flyingTime").innerHTML = '<a href="#page-plan-settings" class="ui-btn-right">Täytä Perustiedot sivulle puuttuvat tiedot!</a>';
+		document.getElementById("flyingTime").innerHTML = '<a href="#page-plan-settings">Täytä Perustiedot sivulle puuttuvat tiedot!</a>';
 		
 		//debug_log("Täytä Perustiedot sivulle puuttuvat tiedot!");
 		return;
@@ -1789,7 +1818,7 @@ function createFlyingTimeTable() {
 	//var tableBegin = '<table data-role="table" id="flyingTimeTable" data-mode="columntoggle" class="ui-responsive table-stripe" data-column-btn-text="Sarakkeet..."><thead><tr class="ui-bar-d"><th data-priority="persist">paikka</th><th data-priority="2">km</th><th data-priority="1">min</th></tr></thead><tbody>';
 	var tableBegin = '<table data-role="table" id="flyingTimeTable" class="table-stripe">';
 	tableBegin += '<thead>';
-	tableBegin += '<tr class="ui-bar-d">';
+	tableBegin += '<tr class="ui-bar-a">'; // ui-bar-d
 	tableBegin += '<th data-priority="persist">paikka</th>';
 	tableBegin += '<th data-priority="2">' + distanceUnitText + '</th>';
 	
@@ -1895,11 +1924,11 @@ function updateFlyingTimeValues() {
 			}
 		}
 		if (flightTimeOverrideStr.length !== 4) {
-			alert("Lentoaikaan täytyy antaa sekä tunnit että minuutit!");
+			alert("Itse määriteltyyn lentoaikaan täytyy antaa sekä tunnit että minuutit!");
 			return false;
 		}
 		if (Number(flightTimeOverrideStr) < Number(gSelectedFlyingTimeStr)) {
-			alert("Lentoajaksi ei voi antaa vähempää kuin laskelmassa on laskettu!");
+			alert("Itse määritellyksi lentoajaksi ei voi antaa vähempää kuin laskelmassa on laskettu!");
 			return false;
 		}
 		gSelectedFlyingTimeStr = flightTimeOverrideStr;
@@ -1992,7 +2021,9 @@ function updateFlightPlanLink() {
 	linkString += "&dad=" + getAerodromeByIndex( document.getElementById("destination").value ).icao;
 	
 	// Check FlightTimeOverride
-	updateFlyingTimeValues();
+	if (updateFlyingTimeValues() == false) {
+		return false;
+	}
 	
 	linkString += "&eet=" + gSelectedFlyingTimeStr;
 
@@ -2001,8 +2032,8 @@ function updateFlightPlanLink() {
 	
 	// Add departure and/or destination places into 18: field, if using ZZZZ airfield.
 	//18: DEP/NUMMIJARVI DEST/AHTARI
-	//var alertText = "Muista päivittää lomakkeen kenttään 18:";
-	//var showAlertText = false;
+	var alertText = "Muista päivittää lomakkeen kenttään 18:";
+	var showAlertText = false;
 	
 	var departureValue = document.getElementById("departure").value;
 	if (departureValue == UNOFFICIAL_AERODROME_INDEX) 
@@ -2026,6 +2057,10 @@ function updateFlightPlanLink() {
 	var destinationValue = document.getElementById("destination").value;
 	if (destinationValue == UNOFFICIAL_AERODROME_INDEX) {
 		other += "DEST%252F" + document.getElementById("zzzz_destination").value + " ";
+		
+		// TODO note user to manually add coordinates
+		//alertText += "\nMääräkentän koordinaatit (ddmmN dddmmE).";
+		//showAlertText = true;
 	}
 	else {
 		var destinationAerodrome = getAerodromeByIndex(destinationValue);
@@ -2052,6 +2087,11 @@ function updateFlightPlanLink() {
 		var depAerodrome = getAerodromeByIndex( dep.value );
 		//debug_log("dep acc =" + depAerodrome.acc);
 		other += "DEP " + BY_RTF_ON_AIR_STR + depAerodrome.acc + " ";
+		
+		if (depAerodrome.acc == NOTE_TO_ADD_ACC_FREQ_STR) {
+			alertText += "\nLähtöpaikan ACC jakso.";
+			showAlertText = true;
+		}
 	}
 
 	if (document.getElementById("planCompletionMethod").value == "phoneOnGound") {
@@ -2062,6 +2102,11 @@ function updateFlightPlanLink() {
 		var destAerodrome = getAerodromeByIndex( dest.value );
 		//debug_log("dest acc =" + destAerodrome.acc);
 		other += "ARR " + BY_RTF_ON_AIR_STR + destAerodrome.acc + " ";
+		
+		if (destAerodrome.acc == NOTE_TO_ADD_ACC_FREQ_STR) {
+			alertText += "\nLaskupaikan ACC jakso.";
+			showAlertText = true;
+		}
 	}
 
 	//other += "PILOT TEL " + document.getElementById("pilotTel").value;
@@ -2090,7 +2135,7 @@ function updateFlightPlanLink() {
 		}
 	}
 	if (Number(endurance) === 0) {
-		alert("Toiminta-aika ei voi olla nolla!\nMeinasitko päästä pitkälle?");
+		alert("Toiminta-aika puuttuu!\nAseta oikea toiminta-aika.");
 		return false;
 	}
 
@@ -2123,6 +2168,10 @@ function updateFlightPlanLink() {
 	//debug_log("updateFlightPlanLink() - linkString after  =" + linkString);
 
 	flightPlanLink = linkStart + linkString;
+	
+	if (showAlertText) {
+		alert(alertText);
+	}
 	
 	return true;
 }
