@@ -50,6 +50,34 @@
  * 		+ toteutuksen tekniset yksityiskohdat
  * + j‰t‰ johonkin talteen plaanin aktivointi- ja lopetustavat (puh/jakso), ettei tarvisi kirjoittaa muistiin
  * 
+ * =======
+ * - Ilmatilauudistus 13 NOV 2014
+ * 		+ tee tietojen ajastettu vaihto
+ * 			+ kaikki kolme xml tiedostoa
+ * 		+ uusi VFR pisteet -tiedosto -> on valmiina
+ * 		+ ACC sektorit uusiksi
+ * 			+ selvitett‰v‰ mill‰ sektorilla mik‰kin kentt‰ on?
+ * 				+ tornikent‰t
+ * 				+ korpikent‰t -> tarkistuksia viel‰
+ * 				+ zzzz kent‰t (oikeasta ilmailukartasta) -> tarkistuksia viel‰
+ * 				+ sektoreiden koordinaatit on tiedossa, joten voisi olla mahdollista piirt‰‰ ne kartalle?
+ * 			+ tarkistuksia teht‰v‰ viel‰ oikealla datalla
+ * 			+ jaksot
+ * 			+ sektorien koordinaatit lˆytyy, mutta ei viel‰ suoraa tietoa mitk‰ kent‰t ko. alueilla on.
+ * 				ENR 2.1 FIR, ACC SECTOR, CTA, FIZ UPPER, TMA
+ * 				ACC-sektorit on esitetty taulukossa 2.1.2.
+ * 				EF_AMDT_A_2014_2_part_2_en.pdf
+ * 
+ * +- lentokorkeus valinnat selv‰kielelle (kuten nopeus)
+ * - kentt‰listan filtterˆinti kirjoituksen mukaan?
+ * 		- mihin tekstikentt‰ sopii
+ * 		- miten filtterˆinti k‰yt‰nnˆss‰ toimii
+ * 			- valmis demokoodi, data-native-menu="false"
+ * 			http://demos.jquerymobile.com/1.4.4/selectmenu-custom-filter/
+ * - uusi tekstikentt‰, plaanin aktivointi, muu tapa (RTF PIRKKALA TWR 118 700)
+ * - jos reitti j‰‰ tyhj‰ksi, lis‰‰ siihen DCT, paitsi jos l‰htˆ ja m‰‰r‰kentt‰ on samoja... silloin note ett‰ "lis‰‰ siihen jotain, esim. TC"
+ * 
+ * 
  * - refresh jossain muualla kuin p‰‰sivulla aiheuttaa erroreita -> jquery vaiheessa voisi koittaa korjata
  * 
  * - lis‰‰ koodin muuttamisp‰iv‰m‰‰r‰ lokitukseen?
@@ -73,6 +101,8 @@
  * 
  * - review and update comments
  * 
+ * - poista timestampit minimoitavasta koodista
+ * - poista p‰iv‰m‰‰r‰feikkaus ennen julkaisua
  * + minimization: http://closure-compiler.appspot.com/home
  */
 
@@ -94,17 +124,17 @@ var gSelectedFlyingTimeStr;
 // constants
 
 // Date when update is taken into use.
-var dateOfUpdateStr = "2013-09-19T00:00:00Z";
+var dateOfUpdateStr = "2014-11-13T00:00:00Z";
 
 // These names are used before update
-var VFRPortFilename_before_2013_sep_19 = "17NOV2011.xml";
-var AerodromesFilename_before_2013_sep_19 = "aerodromes.xml";
+var AerodromesFilename_before_13NOV2014 = "aerodromes_19SEP2013.xml";
+var VFRPortFilename_before_13NOV2014    = "EF_VFRREP_19SEP2013.xml";
+var ZZZZFieldsFilename_before_13NOV2014 = "zzzz_fields_18JAN2014.xml";
 
 // Current (new) filenames
-var VFRPortFilename = "EF_VFRREP_19SEP2013.xml";
-var AerodromesFilename = "aerodromes_19SEP2013.xml";
-//var ZZZZFieldsFilename = "zzzz_fields.xml";
-var ZZZZFieldsFilename = "zzzz_fields_18JAN2014.xml";
+var VFRPortFilename = "EF_VFRREP_13NOV2014.xml";
+var AerodromesFilename = "aerodromes_13NOV2014.xml";
+var ZZZZFieldsFilename = "zzzz_fields_13NOV2014.xml";
 
 var UNOFFICIAL_AERODROME="ZZZZ";
 var UNOFFICIAL_AERODROME_INDEX=0; // This field index is used when ZZZZ place name was written manually, not from xml.
@@ -123,6 +153,13 @@ function debug_log(str)
 {
 	log += str + "<br>";
 	document.getElementById("log").innerHTML=log;
+}
+
+function debug_timestamp(str)
+{
+	var d = new Date();
+	var n = d.getTime(); // toTimeString();
+	debug_log(str + ":"+ n);
 }
 
 //-------------------------------------
@@ -536,6 +573,8 @@ function aerodromeXmlResponseHandler() {
 	if (this.readyState == this.DONE || this.readyState == 4) {
 		//debug_log( "aerodromeXmlResponseHandler - status=" + this.status );
 		if (this.status == 200 && this.responseXML !== null ) { //&& this.responseXML.getElementById('test').textContent
+			debug_timestamp("aerodromeXml loaded");
+
 			// success!
 			aerodromeReadyHandler(this.responseXML);
 			return;
@@ -603,8 +642,8 @@ function vfrPortReadyHandler(xmlDoc) {
 		var wptName = wpt_list[wpt].getElementsByTagName("name")[0].childNodes[0].nodeValue;
 		var desc = wpt_list[wpt].getElementsByTagName("desc")[0].childNodes[0].nodeValue;
 		if (desc == "Compulsory") {
-			var lat = wpt_list[wpt].attributes.getNamedItem("lat").nodeValue;
-			var lon = wpt_list[wpt].attributes.getNamedItem("lon").nodeValue;
+			var lat = wpt_list[wpt].attributes.getNamedItem("lat").value; // FIXED nodeValue -> value
+			var lon = wpt_list[wpt].attributes.getNamedItem("lon").value; // FIXED nodeValue -> value
 			
 			VfrRepArray.push(new Waypoint(wptName, lat, lon));
 		}
@@ -618,10 +657,11 @@ function vfrPortReadyHandler(xmlDoc) {
 }
 
 function aerodromeReadyHandler(xmlDoc) {
+	debug_timestamp("aerodromeReadyHandler start");
 	try {
 		var gpx_list = xmlDoc.getElementsByTagName("gpx");
 		if (gpx_list.length >0) {
-			debug_log( "Lentokentt‰tiedot p‰iv‰tty: " + gpx_list[0].attributes.getNamedItem("created").nodeValue);
+			debug_log( "Lentokentt‰tiedot p‰iv‰tty: " + gpx_list[0].attributes.getNamedItem("created").value); // FIXED nodeValue -> value
 		}
 	} catch(err) {
 		debug_log("Could not read xml date: " + err);
@@ -649,8 +689,8 @@ function aerodromeReadyHandler(xmlDoc) {
 			//debug_log( tmp_acc + " -> " + acc );
 
 
-			var lat = ad_list[i].attributes.getNamedItem("lat").nodeValue;
-			var lon = ad_list[i].attributes.getNamedItem("lon").nodeValue;
+			var lat = ad_list[i].attributes.getNamedItem("lat").value; // FIXED nodeValue -> value
+			var lon = ad_list[i].attributes.getNamedItem("lon").value; // FIXED nodeValue -> value
 			
 			var vfrPoints = ad_list[i].getElementsByTagName("vfrpoint");
 			var vfrPointsArray = new Array();
@@ -676,6 +716,7 @@ function aerodromeReadyHandler(xmlDoc) {
 
 	// removed because we continue after VFR port file loading.
 	//continueIfEverythingIsReady();
+	debug_timestamp("aerodromeReadyHandler end");
 }
 
 
@@ -685,7 +726,7 @@ function zzzzFieldReadyHandler(xmlDoc) {
 	try {
 		var gpx_list = xmlDoc.getElementsByTagName("gpx");
 		if (gpx_list.length >0) {
-			debug_log( "Ep‰virallisten lentopaikkojen tiedot p‰iv‰tty: " + gpx_list[0].attributes.getNamedItem("created").nodeValue);
+			debug_log( "Ep‰virallisten lentopaikkojen tiedot p‰iv‰tty: " + gpx_list[0].attributes.getNamedItem("created").value); // FIXED nodeValue -> value
 		}
 	} catch(err) {
 		debug_log("Could not read xml date: " + err);
@@ -704,8 +745,8 @@ function zzzzFieldReadyHandler(xmlDoc) {
 			var acc = tmp_acc.replace(".", " ");
 			//debug_log( tmp_acc + " -> " + acc );
 
-			var lat = ad_list[i].attributes.getNamedItem("lat").nodeValue;
-			var lon = ad_list[i].attributes.getNamedItem("lon").nodeValue;
+			var lat = ad_list[i].attributes.getNamedItem("lat").value; // FIXED nodeValue -> value
+			var lon = ad_list[i].attributes.getNamedItem("lon").value; // FIXED nodeValue -> value
 			
 			var vfrPoints = ad_list[i].getElementsByTagName("vfrpoint");
 			var vfrPointsArray = new Array();
@@ -1542,10 +1583,12 @@ function onLoad()
 	var today = new Date();
 	var dateOfUpdate = new Date(dateOfUpdateStr);
 	if (today.getTime() < dateOfUpdate.getTime()) {
-		VFRPortFilename = VFRPortFilename_before_2013_sep_19;
-		AerodromesFilename = AerodromesFilename_before_2013_sep_19;
+		VFRPortFilename = VFRPortFilename_before_13NOV2014;
+		AerodromesFilename = AerodromesFilename_before_13NOV2014;
+		ZZZZFieldsFilename = ZZZZFieldsFilename_before_13NOV2014;
 	}
 
+	debug_timestamp("aerodromeXml load start");
 	loadXMLDoc(AerodromesFilename, aerodromeXmlResponseHandler);
 
 	if (navigator.geolocation) {

@@ -4,10 +4,10 @@
 		<meta charset="ISO-8859-1">
 		<title>Lentosuunnitelma</title> 
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"> 
-		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css" />
 		<link rel="stylesheet" href="mystyle.css" />
-		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-		<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>
 		
 		<script src="scripts/storage.remy.js"></script>
 		<!-- local-storage from https://gist.github.com/remy/350433 -->
@@ -92,10 +92,10 @@
 					</legend>
 					<select id="flight_lv" onchange="onChangeFlightLv()" data-mini="true">
 						<option value="VFR" selected="selected">VFR</option>
-						<option value="F">F</option>
-						<option value="A">A</option>
-						<option value="S">S</option>
-						<option value="M">M</option>
+						<option value="F">F (lentopinta)</option>
+						<option value="A">A (korkeus merenpinnasta, 100 jalkaa)</option>
+						<option value="S">S (korkeus std paineella, 10 metriä)</option>
+						<option value="M">M (korkeus merenpinnasta, 10 metriä)</option>
 					</select>
 				</fieldset>
 				<fieldset data-role="controlgroup" id="flight_level_container" data-mini="true">

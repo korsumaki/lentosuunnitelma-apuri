@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<gpx
+version="1.2"
+creator="Markku Korsumaki"
+created="2014-11-13"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.topografix.com/GPX/1/1"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<!--
+icao = lähtö- tai laskupaikaksi tuleva teksti
+name = kohtaan 18 tuleva DEP/ tai DEST/ paikannimi
+-->
+<aerodrome lat="630727N" lon="0230305E"><icao>ZZZZ</icao><name>Kauhava</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="680514N" lon="0270726E"><icao>ZZZZ</icao><name>Vuotso</name><atc>no</atc><acc>126.100</acc></aerodrome>
+<aerodrome lat="683937N" lon="0254221E"><icao>ZZZZ</icao><name>Martiniiskonpalo</name><atc>no</atc><acc>126.100</acc></aerodrome>
+<aerodrome lat="684241N" lon="0254510E"><icao>ZZZZ</icao><name>Jäkäläpää</name><atc>no</atc><acc>126.100</acc></aerodrome>
+<aerodrome lat="634244N" lon="0252342E"><icao>ZZZZ</icao><name>Haapajärvi</name><atc>no</atc><acc>132.325</acc></aerodrome>
+<aerodrome lat="623047N" lon="0240403E"><icao>ZZZZ</icao><name>Karhukangas Ähtäri</name><atc>no</atc><acc>132.325</acc></aerodrome>
+<aerodrome lat="620052N" lon="0230329E"><icao>ZZZZ</icao><name>Parkano</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="621828N" lon="0223047E"><icao>ZZZZ</icao><name>Nummijärvi</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="621700N" lon="0222600E"><icao>ZZZZ</icao><name>Nummijärvi jää</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="621700N" lon="0222900E"><icao>ZZZZ</icao><name>Jokela Nummijärvi</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="651800N" lon="0252500E"><icao>ZZZZ</icao><name>Sorosenperä Ii</name><atc>no</atc><acc>124.200</acc></aerodrome>
+<aerodrome lat="653358N" lon="0253631E"><icao>ZZZZ</icao><name>YliOlhava Ii</name><atc>no</atc><acc>124.200</acc></aerodrome>
+<aerodrome lat="604526N" lon="0264421E"><icao>ZZZZ</icao><name>Ummeljoki</name><atc>no</atc><acc>136.650</acc></aerodrome>
+<aerodrome lat="604915N" lon="0265821E"><icao>ZZZZ</icao><name>Savero</name><atc>no</atc><acc>136.650</acc></aerodrome>
+<aerodrome lat="620143N" lon="0243955E"><icao>ZZZZ</icao><name>Mänttä</name><atc>no</atc><acc>132.325</acc></aerodrome>
+<aerodrome lat="621926N" lon="0224139E"><icao>ZZZZ</icao><name>Ilvesjoki</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="623510N" lon="0222850E"><icao>ZZZZ</icao><name>Myllykylä Kurikka</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="623410N" lon="0220339E"><icao>ZZZZ</icao><name>Norinkylä Teuva</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="615351N" lon="0261116E"><icao>ZZZZ</icao><name>Leivonmäen Höystösensuo Joutsa</name><atc>no</atc><acc>132.325</acc></aerodrome>
+<aerodrome lat="630216N" lon="0220732E"><icao>ZZZZ</icao><name>Vähäkyrö</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="613409N" lon="0280049E"><icao>ZZZZ</icao><name>Pistohiekka Puumala</name><atc>no</atc><acc>135.525</acc></aerodrome>
+<aerodrome lat="690734N" lon="0271410E"><icao>ZZZZ</icao><name>Kaamanen</name><atc>no</atc><acc>126.100</acc></aerodrome>
+<aerodrome lat="611633N" lon="0240026E"><icao>ZZZZ</icao><name>Valkeakoski</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="611200N" lon="0225300E"><icao>ZZZZ</icao><name>Rekikoski Huittinen</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="611200N" lon="0230100E"><icao>ZZZZ</icao><name>Illo Sastamala</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="610600N" lon="0230940E"><icao>ZZZZ</icao><name>Punkalaidun</name><atc>no</atc><acc>127.100</acc></aerodrome>
+
+</gpx>
