@@ -157,9 +157,9 @@ function debug_log(str)
 
 function debug_timestamp(str)
 {
-	var d = new Date();
-	var n = d.getTime(); // toTimeString();
-	debug_log(str + ":"+ n);
+	//var d = new Date();
+	//var n = d.getTime(); // toTimeString();
+	//debug_log(str + ":"+ n);
 }
 
 //-------------------------------------
