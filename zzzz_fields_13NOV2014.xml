@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
 <gpx
-version="1.2"
+version="1.4"
 creator="Markku Korsumaki"
 created="2014-11-13"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -36,5 +36,6 @@ name = kohtaan 18 tuleva DEP/ tai DEST/ paikannimi
 <aerodrome lat="611200N" lon="0225300E"><icao>ZZZZ</icao><name>Rekikoski Huittinen</name><atc>no</atc><acc>127.100</acc></aerodrome>
 <aerodrome lat="611200N" lon="0230100E"><icao>ZZZZ</icao><name>Illo Sastamala</name><atc>no</atc><acc>127.100</acc></aerodrome>
 <aerodrome lat="610600N" lon="0230940E"><icao>ZZZZ</icao><name>Punkalaidun</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="624500N" lon="0232900E"><icao>ZZZZ</icao><name>Mäyry Kuortane</name><atc>no</atc><acc>127.100</acc></aerodrome>
 
 </gpx>
