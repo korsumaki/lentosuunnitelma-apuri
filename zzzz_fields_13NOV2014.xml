@@ -2,7 +2,7 @@
 <gpx
 version="1.4"
 creator="Markku Korsumaki"
-created="2014-11-13"
+created="2015-02-08"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/1"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
@@ -36,6 +36,7 @@ name = kohtaan 18 tuleva DEP/ tai DEST/ paikannimi
 <aerodrome lat="611200N" lon="0225300E"><icao>ZZZZ</icao><name>Rekikoski Huittinen</name><atc>no</atc><acc>127.100</acc></aerodrome>
 <aerodrome lat="611200N" lon="0230100E"><icao>ZZZZ</icao><name>Illo Sastamala</name><atc>no</atc><acc>127.100</acc></aerodrome>
 <aerodrome lat="610600N" lon="0230940E"><icao>ZZZZ</icao><name>Punkalaidun</name><atc>no</atc><acc>127.100</acc></aerodrome>
-<aerodrome lat="624500N" lon="0232900E"><icao>ZZZZ</icao><name>Mäyry Kuortane</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="624506N" lon="0232917E"><icao>ZZZZ</icao><name>Mäyry Kuortane</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="611159N" lon="0243720E"><icao>ZZZZ</icao><name>Iso Roinevesi Hauho</name><atc>no</atc><acc>123.775</acc></aerodrome>
 
 </gpx>
