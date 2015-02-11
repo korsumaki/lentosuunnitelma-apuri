@@ -68,7 +68,7 @@
  * 				ACC-sektorit on esitetty taulukossa 2.1.2.
  * 				EF_AMDT_A_2014_2_part_2_en.pdf
  * 
- * +- lentokorkeus valinnat selväkielelle (kuten nopeus)
+ * + lentokorkeus valinnat selväkielelle (kuten nopeus)
  * - kenttälistan filtteröinti kirjoituksen mukaan?
  * 		- mihin tekstikenttä sopii
  * 		- miten filtteröinti käytännössä toimii
@@ -77,6 +77,9 @@
  * - uusi tekstikenttä, plaanin aktivointi, muu tapa (RTF PIRKKALA TWR 118 700)
  * - jos reitti jää tyhjäksi, lisää siihen DCT, paitsi jos lähtö ja määräkenttä on samoja... silloin note että "lisää siihen jotain, esim. TC"
  * 
+ * - xml latauksen ja parsinnan kellotus
+ * 		- loppu-alku -ajan tulostus
+ * 		- 
  * 
  * - refresh jossain muualla kuin pääsivulla aiheuttaa erroreita -> jquery vaiheessa voisi koittaa korjata
  * 
@@ -146,8 +149,13 @@ var BY_TWR = "- (torni)";
 
 var NOTE_TO_ADD_ACC_FREQ_STR = "LISÄÄ_ACC_JAKSO";
 
+var PYROTECHNICS_NOTE_REMARKS = "rakettipelastusvarjo";
+
 var overrideFlightTime = true;
 
+
+var total_startup_start_time = 0;
+var aerodromeXml_start_time = 0;
 
 function debug_log(str)
 {
@@ -155,14 +163,20 @@ function debug_log(str)
 	document.getElementById("log").innerHTML=log;
 }
 
-function debug_timestamp(str)
+function debug_timestamp_start(str)
 {
-	//var d = new Date();
-	//var n = d.getTime(); // toTimeString();
-	//debug_log(str + ":"+ n);
+	var d = new Date();
+	var n = d.getTime(); // toTimeString();
+	//debug_log("-> " + str); // + ": " + n
+	return n;
+}
+function debug_timestamp_ready(str, start_time)
+{
+	var d = new Date();
+	var n = d.getTime(); // toTimeString();
+	//debug_log("<- " + str + ": " + (n-start_time)); //  + " -- "+ n
 }
 
-//-------------------------------------
 
 function getFlightTimeOverride() {
 	return overrideFlightTime;
@@ -227,13 +241,16 @@ function isEverythingReady() {
 }
 
 function continueIfEverythingIsReady() {
+	debug_timestamp_ready("total startup (check if everything is ready)", total_startup_start_time);
+
 	if (isEverythingReady()) {
 		//debug_log("continueIfEverythingIsReady()");
 		PopulateSelections();
 		onChangeDepartureAd();
 		onChangeDestinationAd();
 	}
-	
+	debug_timestamp_ready("total startup (all but position)", total_startup_start_time);
+
 	if (OfficialAerodromeArray !== undefined && ZZZZFieldArray !== undefined &&gPosition_lat !== undefined) {
 		//debug_log("continueIfEverythingIsReady() - new handlePositionUpdate");
 		handlePositionUpdate(gPosition_lat, gPosition_lon);
@@ -264,6 +281,8 @@ function handlePositionError(error) {
 
 
 function handlePositionUpdateCallback(position) {
+	debug_timestamp_ready("total startup (got position update)", total_startup_start_time);
+
 	handlePositionUpdate(position.coords.latitude, position.coords.longitude);
 	var accuracy;
 	if (position.coords.accuracy<1000) {
@@ -322,6 +341,8 @@ function handlePositionUpdate(lat, lon) {
 	PopulateSelections();
 	onChangeDepartureAd();
 	onChangeDestinationAd();
+	
+	debug_timestamp_ready("total startup (after position update)", total_startup_start_time);
 }
 
 function addPrefixDigits(value, digitToAdd, targetLength) {
@@ -573,7 +594,7 @@ function aerodromeXmlResponseHandler() {
 	if (this.readyState == this.DONE || this.readyState == 4) {
 		//debug_log( "aerodromeXmlResponseHandler - status=" + this.status );
 		if (this.status == 200 && this.responseXML !== null ) { //&& this.responseXML.getElementById('test').textContent
-			debug_timestamp("aerodromeXml loaded");
+			debug_timestamp_ready("aerodromeXml loaded", aerodromeXml_start_time);
 
 			// success!
 			aerodromeReadyHandler(this.responseXML);
@@ -622,6 +643,8 @@ function loadXMLDoc(filename, handler) {
 }
 
 function vfrPortReadyHandler(xmlDoc) {
+	var vfrPortReadyHandler_start_time = debug_timestamp_start("vfrPortReadyHandler");
+
 	try {
 		var metadata = xmlDoc.getElementsByTagName("metadata");
 		if (metadata.length >0) {
@@ -651,13 +674,15 @@ function vfrPortReadyHandler(xmlDoc) {
 	debug_log( "=> " + VfrRepArray.length + " VFR ilmoittautumispistettä.");
 
 	//continueIfEverythingIsReady();  moved to end of zzzzFieldReadyHandler
+
+	debug_timestamp_ready("vfrPortReadyHandler", vfrPortReadyHandler_start_time);
 	
 	//debug_log( "Loading unofficial airfields...");
 	loadXMLDoc(ZZZZFieldsFilename, zzzzFieldXmlResponseHandler);
 }
 
 function aerodromeReadyHandler(xmlDoc) {
-	debug_timestamp("aerodromeReadyHandler start");
+	var aerodromeReadyHandler_start_time = debug_timestamp_start("aerodromeReadyHandler");
 	try {
 		var gpx_list = xmlDoc.getElementsByTagName("gpx");
 		if (gpx_list.length >0) {
@@ -712,16 +737,19 @@ function aerodromeReadyHandler(xmlDoc) {
 	}
 
 	debug_log( "=> " + OfficialAerodromeArray.length + " lentokenttää.");
+
+	debug_timestamp_ready("aerodromeReadyHandler", aerodromeReadyHandler_start_time);
+
 	loadXMLDoc(VFRPortFilename, vfrPortXmlResponseHandler);
 
 	// removed because we continue after VFR port file loading.
 	//continueIfEverythingIsReady();
-	debug_timestamp("aerodromeReadyHandler end");
 }
 
 
 function zzzzFieldReadyHandler(xmlDoc) {
 	//debug_log("zzzzFieldReadyHandler");
+	var zzzzFieldReadyHandler_start_time = debug_timestamp_start("zzzzFieldReadyHandler");
 	
 	try {
 		var gpx_list = xmlDoc.getElementsByTagName("gpx");
@@ -766,6 +794,8 @@ function zzzzFieldReadyHandler(xmlDoc) {
 
 	debug_log( "=> " + ZZZZFieldArray.length + " epävirallista lentopaikkaa.");
 	//OfficialAerodromeArray = OfficialAerodromeArray.concat(ZZZZFieldArray);
+
+	debug_timestamp_ready("zzzzFieldReadyHandler", zzzzFieldReadyHandler_start_time);
 	
 	continueIfEverythingIsReady();
 }
@@ -982,8 +1012,11 @@ function clearAircraftSettingsFields() {
 	document.getElementById("aircraftSpeedUnit").value = "K";
 	document.getElementById("aircraftSpeed").value = "";
 	document.getElementById("aircraftColor").value = "";
+	document.getElementById("pyrotechnicsOnBoard").value = "off";
 	//try {
 	$('#ssr').selectmenu('refresh');
+	//$('#pyrotechnicsOnBoard').flipswitch('refresh'); // This is moved later, so that previous plane data is not changed...
+
 	$('#aircraftSpeedUnit').selectmenu('refresh');
 	//} catch(err) { } // ignore error (it happens in first onload)
 }
@@ -1031,6 +1064,7 @@ function onChangeAircraftSettings() {
 	clearAircraftSettingsFields();
 	if (selectedAircraft == "NewAircraft") {
 		addNewAircraftSettings();
+		$('#pyrotechnicsOnBoard').flipswitch('refresh'); // TODO This could not be in clearAircraftSettingsFields() as there it would change previous aircrafts pyrotechnicsOnBoard value...
 	} else {
 		//debug_log("onChangeAircraftSettings() - selected id: " + selectedAircraft );
 		// update current id
@@ -1056,6 +1090,7 @@ function removeAircraftDataWithPrefix( prefix ) {
 	localStorage.removeItem( prefix + "aircraftSpeedUnit");
 	localStorage.removeItem( prefix + "aircraftSpeed");
 	localStorage.removeItem( prefix + "aircraftColor");
+	localStorage.removeItem( prefix + "pyrotechnicsOnBoard");
 }
 
 function deleteCurrentAircraftSettings() {
@@ -1223,10 +1258,18 @@ function onChangeAircraftColor() {
 	localStorage.setItem( currentId + "_aircraftColor", document.getElementById("aircraftColor").value);
 }
 
+function onChangePyrotechnicsOnBoard() {
+	var currentId = localStorage.getItem( "currentSettingsId");
+	localStorage.setItem( currentId + "_pyrotechnicsOnBoard", document.getElementById("pyrotechnicsOnBoard").value);
+	//debug_log("onChangePyrotechnicsOnBoard(): setItem " + currentId + "_pyrotechnicsOnBoard=" + document.getElementById("pyrotechnicsOnBoard").value); // TODO remove logging
+	
+}
+
 function onChangeZzzzFieldsEnabled() {
 	localStorage.setItem( "zzzzFieldsEnabled", document.getElementById("zzzzFieldsEnabled").value);
 	handlePositionUpdate(gPosition_lat, gPosition_lon);
 }
+
 
 function convertOldSettings() {
 	var newId=0;
@@ -1346,6 +1389,19 @@ function updateFromLocalStorage() {
 	if (color !== null) {
 		document.getElementById("aircraftColor").value = color;
 	}
+
+	var pyrotechnicsOnBoard = localStorage.getItem(currentId + "_pyrotechnicsOnBoard");
+	//debug_log("updateFromLocalStorage - pyrotechnicsOnBoard: " + pyrotechnicsOnBoard); // TODO remove logging
+	if (pyrotechnicsOnBoard === null) {
+		pyrotechnicsOnBoard = "off";
+	}
+	//debug_log("updateFromLocalStorage(): pyrotechnicsOnBoard - " + pyrotechnicsOnBoard); // TODO remove logging
+	
+	document.getElementById("pyrotechnicsOnBoard").value = pyrotechnicsOnBoard;
+	try {
+		$('#pyrotechnicsOnBoard').flipswitch('refresh');
+	} catch(err) { } // ignore error (it happens in first onload)
+
 	var zzzzEnabled = localStorage.getItem("zzzzFieldsEnabled");
 	if (zzzzEnabled !== null) {
 		document.getElementById("zzzzFieldsEnabled").value = zzzzEnabled;
@@ -1579,6 +1635,8 @@ function initStoredPlanPageHandler() {
 
 function onLoad()
 {
+	total_startup_start_time = debug_timestamp_start("onLoad");
+
 	// Check whether we should still load old not-yet-updated files
 	var today = new Date();
 	var dateOfUpdate = new Date(dateOfUpdateStr);
@@ -1588,7 +1646,7 @@ function onLoad()
 		ZZZZFieldsFilename = ZZZZFieldsFilename_before_13NOV2014;
 	}
 
-	debug_timestamp("aerodromeXml load start");
+	aerodromeXml_start_time = debug_timestamp_start("aerodromeXml load start");
 	loadXMLDoc(AerodromesFilename, aerodromeXmlResponseHandler);
 
 	if (navigator.geolocation) {
@@ -1625,6 +1683,17 @@ function updateCurrentLocation() {
 	if (navigator.geolocation) {
 		//debug_log("geolocation is supported");
 		document.getElementById("locationUpdateButtonText").innerHTML = "Sijainti...";
+/*	http://www.w3.org/TR/geolocation-API/#high-accuracy
+  interface PositionOptions {
+    attribute boolean enableHighAccuracy;
+    attribute long timeout;
+    attribute long maximumAge;
+  };
+*/
+		//var options = { maximumAge:600000 };
+		//debug_log("updateCurrentLocation(): maximumAge:600000 in use");
+		//boolean enableHighAccuracy
+		//navigator.geolocation.getCurrentPosition(handlePositionUpdateCallback, handlePositionError, options);
 		navigator.geolocation.getCurrentPosition(handlePositionUpdateCallback, handlePositionError );
 	}
 }
@@ -2198,6 +2267,12 @@ function updateFlightPlanLink() {
 	//linkString += "&person=" + document.getElementById("persons").value;
 	
 	linkString += "&markings=" + document.getElementById("aircraftColor").value;
+	
+	if (document.getElementById("pyrotechnicsOnBoard").value == "on")
+	{
+		linkString += "&remarks=" + PYROTECHNICS_NOTE_REMARKS;
+	}
+	
 	linkString += "&pic=" + document.getElementById("pilot").value;
 	linkString += "&tel=" + document.getElementById("pilotTel").value;
 	linkString += "&filed=" + document.getElementById("pilot").value;

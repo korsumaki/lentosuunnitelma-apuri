@@ -176,7 +176,7 @@
 			<div class="ui-field-contain">
 				<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
 					<legend>
-						Henkilömäärä
+						Henkilö&shy;määrä
 					</legend>
 					<input type="radio" id="persons1" name="persons" value="001" checked="checked" />
 					<label for="persons1">1</label>
@@ -408,7 +408,15 @@
 				<label for="aircraftColor">Väri</label>
 				<input id="aircraftColor" type="text" size="7" placeholder="Koneen väri" onchange="onChangeAircraftColor()" data-mini="true">
 			</div> <!-- fieldcontain -->
-			
+
+			<div class="ui-field-contain">
+				<label for="pyrotechnicsOnBoard">Raketti&shy;pelastusvarjo</label>
+				<select name="pyrotechnicsOnBoard" id="pyrotechnicsOnBoard" onChange="onChangePyrotechnicsOnBoard()" data-role="flipswitch" data-mini="true">
+					<option value="off">Off</option>
+					<option value="on">On</option>
+				</select>
+			</div> <!-- fieldcontain -->
+
 			<div class="ui-field-contain">
 				<label for="pilot">Päällikkö</label>
 				<input id="pilot" type="text" size="12" placeholder="Päällikön sukunimi" onchange="onChangePilot()" data-mini="true">
