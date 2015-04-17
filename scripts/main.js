@@ -105,7 +105,22 @@
  * - review and update comments
  * 
  * - poista timestampit minimoitavasta koodista
- * - poista p‰iv‰m‰‰r‰feikkaus ennen julkaisua
+ * + poista p‰iv‰m‰‰r‰feikkaus ennen julkaisua
+ * 
+ * 
+ * - OFP
+ *     + laskelma-taulukkoon lentosuunnat
+ *     - piirr‰ graafi lentosuunnista
+ * - hae open-data
+ * 		- metar yms.
+ * 		- tallenna localstorageen myˆhemp‰‰ k‰yttˆ‰ varten
+ * - kokeile offline moodia
+ * 		- eri selaimilla
+ * 
+ * + Kauhavan siirto ajastetusti 28.05.2015
+ * 
+ * - Muista p‰ivitt‰‰ kooditiedoston nimi! Kannattaa olla versionumero yms. varmistamassa uuden tiedoston lataamista.
+ * 
  * + minimization: http://closure-compiler.appspot.com/home
  */
 
@@ -127,17 +142,17 @@ var gSelectedFlyingTimeStr;
 // constants
 
 // Date when update is taken into use.
-var dateOfUpdateStr = "2014-11-13T00:00:00Z";
+var dateOfUpdateStr = "2015-05-28T00:00:00Z";
 
 // These names are used before update
-var AerodromesFilename_before_13NOV2014 = "aerodromes_19SEP2013.xml";
-var VFRPortFilename_before_13NOV2014    = "EF_VFRREP_19SEP2013.xml";
-var ZZZZFieldsFilename_before_13NOV2014 = "zzzz_fields_18JAN2014.xml";
+var VFRPortFilename_before_change    = "EF_VFRREP_13NOV2014.xml";
+var AerodromesFilename_before_change = "aerodromes_13NOV2014.xml";
+var ZZZZFieldsFilename_before_change = "zzzz_fields_13NOV2014.xml";
 
 // Current (new) filenames
-var VFRPortFilename = "EF_VFRREP_13NOV2014.xml";
-var AerodromesFilename = "aerodromes_13NOV2014.xml";
-var ZZZZFieldsFilename = "zzzz_fields_13NOV2014.xml";
+var VFRPortFilename = "EF_VFRREP_13NOV2014.xml"; // This does not change
+var AerodromesFilename = "aerodromes_28MAY2015.xml";
+var ZZZZFieldsFilename = "zzzz_fields_28MAY2015.xml";
 
 var UNOFFICIAL_AERODROME="ZZZZ";
 var UNOFFICIAL_AERODROME_INDEX=0; // This field index is used when ZZZZ place name was written manually, not from xml.
@@ -529,7 +544,11 @@ function Waypoint(name, lat, lon) {
 }
 
 function toRad(v) {
-	return v * Math.PI / 180;
+	return v * (Math.PI / 180);
+}
+
+function toDeg(v) {
+	return v / (Math.PI / 180);
 }
 
 function calcDistanceFrom(lat1, lon1, lat2, lon2) {
@@ -1641,9 +1660,9 @@ function onLoad()
 	var today = new Date();
 	var dateOfUpdate = new Date(dateOfUpdateStr);
 	if (today.getTime() < dateOfUpdate.getTime()) {
-		VFRPortFilename = VFRPortFilename_before_13NOV2014;
-		AerodromesFilename = AerodromesFilename_before_13NOV2014;
-		ZZZZFieldsFilename = ZZZZFieldsFilename_before_13NOV2014;
+		VFRPortFilename = VFRPortFilename_before_change;
+		AerodromesFilename = AerodromesFilename_before_change;
+		ZZZZFieldsFilename = ZZZZFieldsFilename_before_change;
 	}
 
 	aerodromeXml_start_time = debug_timestamp_start("aerodromeXml load start");
@@ -1870,6 +1889,65 @@ function convertFlyingTimeToString( flyingTime )
 	return "unknown";
 }*/
 
+
+
+/*
+ * Calculate bearing from point1 to point2
+ * 
+ * Input in Radian decimal -format
+ * 
+ * source: http://www.movable-type.co.uk/scripts/latlong.html
+ */
+function BearingBetweenCoordinates(lat1, lon1, lat2, lon2 ) {
+	//debug_log("BearingBetweenCoordinates - " + lat1+" "+lon1+" "+lat2+" "+lon2);
+
+	var y = Math.sin(lon2-lon1) * Math.cos(lat2);
+	var x = Math.cos(lat1)*Math.sin(lat2) - Math.sin(lat1)*Math.cos(lat2)*Math.cos(lon2-lon1);
+	var brng = toDeg(Math.atan2(y, x));
+	
+	// Result is between -180 ... + 180. To change to 0 ... 360 use "(brng+360)%360"
+	brng = (brng+360)%360;
+	
+	//debug_log("BearingBetweenCoordinates ---> " + brng);
+	return brng;
+}
+
+/*
+ * Calculate bearing from point1 to point2.
+ * Calculate average from start bearing and final bearing.
+ * 
+ * Input in Degree decimal -format
+ */
+function Bearing(latitude1, longitude1, latitude2, longitude2) {
+	//debug_log("Bearing - " + latitude1+" "+longitude1+" "+latitude2+" "+longitude2);
+	//debug_log("Bearing - " + lat1+" "+lon1+" "+lat2+" "+lon2);
+	var lat1 = toRad(latitude1);
+	var lon1 = toRad(longitude1);
+	var lat2 = toRad(latitude2);
+	var lon2 = toRad(longitude2);
+	
+	var startBearing = BearingBetweenCoordinates(lat1, lon1, lat2, lon2);
+	var finalBearing = (BearingBetweenCoordinates(lat2, lon2, lat1, lon1) + 180)%360;
+	// reverse angle  (brng+180)%360
+	var average = (startBearing+finalBearing)/2;
+
+	//debug_log("Bearing ---> start=" + startBearing + " final=" + finalBearing + " diff=" + (finalBearing-startBearing) + ", average=" + average);
+
+	return Math.round(average);
+}
+// Input in Degree Minute Second -format
+function Bearing_DMS(latitude1, longitude1, latitude2, longitude2) {
+	//debug_log("Bearing_DMS - " + latitude1+" "+longitude1+" "+latitude2+" "+longitude2);
+	//"612455N", "0233516E", "613509N", "0234511E"
+	var lat1 = DMS_to_Decimal(latitude1);
+	var lon1 = DMS_to_Decimal(longitude1);
+	var lat2 = DMS_to_Decimal(latitude2);
+	var lon2 = DMS_to_Decimal(longitude2);
+	
+	return Bearing(lat1, lon1, lat2, lon2);
+}
+
+
 // Return distance in km or NM.
 function getDistanceInCurrentUnit( dist ) {
 	var aircraftSpeedUnit = document.getElementById("aircraftSpeedUnit").value;
@@ -1957,9 +2035,20 @@ function createFlyingTimeTable() {
 	var totalDist=0;
 	for (var i=1; i<array.length; ++i) {
 		if (array[i] !== null) {
+			
+			// Add flight directions to table, only if previous and current points are different
+			if (prev.lat != array[i].lat || prev.lon != array[i].lon) {
+				row = rowBegin;
+				var bearingStr = addPrefixDigits( Bearing(prev.lat, prev.lon, array[i].lat, array[i].lon).toString(), 0, 3);
+				row += cellBegin + "<center>" + bearingStr + "&deg;</center>" + cellEnd;
+				row += cellBegin + cellEnd;
+				row += cellBegin + cellEnd;
+				row += rowEnd;
+				table += row;
+			}
+
 			var legDist = calcDistanceFrom(prev.lat, prev.lon, array[i].lat, array[i].lon);
 			totalDist += legDist;
-			
 			row = rowBegin;
 
 			if (array[i].icao === undefined) {
@@ -1972,8 +2061,8 @@ function createFlyingTimeTable() {
 			row += cellBegin + Math.round(getDistanceInCurrentUnit(legDist)) + cellEnd;
 			row += cellBegin + getTimeFromDistance(legDist, aircraftSpeed) + cellEnd;
 			row += rowEnd;
-			
 			table += row;
+
 			prev=array[i];
 		}
 	}
