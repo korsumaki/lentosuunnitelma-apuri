@@ -166,6 +166,8 @@ var NOTE_TO_ADD_ACC_FREQ_STR = "LISÄÄ_ACC_JAKSO";
 
 var PYROTECHNICS_NOTE_REMARKS = "rakettipelastusvarjo";
 
+var OPENAVIATIONDATA_APIKEY = "mkXQV7UpiiBgOVjxbTzioYfpOlNVtEtg";
+
 var overrideFlightTime = true;
 
 
@@ -1769,6 +1771,53 @@ function updatePlanActivationMethods(elSelection, ad) {
 	appendOption(elSelection, "Radiolla ilmassa (ACC, " + ad.acc + ")", "rtfOnAir");
 }
 
+function getMetar(aerodrome, selector) {
+	// http://api.jquery.com/load/
+	document.getElementById(selector).innerHTML = "";
+
+	$.getJSON("https://api.openaviationdata.com/v1/metar?station=" + aerodrome + "&key=" + OPENAVIATIONDATA_APIKEY, 
+		function(data, textStatus, jqXHR) {
+			if (data.code == 200) {
+				document.getElementById(selector).innerHTML = data.data[aerodrome].raw;
+			}
+		} );
+}
+
+function getTaf(aerodrome, selector) {
+	// http://api.jquery.com/load/
+	document.getElementById(selector).innerHTML = "";
+	
+	$.getJSON("https://api.openaviationdata.com/v1/taf?station=" + aerodrome + "&key=" + OPENAVIATIONDATA_APIKEY, 
+		function(data, textStatus, jqXHR) {
+			if (data.code == 200) {
+				document.getElementById(selector).innerHTML = data.data[aerodrome].raw;
+			}
+		} );
+}
+
+function getNotam(aerodrome, selector) {
+	// http://api.jquery.com/load/
+	document.getElementById(selector).innerHTML = "";
+	
+	$.getJSON("https://api.openaviationdata.com/v2/notam/facility?icao=" + aerodrome + "&key=" + OPENAVIATIONDATA_APIKEY, 
+		function(data, textStatus, jqXHR) {
+			if (data.code == 200) {
+				var notams="";
+				var ind;
+				notams += '<ul data-role="listview">';
+				for (ind=0; ind<data.data.length; ind++) {
+					notams += "<li>";
+					notams += data.data[ind].facility_icao + "=== ";
+					
+					notams += data.data[ind].report; //report, text
+					notams += "</li>";
+				}
+				notams += "</ul>";
+				document.getElementById(selector).innerHTML = notams;
+			}
+		} );
+}
+
 
 function onChangeDepartureAd() {
 	//debug_log("onChangeDepartureAd");
@@ -1776,11 +1825,11 @@ function onChangeDepartureAd() {
 	var dest=document.getElementById("destination");
 	$('#departure').selectmenu('refresh');
 
-	var depAd = getAerodromeByIndex(dep.value);
-	document.getElementById("route_departure_ad").innerHTML = depAd.icao + " (" + depAd.name + ")";
-
+	//var depAd = getAerodromeByIndex(dep.value);
 	var depAerodrome = getAerodromeByIndex( dep.value );
 	var destAerodrome = getAerodromeByIndex( dest.value );
+	
+	document.getElementById("route_departure_ad").innerHTML = depAerodrome.icao + " (" + depAerodrome.name + ")";
 	
 	fillVfrWaypointSelectionData(document.getElementById("route_departure_rep"), depAerodrome, destAerodrome);
 	fillVfrWaypointSelectionData(document.getElementById("route_destination_rep"), destAerodrome, depAerodrome);
@@ -1800,6 +1849,11 @@ function onChangeDepartureAd() {
 		//document.getElementById("zzzz_departure_container").style.display = 'none';
 		$('#zzzz_departure_container').slideUp();
 	}
+	
+	// TODO - Get Metar, Taf and Notams from open data service
+	//getMetar(depAerodrome.icao, "metarDepId");
+	//getTaf(depAerodrome.icao, "tafDepId");
+	//getNotam(depAerodrome.icao, "notamDepId");
 }
 
 function onChangeDestinationAd() {
@@ -1808,11 +1862,10 @@ function onChangeDestinationAd() {
 	var dest=document.getElementById("destination");
 	$('#destination').selectmenu('refresh');
 
-	var destAd = getAerodromeByIndex(dest.value);
-	document.getElementById("route_destination_ad").innerHTML = destAd.icao + " (" + destAd.name + ")";
-	
+	//var destAd = getAerodromeByIndex(dest.value);
 	var depAerodrome = getAerodromeByIndex( dep.value );
 	var destAerodrome = getAerodromeByIndex( dest.value );
+	document.getElementById("route_destination_ad").innerHTML = destAerodrome.icao + " (" + destAerodrome.name + ")";
 
 	fillVfrWaypointSelectionData(document.getElementById("route_departure_rep"), depAerodrome, destAerodrome);
 	fillVfrWaypointSelectionData(document.getElementById("route_destination_rep"), destAerodrome, depAerodrome);
@@ -1834,6 +1887,14 @@ function onChangeDestinationAd() {
 		$('#zzzz_destination_container').slideUp();
 		setFlightTimeOverride(false);
 	}
+	
+	// TODO - Get Metar, Taf and Notams from open data service
+	// Load destination METAR+TAF only if it differs from departure.
+	// ??if (depAerodrome.icao != destAerodrome.icao) {
+	//getMetar(destAerodrome.icao, "metarDestId");
+	//getTaf(destAerodrome.icao, "tafDestId");
+	//getNotam(destAerodrome.icao, "notamDestId");
+	// ??}
 }
 
 // distance in km
