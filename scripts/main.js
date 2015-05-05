@@ -51,7 +51,7 @@
  * + jätä johonkin talteen plaanin aktivointi- ja lopetustavat (puh/jakso), ettei tarvisi kirjoittaa muistiin
  * 
  * =======
- * - Ilmatilauudistus 13 NOV 2014
+ * + Ilmatilauudistus 13 NOV 2014
  * 		+ tee tietojen ajastettu vaihto
  * 			+ kaikki kolme xml tiedostoa
  * 		+ uusi VFR pisteet -tiedosto -> on valmiina
@@ -108,12 +108,15 @@
  * + poista päivämääräfeikkaus ennen julkaisua
  * 
  * 
- * - OFP
- *     + laskelma-taulukkoon lentosuunnat
- *     - piirrä graafi lentosuunnista
- * - hae open-data
- * 		- metar yms.
- * 		- tallenna localstorageen myöhempää käyttöä varten
+ * - OFP, Lennonvalmistelu - aukeava osio
+ * 		+ laskelma-taulukkoon lentosuunnat
+ * 		- tallenna suunnat localstorageen
+ * 		- piirrä graafi lentosuunnista
+ * 		- linkki nav wrng pdf fileen.
+ * 
+ * 		- hae open-data
+ * 			- metar yms.
+ * 			- tallenna localstorageen myöhempää käyttöä varten
  * - kokeile offline moodia
  * 		- eri selaimilla
  * 
@@ -124,7 +127,7 @@
  * + minimization: http://closure-compiler.appspot.com/home
  */
 
-var log="";
+var log="Ohjelmakoodi päivätty: 2015-05-05<br>";
 var VfrRepArray;
 
 var CurrentAerodromeArray; // Contains either Official or Official+ZZZZ fields, depending on user selection.
@@ -1687,6 +1690,7 @@ function onLoad()
 
 	initStoredPlanPageHandler();
 
+	$('#OFPContainer').slideToggle().hide();
 }
 
 
@@ -1804,20 +1808,31 @@ function getNotam(aerodrome, selector) {
 			if (data.code == 200) {
 				var notams="";
 				var ind;
-				notams += '<ul data-role="listview">';
+				//notams += '<ul data-role="listview">';
 				for (ind=0; ind<data.data.length; ind++) {
-					notams += "<li>";
+					//notams += "<li>";
 					notams += data.data[ind].facility_icao + "=== ";
 					
 					notams += data.data[ind].report; //report, text
-					notams += "</li>";
+					notams += "<br>";
+					//notams += "</li>";
 				}
-				notams += "</ul>";
+				//notams += "</ul>";
 				document.getElementById(selector).innerHTML = notams;
 			}
 		} );
 }
 
+function requestOpenData(depIcao, destIcao) {
+	// TODO Check whether dep and dest differs and request only needed data.
+	getMetar(depIcao, "metarDepId");
+	getTaf(depIcao, "tafDepId");
+	getNotam(depIcao, "notamDepId");
+
+	getMetar(destIcao, "metarDestId");
+	getTaf(destIcao, "tafDestId");
+	getNotam(destIcao, "notamDestId");
+}
 
 function onChangeDepartureAd() {
 	//debug_log("onChangeDepartureAd");
@@ -1851,9 +1866,7 @@ function onChangeDepartureAd() {
 	}
 	
 	// TODO - Get Metar, Taf and Notams from open data service
-	//getMetar(depAerodrome.icao, "metarDepId");
-	//getTaf(depAerodrome.icao, "tafDepId");
-	//getNotam(depAerodrome.icao, "notamDepId");
+	requestOpenData(depAerodrome.icao, destAerodrome.icao);
 }
 
 function onChangeDestinationAd() {
@@ -1889,12 +1902,7 @@ function onChangeDestinationAd() {
 	}
 	
 	// TODO - Get Metar, Taf and Notams from open data service
-	// Load destination METAR+TAF only if it differs from departure.
-	// ??if (depAerodrome.icao != destAerodrome.icao) {
-	//getMetar(destAerodrome.icao, "metarDestId");
-	//getTaf(destAerodrome.icao, "tafDestId");
-	//getNotam(destAerodrome.icao, "notamDestId");
-	// ??}
+	requestOpenData(depAerodrome.icao, destAerodrome.icao);
 }
 
 // distance in km

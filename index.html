@@ -265,6 +265,44 @@
 				</fieldset>
 			</div>
 			
+			<!--div class="ui-field-contain">
+				<fieldset data-role="controlgroup" data-type="horizontal">
+					<legend>Kartta</legend>
+					<canvas id="mapCancas" width="300" height="300" style="border:1px solid #000000;">Canvas not supported</canvas>
+				</fieldset>
+			</div-->
+			<div class="ui-field-contain">
+				<fieldset data-role="controlgroup" data-type="horizontal">
+					<legend>Lennon&shy;valmistelu&shy;tiedot</legend>
+					<button onclick="$('#OFPContainer').slideToggle();" class="ui-btn ui-shadow ui-mini">Näytä...</button>
+				</fieldset>
+			</div>
+
+			<div class="ui-field-contain" id="OFPContainer">
+				<fieldset data-role="controlgroup" data-type="horizontal">
+					<legend>Metar</legend>
+					<p id="metarDepId">m1</p>
+					<p id="metarDestId">m2</p>
+				</fieldset>
+
+				<fieldset data-role="controlgroup" data-type="horizontal">
+					<legend>TAF</legend>
+					<p id="tafDepId">t1</p>
+					<p id="tafDestId">t2</p>
+				</fieldset>
+
+				<fieldset data-role="controlgroup" data-type="horizontal">
+					<legend>NOTAM</legend>
+					<p id="notamDepId">n1</p>
+					<p id="notamDestId">n2</p>
+				</fieldset>
+				<fieldset data-role="controlgroup" data-type="horizontal">
+					<legend>Kartta</legend>
+					<!--span id="notamDepId">n1</span>
+					<span id="notamDestId">n2</span-->
+				</fieldset>
+			</div>
+			
 			<button onclick="onClickFlightPlanLinkButton()" data-mini="true">Jatka lentosuunnitelmaan...</button>
 			
 			<div data-role="collapsible" data-mini="true" data-theme="a" data-content-theme="a"> <!-- b d -->
@@ -437,7 +475,9 @@
 			
 			
 			<h3>Tietoa</h3>
-			<p id="log">Log</p>
+			<p>Käyttöliittymä päivätty: 2015-05-05<br>
+			<span id="log">Log</span>
+			</p>
 
 		</div> <!-- content -->
 
