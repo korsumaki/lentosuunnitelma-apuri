@@ -265,42 +265,40 @@
 				</fieldset>
 			</div>
 			
-			<!--div class="ui-field-contain">
-				<fieldset data-role="controlgroup" data-type="horizontal">
-					<legend>Kartta</legend>
-					<canvas id="mapCancas" width="300" height="300" style="border:1px solid #000000;">Canvas not supported</canvas>
-				</fieldset>
-			</div-->
 			<div class="ui-field-contain">
 				<fieldset data-role="controlgroup" data-type="horizontal">
 					<legend>Lennon&shy;valmistelu&shy;tiedot</legend>
-					<button onclick="$('#OFPContainer').slideToggle();" class="ui-btn ui-shadow ui-mini">Näytä...</button>
+					<button onclick="onOFPContainerToggleClick();" class="ui-btn ui-shadow ui-mini" id="OFPContainerToggleButton">Näytä / piilota...</button>
 				</fieldset>
 			</div>
 
 			<div class="ui-field-contain" id="OFPContainer">
 				<fieldset data-role="controlgroup" data-type="horizontal">
 					<legend>Metar</legend>
-					<p id="metarDepId">m1</p>
-					<p id="metarDestId">m2</p>
+					<p id="metarDepId"></p>
+					<p id="metarDestId"></p>
 				</fieldset>
 
 				<fieldset data-role="controlgroup" data-type="horizontal">
 					<legend>TAF</legend>
-					<p id="tafDepId">t1</p>
-					<p id="tafDestId">t2</p>
+					<p id="tafDepId"></p>
+					<p id="tafDestId"></p>
 				</fieldset>
 
-				<fieldset data-role="controlgroup" data-type="horizontal">
+				<!--fieldset data-role="controlgroup" data-type="horizontal">
 					<legend>NOTAM</legend>
-					<p id="notamDepId">n1</p>
-					<p id="notamDestId">n2</p>
-				</fieldset>
+					<p id="notamDepId"></p>
+					<p id="notamDestId"></p>
+				</fieldset-->
+				<!--fieldset data-role="controlgroup" data-type="horizontal">
+					<legend>Reitti&shy;kartta</legend>
+					<canvas id="mapCancas" width="300" height="300" style="border:1px solid #000000;">Canvas not supported</canvas>
+				</fieldset-->
 				<fieldset data-role="controlgroup" data-type="horizontal">
-					<legend>Kartta</legend>
-					<!--span id="notamDepId">n1</span>
-					<span id="notamDestId">n2</span-->
+					<legend>NAV WRNG -kartta</legend>
+					<a href="https://ais.fi/ais/bulletins/wrng1map.pdf" rel="external" data-ajax="false">Ammunnat ja vaara-alueet (pdf kartta)</a>
 				</fieldset>
+				<!-- https://ais.fi/ais/bulletins/wrng1map.pdf -->
 			</div>
 			
 			<button onclick="onClickFlightPlanLinkButton()" data-mini="true">Jatka lentosuunnitelmaan...</button>
@@ -475,7 +473,7 @@
 			
 			
 			<h3>Tietoa</h3>
-			<p>Käyttöliittymä päivätty: 2015-05-05<br>
+			<p>Käyttöliittymä päivätty: 2015-05-21<br>
 			<span id="log">Log</span>
 			</p>
 

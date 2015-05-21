@@ -127,7 +127,7 @@
  * + minimization: http://closure-compiler.appspot.com/home
  */
 
-var log="Ohjelmakoodi päivätty: 2015-05-05<br>";
+var log="Ohjelmakoodi päivätty: 2015-05-21<br>";
 var VfrRepArray;
 
 var CurrentAerodromeArray; // Contains either Official or Official+ZZZZ fields, depending on user selection.
@@ -1656,6 +1656,26 @@ function initStoredPlanPageHandler() {
 	});
 }
 
+// Handle toggling of OFPContainer
+function showOFPContainer() {
+	$('#OFPContainer').slideDown();
+	$('#OFPContainerToggleButton').text("Piilota...");
+}
+
+function hideOFPContainer() {
+	$('#OFPContainer').slideUp();
+	$('#OFPContainerToggleButton').text("Näytä...");
+}
+
+function onOFPContainerToggleClick() {
+	if ($('#OFPContainer').is(":hidden")) {
+		showOFPContainer();
+	} else {
+		hideOFPContainer();
+	}
+}
+
+
 
 function onLoad()
 {
@@ -1690,7 +1710,8 @@ function onLoad()
 
 	initStoredPlanPageHandler();
 
-	$('#OFPContainer').slideToggle().hide();
+	// TODO $('#OFPContainer').hide();
+	hideOFPContainer();
 }
 
 
@@ -1775,6 +1796,7 @@ function updatePlanActivationMethods(elSelection, ad) {
 	appendOption(elSelection, "Radiolla ilmassa (ACC, " + ad.acc + ")", "rtfOnAir");
 }
 
+
 function getMetar(aerodrome, selector) {
 	// http://api.jquery.com/load/
 	document.getElementById(selector).innerHTML = "";
@@ -1823,16 +1845,154 @@ function getNotam(aerodrome, selector) {
 		} );
 }
 
-function requestOpenData(depIcao, destIcao) {
-	// TODO Check whether dep and dest differs and request only needed data.
-	getMetar(depIcao, "metarDepId");
-	getTaf(depIcao, "tafDepId");
-	getNotam(depIcao, "notamDepId");
 
-	getMetar(destIcao, "metarDestId");
-	getTaf(destIcao, "tafDestId");
-	getNotam(destIcao, "notamDestId");
+function requestOpenDataDep(depIcao) {
+	// TODO Check whether dep and dest differs and request only needed data.
+	
+	$('#metarDepId').text("");
+	$('#tafDepId').text("");
+	//$('#notamDepId').text("");
+	
+	// TODO - if ZZZZ is selected, remember to clear previous values from fields...
+	if (depIcao !== UNOFFICIAL_AERODROME) {
+		getMetar(depIcao, "metarDepId");
+		getTaf(depIcao, "tafDepId");
+		//getNotam(depIcao, "notamDepId");
+	}
+
+	// TODO not yet good... Need to check better what data should be requested...
+	/*if (depIcao !== destIcao) {
+		if (destIcao !== UNOFFICIAL_AERODROME) {
+			getMetar(destIcao, "metarDestId");
+			getTaf(destIcao, "tafDestId");
+			getNotam(destIcao, "notamDestId");
+		}
+	}*/
 }
+
+function requestOpenDataDest(destIcao) {
+	// TODO Check whether dep and dest differs and request only needed data.
+	
+	$('#metarDestId').text("");
+	$('#tafDestId').text("");
+	//$('#notamDestId').text("");
+	
+	// TODO - if ZZZZ is selected, remember to clear previous values from fields...
+	if (destIcao !== UNOFFICIAL_AERODROME) {
+		getMetar(destIcao, "metarDestId");
+		getTaf(destIcao, "tafDestId");
+		//getNotam(destIcao, "notamDestId");
+	}
+
+	// TODO not yet good... Need to check better what data should be requested...
+	/*if (depIcao !== destIcao) {
+		if (destIcao !== UNOFFICIAL_AERODROME) {
+			getMetar(destIcao, "metarDestId");
+			getTaf(destIcao, "tafDestId");
+			getNotam(destIcao, "notamDestId");
+		}
+	}*/
+}
+
+// http://cheatsheetworld.com/programming/html5-canvas-cheat-sheet/
+// TODO - graphics
+// - nuoli
+// - lentosuunta (astetta)
+// - tornikenttä
+// + korpikenttä
+// + VFR piste
+// TODO scaling coordinates
+// canvas = 0..300
+// usable = 20..280 <- ?
+
+function getScaleFactor(arrayOfPoints) {
+	var pixPerDegree = 0;
+	var minUsable = 20;
+	var maxUsable = 280;
+	var usableDistance = maxUsable-minUsable;
+	
+	var dx = max(x)-min(x);
+	var dy = max(y)-min(y);
+	
+	pixPerDegree = maxUsable/max(dx,dy); 
+	
+	/*if (dy<dx) { // x is greater
+		pixPerDegree = maxUsable/dx;
+	} else { // y is greater
+		pixPerDegree = maxUsable/dy;
+	}*/
+}
+
+function scaleCoordinates() {
+	
+}
+
+// TODO add position information for name (top-left, top-right, bottom-left, bottom-right)
+function drawVfrPoint(ctx, x, y, name) {
+	var size=100; // %
+	var h1=size*5.7735/100;
+	var h2=size*2.8868/100;
+	var half=size*5/100;
+	ctx.beginPath();
+	ctx.moveTo(x,y-h1);
+	ctx.lineTo(x+half,y+h2);
+	ctx.lineTo(x-half,y+h2);
+	ctx.lineTo(x,y-h1);
+	ctx.fill();
+	//ctx.lineWidth = 1;
+	ctx.closePath();
+	ctx.stroke();
+	
+	ctx.font = "14px Arial";
+	ctx.fillStyle = 'black';
+	ctx.textAlign = "center";
+	ctx.fillText(name,x,y-half*2);
+
+}
+
+function drawAirfield(ctx, x, y, name) {
+	var size=100; // %
+	var radius=size*7/100;
+	ctx.fillStyle = 'white';
+	ctx.beginPath();
+	ctx.arc(x,y,radius,0,2*Math.PI);
+	//ctx.fill();
+	ctx.closePath();
+	ctx.stroke();
+	
+	ctx.fillStyle = 'black';
+	ctx.font = "14px Arial";
+	ctx.textAlign = "center";
+	ctx.fillText(name,x,y-radius*2);
+}
+
+function drawArrow(ctx, x1, y1, x2, y2, direction) {
+	//var size=100; // %
+	ctx.moveTo(x1,y1);
+	ctx.lineTo(x2,y2);
+	ctx.stroke();
+}
+
+function updateMapData() {
+	debug_log("updateMapData");
+	// TODO store data to localstorage, to be able to draw again later
+	var c = document.getElementById("mapCancas");
+	var ctx = c.getContext("2d");
+	
+	//drawVfrPoint(ctx, 170, 50, "PALLO");
+	//drawVfrPoint(ctx, 70, 70, "PURSO");
+
+	drawArrow(ctx, 110,110, 120,170, "151");
+	drawArrow(ctx, 120,170, 70,220, "221");
+	drawArrow(ctx, 70,220, 30,250, "226");
+
+	drawVfrPoint(ctx, 120, 170, "VIILA");
+	drawAirfield(ctx, 110, 110, "EFTP");
+
+	drawVfrPoint(ctx, 70, 220, "MANSE");
+	drawAirfield(ctx, 30, 250, "EFTU");
+}
+
 
 function onChangeDepartureAd() {
 	//debug_log("onChangeDepartureAd");
@@ -1866,7 +2026,8 @@ function onChangeDepartureAd() {
 	}
 	
 	// TODO - Get Metar, Taf and Notams from open data service
-	requestOpenData(depAerodrome.icao, destAerodrome.icao);
+	requestOpenDataDep(depAerodrome.icao);
+	//updateMapData();
 }
 
 function onChangeDestinationAd() {
@@ -1902,7 +2063,7 @@ function onChangeDestinationAd() {
 	}
 	
 	// TODO - Get Metar, Taf and Notams from open data service
-	requestOpenData(depAerodrome.icao, destAerodrome.icao);
+	requestOpenDataDest(destAerodrome.icao);
 }
 
 // distance in km
