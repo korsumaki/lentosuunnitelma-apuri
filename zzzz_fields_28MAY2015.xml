@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
 <gpx
-version="1.5"
+version="1.6"
 creator="Markku Korsumaki"
-created="2015-05-28"
+created="2015-06-30"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/1"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
@@ -37,5 +37,6 @@ name = kohtaan 18 tuleva DEP/ tai DEST/ paikannimi
 <aerodrome lat="610600N" lon="0230940E"><icao>ZZZZ</icao><name>Punkalaidun</name><atc>no</atc><acc>127.100</acc></aerodrome>
 <aerodrome lat="624506N" lon="0232917E"><icao>ZZZZ</icao><name>Mäyry Kuortane</name><atc>no</atc><acc>127.100</acc></aerodrome>
 <aerodrome lat="611159N" lon="0243720E"><icao>ZZZZ</icao><name>Iso Roinevesi Hauho</name><atc>no</atc><acc>123.775</acc></aerodrome>
+<aerodrome lat="623747N" lon="0215226E"><icao>ZZZZ</icao><name>Kesti Jurva</name><atc>no</atc><acc>127.100</acc></aerodrome>
 
 </gpx>
