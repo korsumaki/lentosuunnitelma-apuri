@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<gpx
+version="1.5"
+creator="Markku Korsumaki"
+created="2015-07-23"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.topografix.com/GPX/1/1"
+xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<aerodrome lat="673613N" lon="0235818E"><icao>EFAA</icao><name>Aavahelukka</name><atc>no</atc><acc>126.100</acc></aerodrome>
+<aerodrome lat="645343N" lon="0254508E"><icao>EFAH</icao><name>Ahmosuo</name><atc>no</atc><acc>124.200</acc></aerodrome>
+<aerodrome lat="623317N" lon="0233424E"><icao>EFAL</icao><name>Alavus</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="610658N" lon="0221205E"><icao>EFEU</icao><name>Eura</name><atc>no</atc><acc>132.725</acc></aerodrome>
+<aerodrome lat="604807N" lon="0233844E"><icao>EFFO</icao><name>Forssa</name><atc>no</atc><acc>134.575</acc></aerodrome>
+<aerodrome lat="600513N" lon="0223119E"><icao>EFGE</icao><name>Genböle</name><atc>no</atc><acc>121.300</acc></aerodrome>
+<aerodrome lat="640647N" lon="0253015E"><icao>EFHP</icao><name>Haapavesi</name><atc>no</atc><acc>124.200</acc></aerodrome>
+<aerodrome lat="645812N" lon="0244218E"><icao>EFHL</icao><name>Hailuoto</name><atc>no</atc><acc>124.200</acc></aerodrome>
+<aerodrome lat="595044N" lon="0230456E"><icao>EFHN</icao><name>Hanko</name><atc>no</atc><acc>132.675</acc></aerodrome>
+<aerodrome lat="603916N" lon="0245252E"><icao>EFHV</icao><name>Hyvinkää</name><atc>no</atc><acc>127.425</acc></aerodrome>
+<aerodrome lat="614125N" lon="0230427E"><icao>EFHM</icao><name>Hämeenkyrö</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="633755N" lon="0270720E"><icao>EFII</icao><name>Iisalmi</name><atc>no</atc><acc>132.325</acc></aerodrome>
+<aerodrome lat="611459N" lon="0285413E"><icao>EFIM</icao><name>Immola</name><atc>no</atc><acc>136.650</acc></aerodrome>
+<aerodrome lat="614643N" lon="0224258E"><icao>EFJM</icao><name>Jämijärvi</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="641343N" lon="0234935E"><icao>EFKO</icao><name>Kalajoki</name><atc>no</atc><acc>124.200</acc></aerodrome>
+<aerodrome lat="635514N" lon="0240512E"><icao>EFKN</icao><name>Kannus</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="622748N" lon="0222328E"><icao>EFKJ</icao><name>Kauhajoki</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="630727N" lon="0230305E"><icao>EFKA</icao><name>Kauhava</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="664257N" lon="0270926E"><icao>EFKM</icao><name>Kemijärvi</name><atc>no</atc><acc>126.100</acc></aerodrome>
+<aerodrome lat="602746N" lon="0233904E"><icao>EFIK</icao><name>Kiikala</name><atc>no</atc><acc>134.575</acc></aerodrome>
+<aerodrome lat="620958N" lon="0300425E"><icao>EFIT</icao><name>Kitee</name><atc>no</atc><acc>135.525</acc></aerodrome>
+<aerodrome lat="634220N" lon="0263659E"><icao>EFRV</icao><name>Kiuruvesi</name><atc>no</atc><acc>132.325</acc></aerodrome>
+<aerodrome lat="630731N" lon="0250727E"><icao>EFKV</icao><name>Kivijärvi</name><atc>no</atc><acc>132.325</acc></aerodrome>
+<aerodrome lat="640645N" lon="0292619E"><icao>EFKH</icao><name>Kuhmo</name><atc>no</atc><acc>132.325</acc></aerodrome>
+<aerodrome lat="601449N" lon="0204817E"><icao>EFKG</icao><name>Kumlinge</name><atc>no</atc><acc>132.725</acc></aerodrome>
+<aerodrome lat="603417N" lon="0265346E"><icao>EFKY</icao><name>Kymi</name><atc>no</atc><acc>136.650</acc></aerodrome>
+<aerodrome lat="635921N" lon="0254437E"><icao>EFKR</icao><name>Kärsämäki</name><atc>no</atc><acc>124.200</acc></aerodrome>
+<aerodrome lat="610839N" lon="0254135E"><icao>EFLA</icao><name>Lahti-Vesivehmaa</name><atc>no</atc><acc>123.775</acc></aerodrome>
+<aerodrome lat="632358N" lon="0272844E"><icao>EFLL</icao><name>Lapinlahti</name><atc>no</atc><acc>132.325</acc></aerodrome>
+<aerodrome lat="633043N" lon="0293745E"><icao>EFLN</icao><name>Lieksa-Nurmes</name><atc>no</atc><acc>132.325</acc></aerodrome>
+<aerodrome lat="625648N" lon="0233108E"><icao>EFME</icao><name>Menkijärvi</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="603421N" lon="0253032E"><icao>EFMN</icao><name>Mäntsälä</name><atc>no</atc><acc>127.425</acc></aerodrome>
+<aerodrome lat="602002N" lon="0241747E"><icao>EFNU</icao><name>Nummela</name><atc>no</atc><acc>127.425</acc></aerodrome>
+<aerodrome lat="605235N" lon="0224441E"><icao>EFOP</icao><name>Oripää</name><atc>no</atc><acc>134.575</acc></aerodrome>
+<aerodrome lat="621553N" lon="0270010E"><icao>EFPK</icao><name>Pieksämäki</name><atc>no</atc><acc>132.325</acc></aerodrome>
+<aerodrome lat="611443N" lon="0221142E"><icao>EFPI</icao><name>Piikajärvi</name><atc>no</atc><acc>132.725</acc></aerodrome>
+<aerodrome lat="680844N" lon="0254922E"><icao>EFPA</icao><name>Pokka</name><atc>no</atc><acc>126.100</acc></aerodrome>
+<aerodrome lat="652408N" lon="0265649E"><icao>EFPU</icao><name>Pudasjärvi</name><atc>no</atc><acc>124.200</acc></aerodrome>
+<aerodrome lat="614344N" lon="0292337E"><icao>EFPN</icao><name>Punkaharju</name><atc>no</atc><acc>136.650</acc></aerodrome>
+<aerodrome lat="634345N" lon="0255555E"><icao>EFPY</icao><name>Pyhäsalmi</name><atc>no</atc><acc>132.325</acc></aerodrome>
+<aerodrome lat="644117N" lon="0244145E"><icao>EFRH</icao><name>Raahe-Pattijoki</name><atc>no</atc><acc>124.200</acc></aerodrome>
+<aerodrome lat="620356N" lon="0282124E"><icao>EFRN</icao><name>Rantasalmi</name><atc>no</atc><acc>135.525</acc></aerodrome>
+<aerodrome lat="655823N" lon="0262155E"><icao>EFRU</icao><name>Ranua</name><atc>no</atc><acc>124.200</acc></aerodrome>
+<aerodrome lat="632527N" lon="0280727E"><icao>EFRA</icao><name>Rautavaara</name><atc>no</atc><acc>132.325</acc></aerodrome>
+<aerodrome lat="604441N" lon="0240628E"><icao>EFRY</icao><name>Räyskälä</name><atc>no</atc><acc>134.575</acc></aerodrome>
+<aerodrome lat="603112N" lon="0244954E"><icao>EFNS</icao><name>Savikko</name><atc>no</atc><acc>127.425</acc></aerodrome>
+<aerodrome lat="610351N" lon="0264744E"><icao>EFSE</icao><name>Selänpää</name><atc>no</atc><acc>136.650</acc></aerodrome>
+<aerodrome lat="672348N" lon="0263705E"><icao>EFSO</icao><name>Sodankylä</name><atc>no</atc><acc>126.100</acc></aerodrome>
+<aerodrome lat="632352N" lon="0240150E"><icao>EFVT</icao><name>Sulkaharju</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="644919N" lon="0284237E"><icao>EFSU</icao><name>Suomussalmi</name><atc>no</atc><acc>124.200</acc></aerodrome>
+<aerodrome lat="614623N" lon="0240131E"><icao>EFTS</icao><name>Teisko</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="600445N" lon="0241020E"><icao>EFTO</icao><name>Torbacka</name><atc>no</atc><acc>127.425</acc></aerodrome>
+<aerodrome lat="643007N" lon="0264536E"><icao>EFVL</icao><name>Vaala</name><atc>no</atc><acc>124.200</acc></aerodrome>
+<aerodrome lat="610223N" lon="0223530E"><icao>EFVP</icao><name>Vampula</name><atc>no</atc><acc>132.725</acc></aerodrome>
+<aerodrome lat="630721N" lon="0254858E"><icao>EFVI</icao><name>Viitasaari</name><atc>no</atc><acc>132.325</acc></aerodrome>
+<aerodrome lat="603949N" lon="0264445E"><icao>EFWB</icao><name>Wredeby</name><atc>no</atc><acc>136.650</acc></aerodrome>
+<aerodrome lat="640317N" lon="0244331E"><icao>EFYL</icao><name>Ylivieska</name><atc>no</atc><acc>124.200</acc></aerodrome>
+<aerodrome lat="682152N" lon="0232539E"><icao>EFET</icao><name>Enontekiö</name><atc>yes</atc><acc>126.100</acc><vfrpoint>GALDO</vfrpoint><vfrpoint>HIRVA</vfrpoint><vfrpoint>JOHKA</vfrpoint><vfrpoint>KATKA</vfrpoint><vfrpoint>OUNAS</vfrpoint></aerodrome>
+<aerodrome lat="615123N" lon="0244721E"><icao>EFHA</icao><name>Halli</name><atc>yes</atc><acc>132.325</acc><vfrpoint>HAAVI</vfrpoint><vfrpoint>PIHLA</vfrpoint><vfrpoint>TALVI</vfrpoint><vfrpoint>VILPU</vfrpoint></aerodrome>
+<aerodrome lat="601514N" lon="0250239E"><icao>EFHF</icao><name>Helsinki-Malmi</name><atc>yes</atc><acc>127.425</acc><vfrpoint>DEGER</vfrpoint><vfrpoint>NOKKA</vfrpoint><vfrpoint>RASTI</vfrpoint></aerodrome>
+<aerodrome lat="683639N" lon="0272450E"><icao>EFIV</icao><name>Ivalo</name><atc>yes</atc><acc>126.100</acc><vfrpoint>HAMPI</vfrpoint><vfrpoint>LAANI</vfrpoint><vfrpoint>MAHLA</vfrpoint><vfrpoint>VASKI</vfrpoint></aerodrome>
+<aerodrome lat="623932N" lon="0293728E"><icao>EFJO</icao><name>Joensuu</name><atc>yes</atc><acc>135.525</acc><vfrpoint>KONTI</vfrpoint><vfrpoint>LIPPI</vfrpoint><vfrpoint>POLVI</vfrpoint><vfrpoint>SUHMU</vfrpoint></aerodrome>
+<aerodrome lat="622403N" lon="0254022E"><icao>EFJY</icao><name>Jyväskylä</name><atc>yes</atc><acc>132.325</acc><vfrpoint>HONKO</vfrpoint><vfrpoint>KOTTA</vfrpoint><vfrpoint>KUOHU</vfrpoint><vfrpoint>KUUSA</vfrpoint></aerodrome>
+<aerodrome lat="641703N" lon="0274115E"><icao>EFKI</icao><name>Kajaani</name><atc>yes</atc><acc>132.325</acc><vfrpoint>MAINU</vfrpoint><vfrpoint>PALTA</vfrpoint><vfrpoint>PEHKO</vfrpoint><vfrpoint>RIMPI</vfrpoint></aerodrome>
+<aerodrome lat="654645N" lon="0243505E"><icao>EFKE</icao><name>Kemi-Tornio</name><atc>yes</atc><acc>124.200</acc><vfrpoint>OUKKI</vfrpoint><vfrpoint>ROLLO</vfrpoint><vfrpoint>SVEDU</vfrpoint></aerodrome>
+<aerodrome lat="674155N" lon="0245053E"><icao>EFKT</icao><name>Kittilä</name><atc>yes</atc><acc>126.100</acc><vfrpoint>KENUS</vfrpoint><vfrpoint>KUMPU</vfrpoint><vfrpoint>LOUKI</vfrpoint><vfrpoint>VAARA</vfrpoint><vfrpoint>VENHE</vfrpoint></aerodrome>
+<aerodrome lat="634313N" lon="0230821E"><icao>EFKK</icao><name>Kokkola-Pietarsaari</name><atc>yes</atc><acc>127.100</acc><vfrpoint>EMMET</vfrpoint><vfrpoint>KALVI</vfrpoint><vfrpoint>PEDER</vfrpoint><vfrpoint>SUNDI</vfrpoint></aerodrome>
+<aerodrome lat="630031N" lon="0274740E"><icao>EFKU</icao><name>Kuopio</name><atc>yes</atc><acc>132.325</acc><vfrpoint>KARJU</vfrpoint><vfrpoint>KOKKO</vfrpoint><vfrpoint>LAIVO</vfrpoint><vfrpoint>MAANI</vfrpoint><vfrpoint>MELAN</vfrpoint></aerodrome>
+<aerodrome lat="655925N" lon="0291355E"><icao>EFKS</icao><name>Kuusamo</name><atc>yes</atc><acc>124.200</acc><vfrpoint>AVELA</vfrpoint><vfrpoint>KITKA</vfrpoint><vfrpoint>POUSU</vfrpoint><vfrpoint>RAITO</vfrpoint><vfrpoint>SUINI</vfrpoint></aerodrome>
+<aerodrome lat="610245N" lon="0280855E"><icao>EFLP</icao><name>Lappeenranta</name><atc>yes</atc><acc>136.650</acc><vfrpoint>HANNA</vfrpoint><vfrpoint>KAITO</vfrpoint><vfrpoint>KONTU</vfrpoint><vfrpoint>LENSU</vfrpoint></aerodrome>
+<aerodrome lat="600719N" lon="0195347E"><icao>EFMA</icao><name>Mariehamn</name><atc>yes</atc><acc>132.725</acc><vfrpoint>BROON</vfrpoint><vfrpoint>PRAST</vfrpoint><vfrpoint>RANBO</vfrpoint></aerodrome>
+<aerodrome lat="614111N" lon="0271200E"><icao>EFMI</icao><name>Mikkeli</name><atc>yes</atc><acc>135.525</acc><vfrpoint>ASEMA</vfrpoint><vfrpoint>LINKI</vfrpoint><vfrpoint>RISTI</vfrpoint><vfrpoint>SOLMU</vfrpoint></aerodrome>
+<aerodrome lat="645545N" lon="0252120E"><icao>EFOU</icao><name>Oulu</name><atc>yes</atc><acc>124.200</acc><vfrpoint>HAURU</vfrpoint><vfrpoint>PILPA</vfrpoint><vfrpoint>SIIKA</vfrpoint><vfrpoint>TUIRA</vfrpoint></aerodrome>
+<aerodrome lat="612741N" lon="0214752E"><icao>EFPO</icao><name>Pori</name><atc>yes</atc><acc>132.725</acc><vfrpoint>KULTA</vfrpoint><vfrpoint>MALOP</vfrpoint><vfrpoint>RAUTU</vfrpoint><vfrpoint>SIRMA</vfrpoint></aerodrome>
+<aerodrome lat="663342N" lon="0254951E"><icao>EFRO</icao><name>Rovaniemi</name><atc>yes</atc><acc>124.200</acc><vfrpoint>HEINU</vfrpoint><vfrpoint>KUKSA</vfrpoint><vfrpoint>ROSKA</vfrpoint><vfrpoint>SONKA</vfrpoint></aerodrome>
+<aerodrome lat="615634N" lon="0285642E"><icao>EFSA</icao><name>Savonlinna</name><atc>yes</atc><acc>135.525</acc><vfrpoint>APAJA</vfrpoint><vfrpoint>HANHI</vfrpoint><vfrpoint>IKOIN</vfrpoint><vfrpoint>KALLI</vfrpoint><vfrpoint>KUONA</vfrpoint></aerodrome>
+<aerodrome lat="624137N" lon="0224955E"><icao>EFSI</icao><name>Seinäjoki</name><atc>yes</atc><acc>127.100</acc><vfrpoint>JOKIP</vfrpoint><vfrpoint>KOSSU</vfrpoint><vfrpoint>KUORA</vfrpoint><vfrpoint>NURMO</vfrpoint></aerodrome>
+<aerodrome lat="612455N" lon="0233516E"><icao>EFTP</icao><name>Tampere-Pirkkala</name><atc>yes</atc><acc>127.100</acc><vfrpoint>PALLO</vfrpoint><vfrpoint>PURSO</vfrpoint><vfrpoint>VIILA</vfrpoint></aerodrome>
+<aerodrome lat="603053N" lon="0221542E"><icao>EFTU</icao><name>Turku</name><atc>yes</atc><acc>134.575</acc><vfrpoint>HARVA</vfrpoint><vfrpoint>KIHTI</vfrpoint><vfrpoint>MANSE</vfrpoint><vfrpoint>NOUSU</vfrpoint></aerodrome>
+<aerodrome lat="605347N" lon="0265617E"><icao>EFUT</icao><name>Utti</name><atc>yes</atc><acc>136.650</acc><vfrpoint>HERMU</vfrpoint><vfrpoint>HONKA</vfrpoint><vfrpoint>LINJA</vfrpoint><vfrpoint>ORAVA</vfrpoint></aerodrome>
+<aerodrome lat="630243N" lon="0214551E"><icao>EFVA</icao><name>Vaasa</name><atc>yes</atc><acc>127.100</acc><vfrpoint>MINNE</vfrpoint><vfrpoint>TERVA</vfrpoint><vfrpoint>VASSO</vfrpoint></aerodrome>
+<aerodrome lat="621016N" lon="0275207E"><icao>EFVR</icao><name>Varkaus</name><atc>yes</atc><acc>135.525</acc><vfrpoint>LAMPO</vfrpoint><vfrpoint>MAAVU</vfrpoint><vfrpoint>MANKI</vfrpoint><vfrpoint>POIJI</vfrpoint><vfrpoint>VEHMA</vfrpoint></aerodrome>
+</gpx>

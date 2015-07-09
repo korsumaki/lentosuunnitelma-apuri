@@ -145,16 +145,16 @@ var gSelectedFlyingTimeStr;
 // constants
 
 // Date when update is taken into use.
-var dateOfUpdateStr = "2015-05-28T00:00:00Z";
+var dateOfUpdateStr = "2015-07-23T00:00:00Z";
 
 // These names are used before update
 var VFRPortFilename_before_change    = "EF_VFRREP_13NOV2014.xml";
-var AerodromesFilename_before_change = "aerodromes_13NOV2014.xml";
-var ZZZZFieldsFilename_before_change = "zzzz_fields_13NOV2014.xml";
+var AerodromesFilename_before_change = "aerodromes_28MAY2015.xml";
+var ZZZZFieldsFilename_before_change = "zzzz_fields_28MAY2015.xml";
 
 // Current (new) filenames
 var VFRPortFilename = "EF_VFRREP_13NOV2014.xml"; // This does not change
-var AerodromesFilename = "aerodromes_28MAY2015.xml";
+var AerodromesFilename = "aerodromes_23JUL2015.xml";
 var ZZZZFieldsFilename = "zzzz_fields_28MAY2015.xml";
 
 var UNOFFICIAL_AERODROME="ZZZZ";
