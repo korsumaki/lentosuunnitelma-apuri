@@ -148,14 +148,14 @@ var gSelectedFlyingTimeStr;
 var dateOfUpdateStr = "2016-01-01T00:00:00Z";
 
 // These names are used before update
-var VFRPortFilename_before_change    = "EF_VFRREP_12NOV2015.xml";
-var AerodromesFilename_before_change = "aerodromes_01JAN2016.xml";
-var ZZZZFieldsFilename_before_change = "zzzz_fields_28MAY2015.xml";
+var VFRPortFilename_before_change    = "data/EF_VFRREP_12NOV2015.xml";
+var AerodromesFilename_before_change = "data/aerodromes_01JAN2016.xml";
+var ZZZZFieldsFilename_before_change = "data/zzzz_fields_28MAY2015.xml";
 
 // Current (new) filenames
-var VFRPortFilename = "EF_VFRREP_12NOV2015.xml";
-var AerodromesFilename = "aerodromes_01JAN2016.xml";
-var ZZZZFieldsFilename = "zzzz_fields_28MAY2015.xml"; // does not change in this update
+var VFRPortFilename = "data/EF_VFRREP_12NOV2015.xml";
+var AerodromesFilename = "data/aerodromes_01JAN2016.xml";
+var ZZZZFieldsFilename = "data/zzzz_fields_28MAY2015.xml"; // does not change in this update
 
 var UNOFFICIAL_AERODROME="ZZZZ";
 var UNOFFICIAL_AERODROME_INDEX=0; // This field index is used when ZZZZ place name was written manually, not from xml.
