@@ -127,7 +127,7 @@
  * + minimization: http://closure-compiler.appspot.com/home
  */
 
-var log="Ohjelmakoodi päivätty: 2015-05-21<br>";
+var log="Ohjelmakoodi päivätty: 2016-01-08<br>";
 var VfrRepArray;
 
 var CurrentAerodromeArray; // Contains either Official or Official+ZZZZ fields, depending on user selection.
@@ -144,18 +144,12 @@ var gSelectedFlyingTimeStr;
 
 // constants
 
-// Date when update is taken into use.
-var dateOfUpdateStr = "2016-01-01T00:00:00Z";
+var DATA_VALIDITY_JSON_FILE = "data/validity.json";
 
-// These names are used before update
-var VFRPortFilename_before_change    = "data/EF_VFRREP_12NOV2015.xml";
-var AerodromesFilename_before_change = "data/aerodromes_01JAN2016.xml";
-var ZZZZFieldsFilename_before_change = "data/zzzz_fields_28MAY2015.xml";
-
-// Current (new) filenames
-var VFRPortFilename = "data/EF_VFRREP_12NOV2015.xml";
-var AerodromesFilename = "data/aerodromes_01JAN2016.xml";
-var ZZZZFieldsFilename = "data/zzzz_fields_28MAY2015.xml"; // does not change in this update
+// Current filenames
+var VFRPortFilename = "";
+var AerodromesFilename = "";
+var ZZZZFieldsFilename = "";
 
 var UNOFFICIAL_AERODROME="ZZZZ";
 var UNOFFICIAL_AERODROME_INDEX=0; // This field index is used when ZZZZ place name was written manually, not from xml.
@@ -1676,19 +1670,61 @@ function onOFPContainerToggleClick() {
 }
 
 
+/*
+ * TODO
+ * + load json file
+ * + parse dates 
+ * + find current date range
+ * + use files from that range
+ * 
+ * JSON.parse
+ * 
+ * validator
+ * check that 
+ * + json file founds
+ * + no errors in parse
+ * + all dates parsed without errors
+ * + dates are in increasing order
+ * + all tags found
+ * + filenames are not empty
+ * + from today to future, all dates have all files
+ * + all files are found from data directory
+ * 
+ * */
+
+function loadValidityJson()
+{
+	$.getJSON(DATA_VALIDITY_JSON_FILE, 
+		function(data, textStatus, jqXHR) {
+			var today = new Date();
+
+			for (var i=0; i<data.data.length; ++i) {
+				
+				var dateOfUpdate = new Date(data.data[i].validFrom);
+				
+				if (today.getTime() >= dateOfUpdate.getTime()) {
+					//console.log( "käytä fileä:" + data.data[i].aerodromes );
+					AerodromesFilename = data.data[i].aerodromes;
+					ZZZZFieldsFilename = data.data[i].zzzzfields;
+					VFRPortFilename = data.data[i].vfrpoints;
+				}
+			}
+		}).fail(function() {
+			alert("Virhe validity.json tiedoston lataamisessa. Tiedostoa ei löydy tai formaatti on pielessä.");
+		}).always(function() {
+			onStartup();
+		});
+}
 
 function onLoad()
 {
-	total_startup_start_time = debug_timestamp_start("onLoad");
+	loadValidityJson();
+}
 
-	// Check whether we should still load old not-yet-updated files
-	var today = new Date();
-	var dateOfUpdate = new Date(dateOfUpdateStr);
-	if (today.getTime() < dateOfUpdate.getTime()) {
-		VFRPortFilename = VFRPortFilename_before_change;
-		AerodromesFilename = AerodromesFilename_before_change;
-		ZZZZFieldsFilename = ZZZZFieldsFilename_before_change;
-	}
+function onStartup() {
+	//console.log( "onStartup()" );
+
+	total_startup_start_time = debug_timestamp_start("onStartup");
 
 	aerodromeXml_start_time = debug_timestamp_start("aerodromeXml load start");
 	loadXMLDoc(AerodromesFilename, aerodromeXmlResponseHandler);
