@@ -2,7 +2,7 @@
 <gpx
 version="1.6"
 creator="Markku Korsumaki"
-created="2016-01-01"
+created="2016-01-14"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/1"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
@@ -60,7 +60,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 <aerodrome lat="600445N" lon="0241020E"><icao>EFTO</icao><name>Torbacka</name><atc>no</atc><acc>127.425</acc></aerodrome>
 <aerodrome lat="643007N" lon="0264536E"><icao>EFVL</icao><name>Vaala</name><atc>no</atc><acc>124.200</acc></aerodrome>
 <aerodrome lat="610223N" lon="0223530E"><icao>EFVP</icao><name>Vampula</name><atc>no</atc><acc>132.725</acc></aerodrome>
-<aerodrome lat="621043N" lon="0275134E"><icao>EFVR</icao><name>Varkaus</name><atc>no</atc><acc>135.525</acc></aerodrome>
+<aerodrome lat="621016N" lon="0275207E"><icao>EFVR</icao><name>Varkaus</name><atc>no</atc><acc>135.525</acc></aerodrome>
 <aerodrome lat="630721N" lon="0254858E"><icao>EFVI</icao><name>Viitasaari</name><atc>no</atc><acc>132.325</acc></aerodrome>
 <aerodrome lat="603949N" lon="0264445E"><icao>EFWB</icao><name>Wredeby</name><atc>no</atc><acc>136.650</acc></aerodrome>
 <aerodrome lat="640317N" lon="0244331E"><icao>EFYL</icao><name>Ylivieska</name><atc>no</atc><acc>124.200</acc></aerodrome>
