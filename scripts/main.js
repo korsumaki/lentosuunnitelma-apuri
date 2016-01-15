@@ -392,7 +392,7 @@ function DMS_to_DM(dms) {
 		seconds=parseInt(dms.substr(5,2), 10);
 	}
 	else {
-		debug_log("ERROR: DMS_to_DM(): DMS coordinate does not look valid!");
+		debug_log("ERROR: DMS_to_DM(): DMS coordinate does not look valid! dms=" + dms);
 	}
 		
 	if (seconds>=30) {
@@ -416,7 +416,7 @@ function DMS_to_DM(dms) {
 					addPrefixDigits( minutes.toString(), "0", 2) + sign;
 			break;
 		default: // No letter at the end (or wrong letter).
-			debug_log("ERROR: DMS_to_DM(): DMS coordinate does not look valid! No letter at the end (or wrong letter).");
+			debug_log("ERROR: DMS_to_DM(): DMS coordinate does not look valid! No letter at the end (or wrong letter). dms=" + dms);
 			break;
 	}
 
@@ -446,6 +446,7 @@ function DMS_to_Decimal(dms) {
 			dms = dms.substr(0, dms.length-1);
 			break;
 		default: // No letter at the end (or wrong letter).
+			debug_log("ERROR: DMS_to_Decimal(): DMS coordinate does not look valid! No letter at the end (or wrong letter). dms=" + dms);
 			break;
 	}
 
@@ -459,7 +460,7 @@ function DMS_to_Decimal(dms) {
 		seconds=parseInt(dms.substr(5,2), 10);
 	}
 	else {
-		debug_log("ERROR: DMS coordinate does not look valid!");
+		debug_log("ERROR: DMS_to_Decimal(): DMS coordinate does not look valid! dms=" + dms);
 	}
 		
 	decimal = factor*(degrees+(minutes*60+seconds)/3600);
@@ -479,6 +480,7 @@ function Decimal_to_DMS_lat(decimal) {
 	var sign = "N";
 	if (decimal < 0) {
 		sign = "S";
+		decimal = -decimal;
 	}
 	d = parseInt(decimal);
 	decimal -= d;
@@ -512,6 +514,7 @@ function Decimal_to_DMS_lon(decimal) {
 	var sign = "E";
 	if (decimal < 0) {
 		sign = "W";
+		decimal = -decimal;
 	}
 	d = parseInt(decimal);
 	decimal -= d;

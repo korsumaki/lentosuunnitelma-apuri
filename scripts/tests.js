@@ -24,6 +24,8 @@ test( "DMS_to_DM", function() {
   equal( DMS_to_DM("690734N"),  "6908N" );
   equal( DMS_to_DM("611633N"),  "6117N" );
 
+  equal( DMS_to_DM("611633S"),  "6117S" );
+
   equal( DMS_to_DM("0270726E"),  "02707E" );
   equal( DMS_to_DM("0254221E"),  "02542E" );
   equal( DMS_to_DM("0254510E"),  "02545E" );
@@ -43,6 +45,7 @@ test( "DMS_to_DM", function() {
   equal( DMS_to_DM("0271410E"),  "02714E" );
   equal( DMS_to_DM("0240026E"),  "02400E" );
 
+  equal( DMS_to_DM("0061900W"),  "00619W" );
 });
 
 
@@ -65,6 +68,8 @@ test( "Decimal_to_DMS_lat", function() {
   equal( Decimal_to_DMS_lat( DMS_to_Decimal("613409N") ),  "613409N" );
   equal( Decimal_to_DMS_lat( DMS_to_Decimal("690734N") ),  "690734N" );
   equal( Decimal_to_DMS_lat( DMS_to_Decimal("611633N") ),  "611633N" );
+
+  equal( Decimal_to_DMS_lat( DMS_to_Decimal("611633S") ),  "611633S" );
 });
 
 
@@ -87,6 +92,9 @@ test( "Decimal_to_DMS_lon", function() {
   equal( Decimal_to_DMS_lon( DMS_to_Decimal("0280049E") ),  "0280049E" );
   equal( Decimal_to_DMS_lon( DMS_to_Decimal("0271410E") ),  "0271410E" );
   equal( Decimal_to_DMS_lon( DMS_to_Decimal("0240026E") ),  "0240026E" );
+  
+  equal( Decimal_to_DMS_lon( DMS_to_Decimal("0240026W") ),  "0240026W" );
+  equal( Decimal_to_DMS_lon( DMS_to_Decimal("0061900W") ),  "0061900W" );
 });
 /*
 <aerodrome lat="" lon=""><icao>ZZZZ</icao><name>Vuotso</name><atc>no</atc><acc>126.100</acc></aerodrome>
