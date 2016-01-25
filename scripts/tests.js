@@ -277,6 +277,7 @@ test( "JSON validity check", function( assert ) {
 			VFRPortFilename = "";
 			AerodromesFilename = "";
 			ZZZZFieldsFilename = "";
+			AirspaceFilename = "";
 			
 			var prevDate = new Date();
 			var firstDateWithinRange = 0;
@@ -306,13 +307,16 @@ test( "JSON validity check", function( assert ) {
 					VFRPortFilename = "";
 					AerodromesFilename = "";
 					ZZZZFieldsFilename = "";
+					AirspaceFilename = "";
 
 					AerodromesFilename = data.data[i].aerodromes;
 					ZZZZFieldsFilename = data.data[i].zzzzfields;
 					VFRPortFilename = data.data[i].vfrpoints;
+					AirspaceFilename = data.data[i].airspace;
 					console.log( "file1: " + AerodromesFilename);
 					console.log( "file2: " + ZZZZFieldsFilename);
 					console.log( "file3: " + VFRPortFilename);
+					console.log( "file4: " + AirspaceFilename);
 				}
 				else { 
 					equal(firstDateWithinRange, 1, "First date should be included in ranges");
@@ -320,9 +324,12 @@ test( "JSON validity check", function( assert ) {
 				notEqual(data.data[i].vfrpoints, "", "vfrpoints not empty (during loop)");
 				notEqual(data.data[i].aerodromes, "", "aerodromes not empty (during loop)");
 				notEqual(data.data[i].zzzzfields, "", "zzzzfields not empty (during loop)");
+				notEqual(data.data[i].airspace, "", "airspace not empty (during loop)");
+
 				notEqual(data.data[i].vfrpoints, undefined, "vfrpoints exists (during loop)");
 				notEqual(data.data[i].aerodromes, undefined, "aerodromes exists (during loop)");
 				notEqual(data.data[i].zzzzfields, undefined, "zzzzfields exists (during loop)");
+				notEqual(data.data[i].airspace, undefined, "airspace exists (during loop)");
 				
 				// Check that file actually founds
 				$.get(data.data[i].vfrpoints, 
@@ -355,15 +362,27 @@ test( "JSON validity check", function( assert ) {
 					}).fail(function() {
 						ok( 0 == "1", "Failure in zzzzfields file loading." );
 					});
+				$.get(data.data[i].airspace, 
+					function(data, textStatus, jqXHR) {
+						console.log( "airspace success" );
+						actualValidFileCount++;
+						if (actualValidFileCount == expectedFileCount) {
+							done();
+						}
+					}).fail(function() {
+						ok( 0 == "1", "Failure in airspace file loading." );
+					});
 				
 			}
 			console.log( "check filenames are not empty" );
 			notEqual(VFRPortFilename, "", "VFR port filename is not empty (after selection)");
 			notEqual(AerodromesFilename, "", "Aerodromes filename is not empty (after selection)");
 			notEqual(ZZZZFieldsFilename, "", "ZZZZ fields filename is not empty (after selection)");
+			notEqual(AirspaceFilename, "", "Airspace filename is not empty (after selection)");
 			notEqual(VFRPortFilename, undefined, "VFR port filename exists (after selection)");
 			notEqual(AerodromesFilename, undefined, "Aerodromes filename exists (after selection)");
 			notEqual(ZZZZFieldsFilename, undefined, "ZZZZ fields filename exists (after selection)");
+			notEqual(AirspaceFilename, undefined, "Airspace filename exists (after selection)");
 			console.log( "check filenames check done" );
 
 		}).fail(function() {
@@ -374,4 +393,8 @@ test( "JSON validity check", function( assert ) {
 		});
    
 });
+
+//test( "createTESTdata", function() {
+//  equal( createTESTdata(), "0" );
+//});
 

@@ -4,12 +4,14 @@
 		"validFrom":  "2015-11-12T00:00:00Z",
 		"aerodromes": "data/aerodromes_12NOV2015.xml",
 		"zzzzfields": "data/zzzz_fields_28MAY2015.xml",
-		"vfrpoints":  "data/EF_VFRREP_12NOV2015.xml"
+		"vfrpoints":  "data/EF_VFRREP_12NOV2015.xml",
+		"airspace":   "data/airspace_01JAN2016.json"
 	}, {
 		"validFrom":  "2016-01-01T00:00:00Z",
 		"aerodromes": "data/aerodromes_01JAN2016.xml",
 		"zzzzfields": "data/zzzz_fields_28MAY2015.xml",
-		"vfrpoints":  "data/EF_VFRREP_12NOV2015.xml"
+		"vfrpoints":  "data/EF_VFRREP_12NOV2015.xml",
+		"airspace":   "data/airspace_01JAN2016.json"
 	}
 	]
 } 
