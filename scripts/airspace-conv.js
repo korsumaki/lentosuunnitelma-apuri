@@ -2,72 +2,10 @@
 
 /*
  * TODO list:
- * 
- * 
+ * - Trim spaces from raw data (EFJO CTR bottom level was 'SFC ')
  * 
  * http://geojsonlint.com/
  * http://geojson.org/geojson-spec.html
- * 
- * geojson
- * + datan voi tarkistaa kartalla
- * - oma formaatti voisi olla tiiviimpi
- * - koordinaatit täytyy convertoida
- * 
- * TODO Airspace
- * - tee scripti muodostamaan geojson filen yksinkertaisemmasta datasta
- *   - koordinaattien muunto desimaalimuotoon
- * - 
-
-Ilmatilat
-
-CTR
-TMA
-CTA
-FIZ UPPER
-ACC sektorit <- ei näitä
-
-ENR 2.1 FIR, ACC SECTOR, CTA, FIZ UPPER, TMA
-
-EFTP AD 2.17 ATS-ILMATILA
-
-"name": "EFTP CTR"
-"lateralLimits": 
-613635N 0235128E - 612303N 0240448E -
-611303N 0232104E - 612630N 0230729E -
-613635N 0235128E
-"verticalLimits": "korkeus SFC - 2000FT MSL"
-
-EFTP TMA EAST
-614324N 0234508E - 614307N 0240755E -
-613600N 0243552E - 611443N 0243524E -
-610548N 0235502E - 610342N 0232209E -
-610640N 0230829E - 612126N 0225328E -
-613145N 0225407E - 614324N 0234508E
-2000 FT MSL - FL 95
-
-EFTP TMA WEST
-613145N 0225407E - 612126N 0225328E -
-610640N 0230829E - 610342N 0232209E -
-610251N 0230418E - 611036N 0223554E -
-612857N 0223728E - 613012N 0224727E -
-613145N 0225407E
-FL 65 - FL 95
-
-
-
-EFHA CTR
-615938N 0251232E - 614442N 0251426E -
-614305N 0242345E - 615759N 0242122E -
-615938N 0251232E
-SFC - 2000FT MSL
-
-EFHA TMA
-621002N 0250657E - 615152N 0254656E -
-613731N 0253018E - 613600N 0243552E -
-614307N 0240755E - 615655N 0240258E -
-620455N 0240521E - 621002N 0250657E
-2000 FT MSL - FL 95
-
  */
 var outputJson ="";
 
@@ -200,8 +138,6 @@ EFJY CTA
 630006N 0240449E - 631302N 0243759E -
 631758N 0250448E - 631924N 0254005E
 631116N 0263241E - 631924N 0254005E
-
-
 
  * 
  * - EFHA CTR väli puuttuu 2000 ja FT välistä

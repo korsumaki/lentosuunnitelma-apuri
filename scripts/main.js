@@ -2,71 +2,6 @@
 
 /*
  * TODO list:
- * + kokeile vfr tiedon asetusta (täytä seuraava kenttä oikein)
- * + jos reitti on tyhjä, lisää space (vai nolla?)
- * + Kohdassa 18 edelleen "DEF RTF EFES ACC"; pelkkä "DEP RTF ACC" riittäisi
- * + Jos perustiedot-osassa on nopeusyksiköksi annettu KT, olisi luontevaa näyttää kokonaismatka myös NM, ei KM
- * + myös RMK/ kauttaviiva muutettu escape koodiksi
- * + myös kenttälistaukseen km -> NM
- * + Joissakin koneissa on enemmän kuin 4 paikkaa
- * + VFR tiedon tilalle muitakin vaihtoehtoja A000, F000, ...
- * + Olisiko mahdollista saada useamman koneen tuki ilman että perustiedoista pitäisi käydä muuttamassa koneen tietoja?
- * + lähtöaika samoin kuin toiminta-aika, 15 min jaolla
- * + molempiin aikoihin 1h lisää?
- * + Jos koneessa on laitteissa "G" , ts BRNAV-hyväksytty GPS (kuten GNS430/530) tulisi kohtaan 18 täyttää aina lisäksi PBN/xxx  (ks. taustat täältä http://www.rocketroute.com/ICAO2012-PBN-RNAV.php )
- *     + jos laitteissa on R -> avaa uusi kenttä "PBN/jotain"
- *     + 18 kentän täyttö lisää uuden kentän sisältö ennen RMK/ kohtaa
- *     + tietojen tallennus ja lataus
- *     + lisää pbn tiedon tarkistus vaadittuihin tietoihin ennen lomakkeelle siirtymistä
- * + lentolaskelmataulukon yhteyteen valitun koneen tunnus näkyviin
- * + zzzz kentän koordinaatit 4+5 numerolla. ConvertToDM()
- * + lentoajan antaminen itse (paikallislennoille tai jos muuten haluaa kierrellä enemmän)
- * 
- * /- lisää tallenna -nappi
- * - tallennetaan plaanin tiedot (localstorageen) (ilman virallista plaanin jättämistä)
- * 		+- tallenna storageen
- * 			- epävirallisen nimi + koordinaatit?
- * 		+- lue storagesta ja muodosta plaanilista etusivulle
- * 			- (epävirallisen) kentän nimi
- * 			- kaikki tiedot näkyvyllä (tai täpättävissä näkyviin), ei linkkiä
- * 		+ lataa storagesta koko plaani storedPlan sivulle
- * 		/- lisää napit (poisto, ...)
- * 		- lisää linkit
- * 			+ notam
- * 			- vfr suomi/aip
- * 			- efes
- * 			- metar
- * 			- ZZZZ kenttien hanskaus
- * 		- session storage -> local storage
- * 		+ nappien teksti 2 riville?
- * 		+ plaanin deletointi
- * 		+ lisää tietojen tallennusta
- * 			+ zzzz kentän selväkielinen nimi
- * 			+ korkeus
- * 			+ toiminta-aika
- * 			+ hlö määrä
- * + käyttöohjesivu
- * 		+ käyttö
- * 		+ toteutuksen tekniset yksityiskohdat
- * + jätä johonkin talteen plaanin aktivointi- ja lopetustavat (puh/jakso), ettei tarvisi kirjoittaa muistiin
- * 
- * =======
- * + Ilmatilauudistus 13 NOV 2014
- * 		+ tee tietojen ajastettu vaihto
- * 			+ kaikki kolme xml tiedostoa
- * 		+ uusi VFR pisteet -tiedosto -> on valmiina
- * 		+ ACC sektorit uusiksi
- * 			+ selvitettävä millä sektorilla mikäkin kenttä on?
- * 				+ tornikentät
- * 				+ korpikentät -> tarkistuksia vielä
- * 				+ zzzz kentät (oikeasta ilmailukartasta) -> tarkistuksia vielä
- * 				+ sektoreiden koordinaatit on tiedossa, joten voisi olla mahdollista piirtää ne kartalle?
- * 			+ tarkistuksia tehtävä vielä oikealla datalla
- * 			+ jaksot
- * 			+ sektorien koordinaatit löytyy, mutta ei vielä suoraa tietoa mitkä kentät ko. alueilla on.
- * 				ENR 2.1 FIR, ACC SECTOR, CTA, FIZ UPPER, TMA
- * 				ACC-sektorit on esitetty taulukossa 2.1.2.
- * 				EF_AMDT_A_2014_2_part_2_en.pdf
  * 
  * + lentokorkeus valinnat selväkielelle (kuten nopeus)
  * - kenttälistan filtteröinti kirjoituksen mukaan?
@@ -83,17 +18,8 @@
  * 
  * - refresh jossain muualla kuin pääsivulla aiheuttaa erroreita -> jquery vaiheessa voisi koittaa korjata
  * 
- * - lisää koodin muuttamispäivämäärä lokitukseen?
+ * + lisää koodin muuttamispäivämäärä lokitukseen?
  * 
- * 
- * + iframe kokeilu idebug.html
- * 		+ http://stackoverflow.com/questions/17223469/how-to-preserve-responsive-design-in-mobile-browsers-iframe
- * 		+ näyttää siltä että uudempi jquerymobile auttaa
- * + Sijainti... -> Sijainti OK
- * 		+ näkeekö onko tarkka vai karkea?
- * 		= handlePositionUpdateCallback
- * + jos huomataan että käyttäjän täytyy modata jotain tietoa lomakkeella, kerro se messageboxissa (acc jakso, /zzzz koordinaatit)
- * + tuntematon epävirallinen laskupaikka -> avaa lentoajan muuttaminen...
  * - tee samat oikeellisuustarkistukset kuin finavialla on?
  * 		- tutki mitä siellä tarkistetaan.
  * - jos reitti kenttään on syötetty jotain, pakota tai ohjaa käyttäjä muuttamaan lentoaikaa.
@@ -104,30 +30,69 @@
  * 
  * - review and update comments
  * 
- * - poista timestampit minimoitavasta koodista
  * + poista päivämääräfeikkaus ennen julkaisua
  * 
  * 
  * - OFP, Lennonvalmistelu - aukeava osio
  * 		+ laskelma-taulukkoon lentosuunnat
  * 		- tallenna suunnat localstorageen
- * 		- piirrä graafi lentosuunnista
- * 		- linkki nav wrng pdf fileen.
+ * 		+ piirrä graafi lentosuunnista
+ * 		+ linkki nav wrng pdf fileen.
  * 
- * 		- hae open-data
- * 			- metar yms.
+ * 		+ hae open-data
+ * 			+ metar yms.
  * 			- tallenna localstorageen myöhempää käyttöä varten
- * - kokeile offline moodia
- * 		- eri selaimilla
+
+TODO:
+
+Android
+	Väärä päivämäärä:
+		ERROR: aerodromeXmlResponseHandler - error: status=200
+		- voi tarkoittaa että laitteen päivämäärä on pielessä
+		- lisää virheilmoitukseen nimi mitä tiedostoa oltiin lukemassa
+		- virheilmoitus jos nimi ei ole valid
+		+ jos today on ennen ensimmäistäkään päivämäärää, herjaa laitteen väärästä pvm asetuksesta.
+
+Android Chrome:
+	+ lentokenttä symboli ei näy oikein (jollain kentällä näkyy)
+		+ toimisiko 8-kulmio (tai joku muu symboli) paremmin joka paikassa? Tornikentälle eri kuin korpikentälle? ZZZZ vielä joku omansa? Ilmailukartan oikeat symbolit?
+
+Android Intenet:
+	+ location päivitys ei valmistu koskaan -> valmistuu kun location on sallittuna
+
+Kehitys
+	- sijainti -nappi 
+		+ keltaisella kun sijaintia haetaan
+		- punaisella jos sijaintia ei ole saatu (denied yms.)
+		- vihreällä jos ok sijainti
+	- Perustiedot -nappi
+		- vihreällä/punaisella
+	- graafi
+		+ symbolien sijainnit fiksusti
+
++ kokeile graafin toimintaa tabletilla -> ok
+
+Note: automaattinen skaalaus muuttaisi myös symbolien (ja tekstin) kokoa?
+
  * 
- * + Kauhavan siirto ajastetusti 28.05.2015
- * 
+ * - poista timestampit minimoitavasta koodista
  * - Muista päivittää kooditiedoston nimi! Kannattaa olla versionumero yms. varmistamassa uuden tiedoston lataamista.
- * 
  * + minimization: http://closure-compiler.appspot.com/home
  */
 
-var log="Ohjelmakoodi päivätty: 2016-01-08<br>";
+
+/*
+ * http://geojsonlint.com/
+ * http://geojson.org/geojson-spec.html
+ * 
+ * geojson
+ * + datan voi tarkistaa kartalla
+ * - oma formaatti voisi olla tiiviimpi
+ * - koordinaatit täytyy convertoida
+ * 
+ */
+
+var log="Ohjelmakoodi päivätty: 2016-01-31<br>";
 var VfrRepArray;
 
 var CurrentAerodromeArray; // Contains either Official or Official+ZZZZ fields, depending on user selection.
@@ -138,18 +103,28 @@ var gPosition_lat;
 var gPosition_lon;
 
 var flightPlanLink; // created link to flight plan
-//var GlobalFlyingTimeStr;
 var gCalculatedFlyingTimeStr;
 var gSelectedFlyingTimeStr;
 
-// constants
-
-var DATA_VALIDITY_JSON_FILE = "data/validity.json";
+var airspaceData;
 
 // Current filenames
 var VFRPortFilename = "";
 var AerodromesFilename = "";
 var ZZZZFieldsFilename = "";
+var AirspaceFilename = "";
+
+// These sizes will change based on screen size
+var CANVAS_WIDTH = 300;
+var CANVAS_HEIGHT = 300;
+
+// constants
+
+var DATA_VALIDITY_JSON_FILE = "data/validity.json";
+var MAX_CANVAS_SIZE = 800; // Max height and width of canvas
+var MIN_CANVAS_SIZE = 300; // Min height and width of canvas
+
+var SCREEN_MARGINAL = 20; // Screen marginal size %
 
 var UNOFFICIAL_AERODROME="ZZZZ";
 var UNOFFICIAL_AERODROME_INDEX=0; // This field index is used when ZZZZ place name was written manually, not from xml.
@@ -166,6 +141,9 @@ var PYROTECHNICS_NOTE_REMARKS = "rakettipelastusvarjo";
 var OPENAVIATIONDATA_APIKEY = "mkXQV7UpiiBgOVjxbTzioYfpOlNVtEtg";
 
 var overrideFlightTime = true;
+
+// This cache is used in resize function to redraw map display
+var mapCacheRouteArray;
 
 
 var total_startup_start_time = 0;
@@ -274,6 +252,8 @@ function continueIfEverythingIsReady() {
 
 function handlePositionError(error) {
 	document.getElementById("locationUpdateButtonText").innerHTML = "Ei sijaintia";
+	$('#location-button').removeClass('location-waiting location-ready').addClass('location-not-available');
+
 	switch(error.code)
 	{
 	case error.PERMISSION_DENIED:
@@ -304,13 +284,9 @@ function handlePositionUpdateCallback(position) {
 	} else {
 		accuracy = "(" + Math.round(position.coords.accuracy/1000) + "km)";
 	}
-	/*if (position.coords.accuracy<500) {
-		accuracy = "(m)";
-	} else {
-		accuracy = "(km)";
-	}*/
 
 	document.getElementById("locationUpdateButtonText").innerHTML = "Sijainti " + accuracy;
+	$('#location-button').removeClass('location-waiting location-not-available').addClass('location-ready');
 }
 
 function handlePositionUpdate(lat, lon) {
@@ -1085,7 +1061,7 @@ function onChangeAircraftSettings() {
 	clearAircraftSettingsFields();
 	if (selectedAircraft == "NewAircraft") {
 		addNewAircraftSettings();
-		$('#pyrotechnicsOnBoard').flipswitch('refresh'); // TODO This could not be in clearAircraftSettingsFields() as there it would change previous aircrafts pyrotechnicsOnBoard value...
+		$('#pyrotechnicsOnBoard').flipswitch('refresh'); // NOTE: This could not be in clearAircraftSettingsFields() as there it would change previous aircrafts pyrotechnicsOnBoard value...
 	} else {
 		//debug_log("onChangeAircraftSettings() - selected id: " + selectedAircraft );
 		// update current id
@@ -1282,8 +1258,6 @@ function onChangeAircraftColor() {
 function onChangePyrotechnicsOnBoard() {
 	var currentId = localStorage.getItem( "currentSettingsId");
 	localStorage.setItem( currentId + "_pyrotechnicsOnBoard", document.getElementById("pyrotechnicsOnBoard").value);
-	//debug_log("onChangePyrotechnicsOnBoard(): setItem " + currentId + "_pyrotechnicsOnBoard=" + document.getElementById("pyrotechnicsOnBoard").value); // TODO remove logging
-	
 }
 
 function onChangeZzzzFieldsEnabled() {
@@ -1351,8 +1325,7 @@ function updateFromLocalStorage() {
 	}
 	var equipment = localStorage.getItem(currentId + "_equipment");
 	if (equipment === null) {
-		//debug_log("updateFromLocalStorage() - force equipment V"); // TODO
-		equipment = "V"; //TODO
+		equipment = "V";
 		localStorage.setItem( currentId + "_equipment", equipment);
 	}
 	if (equipment !== null) {
@@ -1412,11 +1385,9 @@ function updateFromLocalStorage() {
 	}
 
 	var pyrotechnicsOnBoard = localStorage.getItem(currentId + "_pyrotechnicsOnBoard");
-	//debug_log("updateFromLocalStorage - pyrotechnicsOnBoard: " + pyrotechnicsOnBoard); // TODO remove logging
 	if (pyrotechnicsOnBoard === null) {
 		pyrotechnicsOnBoard = "off";
 	}
-	//debug_log("updateFromLocalStorage(): pyrotechnicsOnBoard - " + pyrotechnicsOnBoard); // TODO remove logging
 	
 	document.getElementById("pyrotechnicsOnBoard").value = pyrotechnicsOnBoard;
 	try {
@@ -1674,27 +1645,26 @@ function onOFPContainerToggleClick() {
 
 
 /*
- * TODO
- * + load json file
- * + parse dates 
- * + find current date range
- * + use files from that range
+ * loadValidityJson will load current filenames from 'validity.json'
+ * - load json file
+ * - parse dates 
+ * - find current date range
+ * - use files from that date range
  * 
- * JSON.parse
  * 
- * validator
- * check that 
- * + json file founds
- * + no errors in parse
- * + all dates parsed without errors
- * + dates are in increasing order
- * + all tags found
- * + filenames are not empty
- * + from today to future, all dates have all files
- * + all files are found from data directory
+ * Unit tests ('JSON validity check') are used to check correctness of 'validity.json' file
  * 
- * */
-
+ * It will check that 
+ * - json file founds
+ * - no errors in parse
+ * - all dates parsed without errors
+ * - dates are in increasing order
+ * - all tags found
+ * - filenames are not empty
+ * - from today to future, all dates have all files
+ * - all files are actually found from data directory
+ * 
+ */
 function loadValidityJson()
 {
 	$.getJSON(DATA_VALIDITY_JSON_FILE, 
@@ -1706,26 +1676,44 @@ function loadValidityJson()
 				var dateOfUpdate = new Date(data.data[i].validFrom);
 				
 				if (today.getTime() >= dateOfUpdate.getTime()) {
-					//console.log( "käytä fileä:" + data.data[i].aerodromes );
 					AerodromesFilename = data.data[i].aerodromes;
 					ZZZZFieldsFilename = data.data[i].zzzzfields;
 					VFRPortFilename = data.data[i].vfrpoints;
+					AirspaceFilename = data.data[i].airspace;
 				}
 			}
+			if (AerodromesFilename == "" && ZZZZFieldsFilename == "" && VFRPortFilename == "") {
+				alert("En löydä kenttätietoja tälle päivämäärälle (en muista kovin vanhoja juttuja). Tarkista laitteesi päivämääräasetus.");
+			}
 		}).fail(function() {
-			alert("Virhe validity.json tiedoston lataamisessa. Tiedostoa ei löydy tai formaatti on pielessä.");
+			alert("Virhe validity.json tiedoston lataamisessa. Tiedostoa ei löydy tai formaatti on pielessä. Kokeile ladata sivu uudestaan. Jos vika ei poistu, ota yhteyttä Lentosuunnitelma-apurin tekijään.");
 		}).always(function() {
 			onStartup();
 		});
 }
 
+function loadAirspaceJson()
+{
+	$.getJSON(AirspaceFilename, 
+		function(data, textStatus, jqXHR) {
+			airspaceData = data;
+		}).fail(function() {
+			alert("Virhe airspace.json tiedoston lataamisessa. Tiedostoa ei löydy tai formaatti on pielessä. Kokeile ladata sivu uudestaan. Jos vika ei poistu, ota yhteyttä Lentosuunnitelma-apurin tekijään.");
+		}).always(function() {
+			//onStartup();
+		});
+}
+
 function onLoad()
 {
+	window.addEventListener('resize', resizeCanvas, false);
 	loadValidityJson();
+	resizeCanvas();
 }
 
 function onStartup() {
 	//console.log( "onStartup()" );
+	loadAirspaceJson();
 
 	total_startup_start_time = debug_timestamp_start("onStartup");
 
@@ -1740,6 +1728,7 @@ function onStartup() {
 		debug_log( "Geolocation ei ole tuettu selaimessa.");
 		fakeCurrentLocation();
 		document.getElementById("locationUpdateButtonText").innerHTML = "Ei sijaintia";
+		$('#location-button').removeClass('location-waiting location-ready').addClass('location-not-available');
 	}
 	
 	updateFromLocalStorage();
@@ -1749,7 +1738,6 @@ function onStartup() {
 
 	initStoredPlanPageHandler();
 
-	// TODO $('#OFPContainer').hide();
 	hideOFPContainer();
 }
 
@@ -1768,6 +1756,8 @@ function updateCurrentLocation() {
 	if (navigator.geolocation) {
 		//debug_log("geolocation is supported");
 		document.getElementById("locationUpdateButtonText").innerHTML = "Sijainti...";
+		$('#location-button').removeClass('location-not-available location-ready').addClass('location-waiting');
+
 /*	http://www.w3.org/TR/geolocation-API/#high-accuracy
   interface PositionOptions {
     attribute boolean enableHighAccuracy;
@@ -1934,40 +1924,114 @@ function requestOpenDataDest(destIcao) {
 }
 
 // http://cheatsheetworld.com/programming/html5-canvas-cheat-sheet/
-// TODO - graphics
-// - nuoli
-// - lentosuunta (astetta)
-// - tornikenttä
-// + korpikenttä
-// + VFR piste
-// TODO scaling coordinates
-// canvas = 0..300
-// usable = 20..280 <- ?
 
-function getScaleFactor(arrayOfPoints) {
-	var pixPerDegree = 0;
-	var minUsable = 20;
-	var maxUsable = 280;
-	var usableDistance = maxUsable-minUsable;
+var outcode_TOP_LEFT 	= 0x1;
+var outcode_TOP_RIGHT 	= 0x2;
+var outcode_BOTTOM_LEFT	= 0x4;
+var outcode_BOTTOM_RIGHT= 0x8;
+
+/*
+ * return outcode for direction
+ * 0x1 0x2
+ * 0x4 0x8
+
+ * 0001 0010
+ * 0100 1000
+ * 
+ */
+
+
+// getOutcode finds quadrants to which direction other coordinate is.
+// Returns one quadrant opcode
+function getOutcode(current_x, current_y, other_x, other_y) {
+	//debug_log("getOutcode");
+	var code = 0;
+	if (other_y > current_y) {
+		if (other_x > current_x) {
+			code |= outcode_TOP_RIGHT;
+		}
+		else if (other_x < current_x) { // =
+			code |= outcode_TOP_LEFT;
+		}
+	}
+	else if (other_y < current_y) { // =
+		if (other_x > current_x) {
+			code |= outcode_BOTTOM_RIGHT;
+		}
+		else if (other_x < current_x) { // =
+			code |= outcode_BOTTOM_LEFT;
+		}
+	}
 	
-	var dx = max(x)-min(x);
-	var dy = max(y)-min(y);
-	
-	pixPerDegree = maxUsable/max(dx,dy); 
-	
-	/*if (dy<dx) { // x is greater
-		pixPerDegree = maxUsable/dx;
-	} else { // y is greater
-		pixPerDegree = maxUsable/dy;
-	}*/
+	//debug_log("getOutcode: code=" + code);
+	return code;
 }
 
-function scaleCoordinates() {
+
+// Get horizontal alignment (string) for text.
+// This implementation should be in sync with getVerticalAlignment, so that both selects the same quadrant.
+function getHorisontalAlignment(outcode) {
+	if (!(outcode & outcode_TOP_LEFT) && !(outcode & outcode_TOP_RIGHT)) {
+		//debug_log("getHorisontalAlignment: CENTER (top)");
+		return "center";
+	}
+	if (!(outcode & outcode_BOTTOM_LEFT) && !(outcode & outcode_BOTTOM_RIGHT)) {
+		//debug_log("getHorisontalAlignment: CENTER (bottom)");
+		return "center";
+	}
 	
+	if (!(outcode & outcode_TOP_LEFT)) {
+		//debug_log("getHorisontalAlignment: LEFT (top)");
+		return "right";
+	}
+	else if (!(outcode & outcode_TOP_RIGHT)) {
+		//debug_log("getHorisontalAlignment: RIGHT (top)");
+		return "left";
+	}
+	else if (!(outcode & outcode_BOTTOM_LEFT)) {
+		//debug_log("getHorisontalAlignment: LEFT (bottom)");
+		return "right";
+	}
+	else { // if (!(outcode & outcode_BOTTOM_RIGHT)) {
+		//debug_log("getHorisontalAlignment: RIGHT (bottom)");
+		return "left";
+	}
 }
 
-// TODO add position information for name (top-left, top-right, bottom-left, bottom-right)
-function drawVfrPoint(ctx, x, y, name) {
+// Get vertical alignment value (-1 or 1) for text. Value is used as factor to select side (top or bottom) of the text.
+// This implementation should be in sync with getHorisontalAlignment, so that both selects the same quadrant.
+function getVerticalAlignment(outcode) {
+	if (!(outcode & outcode_TOP_LEFT) && !(outcode & outcode_TOP_RIGHT)) {
+		//debug_log("getVerticalAlignment: TOP (center)");
+		return -1;
+	}
+	if (!(outcode & outcode_BOTTOM_LEFT) && !(outcode & outcode_BOTTOM_RIGHT)) {
+		//debug_log("getVerticalAlignment: BOTTOM (center)");
+		return 1;
+	}
+
+	if (!(outcode & outcode_TOP_LEFT)) {
+		//debug_log("getVerticalAlignment: TOP (left)");
+		return -1;
+	}
+	else if (!(outcode & outcode_TOP_RIGHT)) {
+		//debug_log("getVerticalAlignment: TOP (right)");
+		return -1;
+	}
+	else if (!(outcode & outcode_BOTTOM_LEFT)) {
+		//debug_log("getVerticalAlignment: BOTTOM (left)");
+		return 1;
+	}
+	else { // if (!(outcode & outcode_BOTTOM_RIGHT)) {
+		//debug_log("getVerticalAlignment: BOTTOM (right)");
+		return 1;
+	}
+}
+
+
+// Draw VFR point.
+// outcode specifies in which quadrants are 'reserved' by lines. Text should be written to free quadrant.
+function drawVfrPoint(ctx, x, y, name, outcode) {
 	var size=100; // %
 	var h1=size*5.7735/100;
 	var h2=size*2.8868/100;
@@ -1980,56 +2044,389 @@ function drawVfrPoint(ctx, x, y, name) {
 	ctx.fill();
 	//ctx.lineWidth = 1;
 	ctx.closePath();
+	ctx.strokeStyle = 'black';
 	ctx.stroke();
-	
+
 	ctx.font = "14px Arial";
 	ctx.fillStyle = 'black';
-	ctx.textAlign = "center";
-	ctx.fillText(name,x,y-half*2);
-
+	//ctx.textAlign = "center";
+	ctx.textAlign = getHorisontalAlignment(outcode);
+	var text_y = half+half*3*getVerticalAlignment(outcode);
+	
+	//debug_log("drawVfrPoint: " + name + ", textAlign=" + ctx.textAlign);
+	ctx.fillText(name,x,y+text_y); // y-half*2
 }
 
-function drawAirfield(ctx, x, y, name) {
+// Draw Airfield.
+// outcode specifies in which quadrants are 'reserved' by lines. Text should be written to free quadrant.
+function drawAirfield(ctx, x, y, name, outcode) {
 	var size=100; // %
 	var radius=size*7/100;
 	ctx.fillStyle = 'white';
 	ctx.beginPath();
-	ctx.arc(x,y,radius,0,2*Math.PI);
-	//ctx.fill();
+
+	var xOffset = [ 0, -2, -4, -6, -7, -7, -6, -4, -2,  2,  4,  6,  7, 7, 6, 4, 2, 0 ];
+	var yOffset = [ 7,  7,  6,  4,  2, -2, -4, -6, -7, -7, -6, -4, -2, 2, 4, 6, 7, 7 ];
+	ctx.moveTo( x+xOffset[0], y+yOffset[0] );
+	for (var i=1; i<xOffset.length; ++i) {
+		ctx.lineTo( x+xOffset[i], y+yOffset[i] );
+	}
+
 	ctx.closePath();
+	ctx.strokeStyle = 'black';
 	ctx.stroke();
 	
 	ctx.fillStyle = 'black';
 	ctx.font = "14px Arial";
-	ctx.textAlign = "center";
-	ctx.fillText(name,x,y-radius*2);
+	ctx.textAlign = getHorisontalAlignment(outcode);
+	var text_y = radius+radius*3*getVerticalAlignment(outcode);
+
+	//debug_log("drawAirfield: " + name + ", textAlign=" + ctx.textAlign);
+	ctx.fillText(name,x,y+text_y);
 }
 
 function drawArrow(ctx, x1, y1, x2, y2, direction) {
-	//var size=100; // %
 	ctx.moveTo(x1,y1);
 	ctx.lineTo(x2,y2);
+	ctx.strokeStyle = 'black';
 	ctx.stroke();
 }
 
-function updateMapData() {
-	debug_log("updateMapData");
-	// TODO store data to localstorage, to be able to draw again later
+function drawAirspace(ctx, coordinates, bottom) {
+
+	var bot = bottom.split(' ');
+	if (bot[0] == "SFC") { // Airspaces from surface
+		ctx.strokeStyle = 'green';
+		ctx.fillStyle = 'lightgreen';
+		ctx.globalAlpha=0.5;
+	} 
+	else if (bot[0] == "FL") { // Airspaces from FL xx (typically FL 65 ->)
+		// TODO filter high airspaces out if user has selected
+		ctx.strokeStyle = 'blue';
+		ctx.fillStyle = 'lightblue';
+		ctx.globalAlpha=0.2;
+	}
+	else if (bot[1] == "FT") { // Airspaces from xxxx FT
+		ctx.strokeStyle = 'blue';
+		ctx.fillStyle = 'lightblue';
+		ctx.globalAlpha=0.4;
+	}
+	else { // undef
+		debug_log("ERROR: drawAirspace: tuntematon ilmatilan alareunan merkintä '" + bottom + "'");
+		ctx.strokeStyle = 'red';
+		ctx.fillStyle = 'red';
+		ctx.globalAlpha=0.7;
+	}
+	ctx.beginPath();
+	ctx.moveTo( scaleToScreenX(coordinates[0][0]), scaleToScreenY(coordinates[0][1]));
+
+	var coordList=0;
+	for (var coord=0; coord<coordinates.length; ++coord) {
+		ctx.lineTo( scaleToScreenX(coordinates[coord][0]), scaleToScreenY(coordinates[coord][1]));
+	}
+	
+	ctx.closePath();
+	ctx.fill();
+	ctx.stroke();
+	ctx.globalAlpha=1.0;
+}
+
+
+// These variables are for precalculation
+var gMaxX_gMinX_CANVAS_WIDTH = 0;
+var gMaxY_gMinY_CANVAS_HEIGHT = 0;
+
+var gMinX=0;
+var gMaxX=0;
+var gMinY=0;
+var gMaxY=0;
+
+
+
+function resizeCanvas() {
+	var c = document.getElementById("mapCancas");
+	var container = document.getElementById("planCompletionMethod");
+	//debug_log("resizeCanvas old size: " + c.width + ", " + c.height);
+	//debug_log("resizeCanvas container: " + container.clientWidth + ", " + container.clientHeight);
+
+	c.width = container.clientWidth; // innerWidth;
+	c.height = container.clientWidth; //innerHeight;
+	if (c.width > MAX_CANVAS_SIZE) {
+		c.width = MAX_CANVAS_SIZE;
+		c.height = MAX_CANVAS_SIZE;
+	}
+	else if (c.width < MIN_CANVAS_SIZE) {
+		c.width = MIN_CANVAS_SIZE;
+		c.height = MIN_CANVAS_SIZE;
+	}
+
+	//debug_log("resizeCanvas new size: " + c.width + ", " + c.height);
+	CANVAS_WIDTH = c.width;
+	CANVAS_HEIGHT = c.height;
+	
+	updateMapData(mapCacheRouteArray);
+}
+
+
+/*
+ * Calculate screen scale factors from coordinates
+ * 
+ * Screen:
+ * 
+ * gMinX        gMaxX
+ * gMinY
+ * 0 1 2 3 4 .. 299 -> x
+ * 1
+ * 2
+ * 3
+ * ...
+ * 299 gMaxY
+ * 
+ */
+function getScreenScale(coordArray) {
+	//debug_log("getScreenScale");
+
+	gMinY = coordArray[0].lat;
+	gMaxY = coordArray[0].lat;
+	gMinX = coordArray[0].lon;
+	gMaxX = coordArray[0].lon;
+	for (var wptInd=1; wptInd<coordArray.length; ++wptInd) {
+		if (coordArray[wptInd] != null) {
+			gMinY = Math.min(gMinY, coordArray[wptInd].lat);
+			gMaxY = Math.max(gMaxY, coordArray[wptInd].lat);
+			gMinX = Math.min(gMinX, coordArray[wptInd].lon);
+			gMaxX = Math.max(gMaxX, coordArray[wptInd].lon);
+		}
+	}
+	// Make sure map area width and height is at least 'minimum_size_deg' degrees
+	var minimum_size_deg = 0.25;
+	if (gMaxY-gMinY < minimum_size_deg) {
+		gMinY -= minimum_size_deg/2;
+		gMaxY += minimum_size_deg/2;
+	}
+	if (gMaxX-gMinX < minimum_size_deg) {
+		gMinX -= minimum_size_deg/2;
+		gMaxX += minimum_size_deg/2;
+	}
+
+	/* Scale X or Y with real distances.
+	 * - 1. calculate which direction is longer (width or height, in kilometers)
+	 * - 2. how much should be added to smaller distance (in kilometers, for each side)
+	 * - 3. how much it is in map (in degrees)
+	 * - 4. add it to min and max values
+	 */
+
+	// 1. calculate which direction is longer (width or height, in kilometers)
+	var width_km = calcDistanceFrom(gMinY, gMinX, gMinY, gMaxX); // Width (minX..maxX) in km
+	var height_km = calcDistanceFrom(gMinY, gMinX, gMaxY, gMinX); // Height (minY..maxY) in km
+	//debug_log("Route area width_km: " + width_km);
+	//debug_log("Route area height_km: " + height_km);
+
+	var marginalX_deg = 0;
+	var marginalY_deg = 0;
+	var height_deg = gMaxY-gMinY; // in degrees
+	var width_deg = gMaxX-gMinX; // in degrees
+
+	if (width_km < height_km) {
+		// 2. how much should be added to smaller distance (in kilometers, for each side)
+		var inc_km = (height_km-width_km)/2;
+		// 3. how much it is in map (in degrees)
+		var inc_deg = width_deg/width_km * inc_km;
+		
+		// 4. add it to min and max values
+		gMinX -= inc_deg;
+		gMaxX += inc_deg;
+		width_deg = gMaxX-gMinX; // in degrees
+		
+	} else {
+		// 2. how much should be added to smaller distance (in kilometers, for each side)
+		var inc_km = (width_km-height_km)/2;
+		// 3. how much it is in map (in degrees)
+		var inc_deg = height_deg/height_km * inc_km;
+
+		// 4. add it to min and max values
+		gMinY -= inc_deg;
+		gMaxY += inc_deg;
+		height_deg = gMaxY-gMinY; // in degrees
+	}
+	marginalY_deg = height_deg * SCREEN_MARGINAL/100;
+	marginalX_deg = width_deg * SCREEN_MARGINAL/100;
+	
+	gMinY -= marginalY_deg;
+	gMaxY += marginalY_deg;
+	gMinX -= marginalX_deg;
+	gMaxX += marginalX_deg;
+
+	// Precalculate values for easier calculation for each coordinate
+	gMaxX_gMinX_CANVAS_WIDTH = CANVAS_WIDTH/(gMaxX-gMinX);
+	gMaxY_gMinY_CANVAS_HEIGHT = CANVAS_HEIGHT/(gMaxY-gMinY);
+	
+	/*var lenX = calcDistanceFrom(gMinY, gMinX, gMinY, gMaxX); // Width (minX..maxX) in km
+	var lenX2 = calcDistanceFrom(gMaxY, gMinX, gMaxY, gMaxX); // Width (minX..maxX) in km
+	var lenY = calcDistanceFrom(gMinY, gMinX, gMaxY, gMinX); // Height (minY..maxY) in km
+	debug_log("Screen area width (bottom): " + lenX + " km, width (top): " + lenX2 + " km, height (km): " + lenY);
+	debug_log("Screen scaling error factor (left/bottom, 1.00 = perfect): " + lenY/lenX);
+	debug_log("Screen scaling error factor (top/bottom, 1.00 = perfect): " + lenX2/lenX);
+	*/
+}
+
+function scaleToScreenX(coord) {
+	//var screenX = (coord-gMinX) / (gMaxX-gMinX) * CANVAS_WIDTH;
+	var screenX = (coord-gMinX) * gMaxX_gMinX_CANVAS_WIDTH;
+	return screenX;
+}
+
+function scaleToScreenY(coord) {
+	//var screenY = CANVAS_HEIGHT - (coord-gMinY) / (gMaxY-gMinY) * CANVAS_HEIGHT;
+	var screenY = CANVAS_HEIGHT - (coord-gMinY) * gMaxY_gMinY_CANVAS_HEIGHT;
+	return screenY;
+}
+
+/*
+function createTESTdata() {
+	var routeArray = new Array();
+	//DMS_to_Decimal
+	// reitti
+	//routeArray.push(new Waypoint("61-23", 61, 23));
+	//routeArray.push(new Waypoint(calcDistanceFrom(61, 23, 61, 24), 61, 24));
+	//routeArray.push(new Waypoint(calcDistanceFrom(61, 23, 62, 23), 62, 23));
+	//routeArray.push(new Waypoint("62-24", 62, 24));
+	
+	//calcDistanceFrom(61, 23, 62, 23);
+	routeArray.push(new Waypoint("EFTP", DMS_to_Decimal("612455N"), DMS_to_Decimal("0233516E")));
+	routeArray.push(new Waypoint("PALLO", 61.5858333, 23.7530556));
+	routeArray.push(new Waypoint("TALVI", 61.7180556, 24.3958333));
+	routeArray.push(new Waypoint("EFHA", DMS_to_Decimal("615123N"), DMS_to_Decimal("0244721E")));
+	
+	getScreenScale(routeArray);
+	
 	var c = document.getElementById("mapCancas");
 	var ctx = c.getContext("2d");
 	
-	//drawVfrPoint(ctx, 170, 50, "PALLO");
-	//drawVfrPoint(ctx, 70, 70, "PURSO");
+	for (var wptInd=0; wptInd<routeArray.length; ++wptInd) {
+		drawAirfield(ctx, scaleToScreenX(routeArray[wptInd].lon), scaleToScreenY(routeArray[wptInd].lat), routeArray[wptInd].name);
+	}
+	return 0;
+}
+*/
 
-	drawArrow(ctx, 110,110, 120,170, "151");
-	drawArrow(ctx, 120,170, 70,220, "221");
-	drawArrow(ctx, 70,220, 30,250, "226");
 
-	drawVfrPoint(ctx, 120, 170, "VIILA");
-	drawAirfield(ctx, 110, 110, "EFTP");
 
-	drawVfrPoint(ctx, 70, 220, "MANSE");
-	drawAirfield(ctx, 30, 250, "EFTU");
+
+
+/* 
+ *   Draw map
+ * 
+ * - move names to correct place, 
+ *   + out of route line
+ *   - out of other labels
+ * + use different size of canvas elements. Select which one to use based on screen (or some div's) width.
+ * 
+ * + check time used for drawing (with phones), should it be optimized? -> no need to optimize
+ * + colors
+ *   + edge color, 1 from surface, 2 from FTs, 3 from FL
+ *   - analyze which colors would be best
+ * - switch to disable drawing for higher airspaces (SFC, FL65+)
+ */
+function updateMapData(routeArray) {
+	//debug_log("updateMapData");
+	
+	if (routeArray == undefined) {
+		//debug_log("updateMapData - No valid route to draw. Return.");
+		return;
+	}
+	mapCacheRouteArray = routeArray;
+	
+	// Get scale factors for screen, based on current route
+	var timestamp_scale = debug_timestamp_start("getScreenScale");
+	getScreenScale(routeArray);
+	debug_timestamp_ready("getScreenScale", timestamp_scale);
+
+	var c = document.getElementById("mapCancas");
+	var ctx = c.getContext("2d");
+	
+	// Clear screen
+	ctx.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
+
+	// Draw airspaces
+	var timestamp_airspace = debug_timestamp_start("Draw airspaces");
+	if (airspaceData != undefined) {
+		//debug_log("updateMapData - airspace");
+		for (var feature=0; feature<airspaceData.features.length; ++feature) {
+			//debug_log("updateMapData - airspace: name: " + airspaceData.features[feature].properties.name );
+			drawAirspace(ctx, airspaceData.features[feature].geometry.coordinates[0], airspaceData.features[feature].properties.bottom );
+		}
+	}
+	debug_timestamp_ready("Draw airspaces", timestamp_airspace);
+
+	// Draw current route
+	var timestamp_draw_route = debug_timestamp_start("draw route");
+	var prev=routeArray[0];
+	var next=routeArray[0];
+	for (var i=0; i<routeArray.length; ++i) {
+		if (routeArray[i] !== null) { // Skip missing VFR points
+
+			// find next coordinate for calculating directions
+			next = routeArray[i]; // default 'next' point
+			for (var tmp_i=i+1; tmp_i<routeArray.length; ++tmp_i) {
+				if (routeArray[tmp_i] !== null) {
+					next = routeArray[tmp_i];
+					break;
+				}
+			}
+			// Check directions of lines
+			var outcode = getOutcode(routeArray[i].lon, routeArray[i].lat, prev.lon, prev.lat);
+			outcode |= getOutcode(routeArray[i].lon, routeArray[i].lat, next.lon, next.lat);
+			//debug_log("outcode=" + outcode);
+			
+			if (i==0 || i==3) { // Airfields are first and fourth items
+				var name = routeArray[i].icao;
+				if (name == "ZZZZ") {
+					name += "-" + routeArray[i].name;
+				}
+				drawAirfield(ctx, scaleToScreenX(routeArray[i].lon), scaleToScreenY(routeArray[i].lat), name, outcode);
+			}
+			if (i==1 || i==2) { // VFR points are second and third items
+				drawVfrPoint(ctx, scaleToScreenX(routeArray[i].lon), scaleToScreenY(routeArray[i].lat), routeArray[i].name, outcode);
+			}
+			// Route
+			drawArrow(ctx, scaleToScreenX(prev.lon),scaleToScreenY(prev.lat), scaleToScreenX(routeArray[i].lon),scaleToScreenY(routeArray[i].lat), "");
+			prev=routeArray[i];
+		}
+	}
+	if (routeArray[0] == routeArray[3] && routeArray[1] == null && routeArray[2] == null) {
+		// http://www.w3schools.com/tags/tryit.asp?filename=tryhtml5_canvas_quadraticcurveto
+		if (routeArray[0].icao == "EFHF") {
+			ctx.beginPath();
+			var cx = CANVAS_WIDTH/2;
+			var cy = CANVAS_HEIGHT/2;
+			ctx.moveTo(cx, cy);
+			ctx.quadraticCurveTo(cx,     cy-20,  cx+20, cy-20);
+			ctx.quadraticCurveTo(cx+40,  cy-20, cx+40, cy-10); 
+			ctx.quadraticCurveTo(cx+35, cy+10,     cx+30, cy+20); 
+			ctx.quadraticCurveTo(cx+25,  cy+30,  cx+15, cy+40); 
+			ctx.quadraticCurveTo(cx+10,  cy+50,  cx+20, cy+50); 
+			ctx.quadraticCurveTo(cx+30,  cy+45,  cx+30, cy+30); 
+			ctx.quadraticCurveTo(cx+30,  cy+25,  cx+15, cy+20); 
+			ctx.quadraticCurveTo(cx,     cy+15,  cx,    cy);
+			ctx.stroke();
+		}
+		else {
+			ctx.beginPath();
+			var cx = CANVAS_WIDTH/2;
+			var cy = CANVAS_HEIGHT/2;
+			ctx.moveTo(cx, cy);
+			ctx.quadraticCurveTo(cx,     cy-50,  cx+50, cy-100); //150, 100, 200, 50);
+			ctx.quadraticCurveTo(cx+70,  cy-110, cx+90, cy-50); //220, 40, 240, 100);
+			ctx.quadraticCurveTo(cx+110, cy,     cx+70, cy+30); //260, 150, 220, 180);
+			ctx.quadraticCurveTo(cx+30,  cy+50,  cx+50, cy-50); //180, 200, 200, 100);
+			ctx.quadraticCurveTo(cx+50,  cy-80,  cx-20, cy-40); //50 //200, 70, 130, 100);
+			ctx.quadraticCurveTo(cx-40,  cy-30,  cx-20, cy); //110, 120, 130, 150);
+			ctx.quadraticCurveTo(cx,     cy+20,  cx,    cy); //150, 170, 150, 150);
+			ctx.stroke();
+		}
+	}
+	debug_timestamp_ready("draw route", timestamp_draw_route);
 }
 
 
@@ -2056,17 +2453,14 @@ function onChangeDepartureAd() {
 	createFlyingTimeTable();
 	
 	if (dep.value == UNOFFICIAL_AERODROME_INDEX) {
-		//document.getElementById("zzzz_departure_container").style.display = '';
 		$('#zzzz_departure_container').slideDown();
 	}
 	else {
-		//document.getElementById("zzzz_departure_container").style.display = 'none';
 		$('#zzzz_departure_container').slideUp();
 	}
 	
-	// TODO - Get Metar, Taf and Notams from open data service
+	// Get Metar, Taf and Notams (in future?) from open data service
 	requestOpenDataDep(depAerodrome.icao);
-	//updateMapData();
 }
 
 function onChangeDestinationAd() {
@@ -2075,7 +2469,6 @@ function onChangeDestinationAd() {
 	var dest=document.getElementById("destination");
 	$('#destination').selectmenu('refresh');
 
-	//var destAd = getAerodromeByIndex(dest.value);
 	var depAerodrome = getAerodromeByIndex( dep.value );
 	var destAerodrome = getAerodromeByIndex( dest.value );
 	document.getElementById("route_destination_ad").innerHTML = destAerodrome.icao + " (" + destAerodrome.name + ")";
@@ -2091,17 +2484,15 @@ function onChangeDestinationAd() {
 	createFlyingTimeTable();
 	
 	if (dest.value == UNOFFICIAL_AERODROME_INDEX) {
-		//document.getElementById("zzzz_destination_container").style.display = '';
 		$('#zzzz_destination_container').slideDown();
 		setFlightTimeOverride(true);
 	}
 	else {
-		//document.getElementById("zzzz_destination_container").style.display = 'none';
 		$('#zzzz_destination_container').slideUp();
 		setFlightTimeOverride(false);
 	}
 	
-	// TODO - Get Metar, Taf and Notams from open data service
+	// Get Metar, Taf and Notams (in future?) from open data service
 	requestOpenDataDest(destAerodrome.icao);
 }
 
@@ -2256,10 +2647,7 @@ function createFlyingTimeTable() {
 	}
 	
 	if (aircraftSpeed == 0) {
-		//document.getElementById("flyingTime").innerHTML = '<a href="#page-plan-settings" class="ui-btn-right">Täytä Perustiedot sivulle puuttuvat tiedot!</a>';
 		document.getElementById("flyingTime").innerHTML = '<a href="#page-plan-settings">Täytä Perustiedot sivulle puuttuvat tiedot!</a>';
-		
-		//debug_log("Täytä Perustiedot sivulle puuttuvat tiedot!");
 		return;
 	}	
 	
@@ -2360,6 +2748,8 @@ function createFlyingTimeTable() {
 	
 	// Hide FlightTimeOverride controls because we just calculated new flight time
 	setFlightTimeOverride(false);
+	
+	updateMapData(array);
 }
 
 	// Convert scandinavian letters
@@ -2579,7 +2969,6 @@ function updateFlightPlanLink() {
 		}
 	}
 
-	//other += "PILOT TEL " + document.getElementById("pilotTel").value;
 	other += "PIC TEL " + document.getElementById("pilotTel").value;
 
 	linkString += "&other=" + other;
@@ -2610,7 +2999,6 @@ function updateFlightPlanLink() {
 	}
 
 	linkString += "&endurance=" + endurance;
-	//linkString += "&endurance=" + document.getElementById("endurance").value;
 
 	var persons="";
 	var personsSelection = document.getElementsByName("persons");
@@ -2621,8 +3009,6 @@ function updateFlightPlanLink() {
 		}
 	}
 	linkString += "&person=" + persons;
-	
-	//linkString += "&person=" + document.getElementById("persons").value;
 	
 	linkString += "&markings=" + document.getElementById("aircraftColor").value;
 	
@@ -2636,12 +3022,8 @@ function updateFlightPlanLink() {
 	linkString += "&filed=" + document.getElementById("pilot").value;
 	
 	
-	//debug_log("updateFlightPlanLink() - linkString before =" + linkString);
-
 	// Convert scandinavian letters
 	linkString = convertScandinavianLetters(linkString);
-
-	//debug_log("updateFlightPlanLink() - linkString after  =" + linkString);
 
 	flightPlanLink = linkStart + linkString;
 	

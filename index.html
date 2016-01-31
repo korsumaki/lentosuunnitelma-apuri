@@ -18,12 +18,14 @@
 <body onload="onLoad()">
 	<div data-role="page" id="page-main"> 
 		<div data-role="header" data-position="inline">
-			<a href="#" onclick="updateCurrentLocation()" data-icon="refresh"><span id="locationUpdateButtonText">Sijainti</span></a>
+			<a href="#" onclick="updateCurrentLocation()" data-icon="refresh" id="location-button"><span id="locationUpdateButtonText">Sijainti</span></a>
 			<h1>FPL</h1>
-			<a href="#page-plan-settings" data-icon="gear" class="ui-btn-right">Perustiedot</a>
+			<a href="#page-plan-settings" data-icon="gear" id="settings-button" class="ui-btn-right">Perustiedot</a>
 		</div> 
 
 		<div data-role="content">
+			<p style='background:pink'>Lentosuunnitelma-apurin sijainti on muuttunut, olethan päivittänyt kirjanmerkkisi:<br>
+			<a href="http://korsu.mbnet.fi/ilmailu/plan3/">http://korsu.mbnet.fi/ilmailu/plan3/</a></p>
 			<div class="ui-field-contain">
 				<fieldset data-role="controlgroup" data-mini="true">
 					<legend>
@@ -209,6 +211,12 @@
 			</div>
 
 			<div class="ui-field-contain">
+				
+				<fieldset data-role="controlgroup" data-type="horizontal">
+					<legend>Reitti&shy;kartta</legend>
+					<canvas id="mapCancas" style="border:1px solid #000000;">Canvas not supported</canvas>
+				</fieldset>
+
 				<fieldset data-role="controlgroup" data-type="horizontal"> <!-- data-mini="true"-->
 					<legend>Laskelmat</legend>
 					<span id="selectedPlane"></span>
@@ -266,6 +274,7 @@
 				</fieldset>
 			</div>
 			
+
 			<div class="ui-field-contain">
 				<fieldset data-role="controlgroup" data-type="horizontal">
 					<legend>Lennon&shy;valmistelu&shy;tiedot</legend>
@@ -474,7 +483,7 @@
 			
 			
 			<h3>Tietoa</h3>
-			<p>Käyttöliittymä päivätty: 2015-05-21<br>
+			<p>Käyttöliittymä päivätty: 2016-01-31<br>
 			<span id="log">Log</span>
 			</p>
 

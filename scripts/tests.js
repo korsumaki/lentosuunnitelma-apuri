@@ -398,3 +398,47 @@ test( "JSON validity check", function( assert ) {
 //  equal( createTESTdata(), "0" );
 //});
 
+
+//var outcode_TOP_LEFT 	= 0x1;
+//var outcode_TOP_RIGHT 	= 0x2;
+//var outcode_BOTTOM_LEFT	= 0x4;
+//var outcode_BOTTOM_RIGHT= 0x8;
+
+test( "getOutcode", function() {
+	equal( getOutcode(10, 10, 15, 15), outcode_TOP_RIGHT );
+	equal( getOutcode(10, 10, 5, 15),  outcode_TOP_LEFT );
+	equal( getOutcode(10, 10, 5, 5),   outcode_BOTTOM_LEFT );
+	equal( getOutcode(10, 10, 15, 5),  outcode_BOTTOM_RIGHT );
+	//equal( getOutcode(10, 10, 10, 10), outcode_BOTTOM_LEFT );
+	equal( getOutcode(10, 10, 10, 10), 0 );
+});
+
+
+
+// function getHorisontalAlignment(outcode)
+test( "getHorisontalAlignment", function() {
+	equal( getHorisontalAlignment(outcode_TOP_LEFT|outcode_TOP_RIGHT|outcode_BOTTOM_LEFT|outcode_BOTTOM_RIGHT), "left" ); // default if all directions are reserved
+
+	equal( getHorisontalAlignment(outcode_TOP_LEFT|                  outcode_BOTTOM_LEFT|outcode_BOTTOM_RIGHT), "left" );
+	equal( getHorisontalAlignment(                 outcode_TOP_RIGHT|outcode_BOTTOM_LEFT|outcode_BOTTOM_RIGHT), "right" );
+
+	equal( getHorisontalAlignment(outcode_TOP_LEFT|outcode_TOP_RIGHT|                    outcode_BOTTOM_RIGHT), "right" );
+	equal( getHorisontalAlignment(outcode_TOP_LEFT|outcode_TOP_RIGHT|outcode_BOTTOM_LEFT                     ), "left" );
+	equal( getHorisontalAlignment(                                   outcode_BOTTOM_LEFT|outcode_BOTTOM_RIGHT), "center" );
+	equal( getHorisontalAlignment(outcode_TOP_LEFT|outcode_TOP_RIGHT                                         ), "center" );
+	equal( getHorisontalAlignment( 0                                                                         ), "center" );
+});
+
+// getVerticalAlignment(outcode)
+test( "getVerticalAlignment", function() {
+	equal( getVerticalAlignment(outcode_TOP_LEFT|outcode_TOP_RIGHT|outcode_BOTTOM_LEFT|outcode_BOTTOM_RIGHT), 1 );
+	equal( getVerticalAlignment(                 outcode_TOP_RIGHT|outcode_BOTTOM_LEFT|outcode_BOTTOM_RIGHT), -1 );
+	equal( getVerticalAlignment(outcode_TOP_LEFT|                  outcode_BOTTOM_LEFT|outcode_BOTTOM_RIGHT), -1 );
+	equal( getVerticalAlignment(outcode_TOP_LEFT|outcode_TOP_RIGHT|                    outcode_BOTTOM_RIGHT), 1 );
+	equal( getVerticalAlignment(outcode_TOP_LEFT|outcode_TOP_RIGHT|outcode_BOTTOM_LEFT                     ), 1 );
+	equal( getVerticalAlignment(                                   outcode_BOTTOM_LEFT|outcode_BOTTOM_RIGHT), -1 );
+	equal( getVerticalAlignment(outcode_TOP_LEFT|outcode_TOP_RIGHT                                          ), 1 );
+	equal( getVerticalAlignment(                 outcode_TOP_RIGHT                                          ), 1 );
+	equal( getVerticalAlignment(outcode_TOP_LEFT                                                            ), 1 );
+});
+
