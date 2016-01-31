@@ -2144,7 +2144,7 @@ var gMaxY=0;
 
 
 function resizeCanvas() {
-	var c = document.getElementById("mapCancas");
+	var c = document.getElementById("mapCanvas");
 	var container = document.getElementById("planCompletionMethod");
 	//debug_log("resizeCanvas old size: " + c.width + ", " + c.height);
 	//debug_log("resizeCanvas container: " + container.clientWidth + ", " + container.clientHeight);
@@ -2300,7 +2300,7 @@ function createTESTdata() {
 	
 	getScreenScale(routeArray);
 	
-	var c = document.getElementById("mapCancas");
+	var c = document.getElementById("mapCanvas");
 	var ctx = c.getContext("2d");
 	
 	for (var wptInd=0; wptInd<routeArray.length; ++wptInd) {
@@ -2342,7 +2342,7 @@ function updateMapData(routeArray) {
 	getScreenScale(routeArray);
 	debug_timestamp_ready("getScreenScale", timestamp_scale);
 
-	var c = document.getElementById("mapCancas");
+	var c = document.getElementById("mapCanvas");
 	var ctx = c.getContext("2d");
 	
 	// Clear screen
