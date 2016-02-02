@@ -4,9 +4,6 @@ text-align:center;
 .location-waiting {
 	background:yellow !important;
 }
-.location-not-available .settings-not-done {
+.location-not-available, .settings-not-done{
 	background:red !important;
-}
-.location-ready .settings-ready {
-	background:lightgreen !important;
 }

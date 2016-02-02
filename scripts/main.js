@@ -92,7 +92,7 @@ Note: automaattinen skaalaus muuttaisi myös symbolien (ja tekstin) kokoa?
  * 
  */
 
-var log="Ohjelmakoodi päivätty: 2016-01-31<br>";
+var log="Ohjelmakoodi päivätty: 2016-02-02<br>";
 var VfrRepArray;
 
 var CurrentAerodromeArray; // Contains either Official or Official+ZZZZ fields, depending on user selection.
@@ -252,7 +252,7 @@ function continueIfEverythingIsReady() {
 
 function handlePositionError(error) {
 	document.getElementById("locationUpdateButtonText").innerHTML = "Ei sijaintia";
-	$('#location-button').removeClass('location-waiting location-ready').addClass('location-not-available');
+	$('#location-button').removeClass('location-waiting').addClass('location-not-available');
 
 	switch(error.code)
 	{
@@ -286,7 +286,7 @@ function handlePositionUpdateCallback(position) {
 	}
 
 	document.getElementById("locationUpdateButtonText").innerHTML = "Sijainti " + accuracy;
-	$('#location-button').removeClass('location-waiting location-not-available').addClass('location-ready');
+	$('#location-button').removeClass('location-waiting location-not-available');
 }
 
 function handlePositionUpdate(lat, lon) {
@@ -1728,7 +1728,7 @@ function onStartup() {
 		debug_log( "Geolocation ei ole tuettu selaimessa.");
 		fakeCurrentLocation();
 		document.getElementById("locationUpdateButtonText").innerHTML = "Ei sijaintia";
-		$('#location-button').removeClass('location-waiting location-ready').addClass('location-not-available');
+		$('#location-button').removeClass('location-waiting').addClass('location-not-available');
 	}
 	
 	updateFromLocalStorage();
@@ -1756,7 +1756,7 @@ function updateCurrentLocation() {
 	if (navigator.geolocation) {
 		//debug_log("geolocation is supported");
 		document.getElementById("locationUpdateButtonText").innerHTML = "Sijainti...";
-		$('#location-button').removeClass('location-not-available location-ready').addClass('location-waiting');
+		$('#location-button').removeClass('location-not-available').addClass('location-waiting');
 
 /*	http://www.w3.org/TR/geolocation-API/#high-accuracy
   interface PositionOptions {
