@@ -92,7 +92,7 @@ Note: automaattinen skaalaus muuttaisi myös symbolien (ja tekstin) kokoa?
  * 
  */
 
-var log="Ohjelmakoodi päivätty: 2016-02-02<br>";
+var log="Ohjelmakoodi päivätty: 2016-02-05<br>";
 var VfrRepArray;
 
 var CurrentAerodromeArray; // Contains either Official or Official+ZZZZ fields, depending on user selection.
@@ -545,6 +545,10 @@ function calcDistanceFrom(lat1, lon1, lat2, lon2) {
 
 Waypoint.prototype.getDistance = function () {
 	return this.distance;
+};
+
+Waypoint.prototype.setDistance = function (d) {
+	this.distance = d;
 };
 
 //http://www.movable-type.co.uk/scripts/latlong.html
@@ -1773,8 +1777,72 @@ function updateCurrentLocation() {
 	}
 }
 
+/*
+// Idea:
+// etsitään vain p1 (lähtökentän VFR piste) minkä kautta tulee lyhin reitti.
+// p2 (määräkentän VFR piste) haetaan (toisesta suunnasta) erikseen samanlaisella kutsulla
+min_dist = -1
+for p1 in dep points 
+	d1 = distance(dep, p1)
+	for p2 in dest points 
+		d2 = distance(p1, p2)
+		d3 = distance(p2, dest)
+		if min_dist > d1+d2+d3 or min_dist == -1
+			min_points = p1 // <- haetaan vain parasta p1:stä
+			min_dist = d1+d2+d3
+ */
 
-function sortNearestFirst(array, lat, lon) {
+/*
+ * sortNearestFirst(vfrWaypoints, dep, dest)
+ * 		vfrWaypoints = VFR point array to sort
+ * 		dep = departure airfield
+ * 		dest = destination airfield
+ */
+function sortNearestFirst(vfrWaypoints, dep, dest) {
+	//debug_log("sortNearestFirst - " + dep.icao + " - " + dest.icao );
+
+	var DestVfrWaypoints = getVfrWayPointsByName( dest.vfrPoints );
+
+	// Loop departure's VFR points
+	for (var ind=0; ind<vfrWaypoints.length; ++ind) {
+
+		// distance from dep to VFR point
+		var min_dist = -1; // -1 means that it does not have value yet
+		var d1 = calcDistanceFrom(vfrWaypoints[ind].lat, vfrWaypoints[ind].lon, dep.lat, dep.lon);
+		//debug_log("sortNearestFirst - " + dep.icao + " - " + vfrWaypoints[ind].name + " = " + d1 + " km");
+		
+		// Check whether destination contains any VFR points
+		if (DestVfrWaypoints.length == 0) {
+			var d2 = calcDistanceFrom(vfrWaypoints[ind].lat, vfrWaypoints[ind].lon, dest.lat, dest.lon);
+			//debug_log("sortNearestFirst - -  " + vfrWaypoints[ind].name + " - " + dest.icao + " = " + d2 + " km");
+			vfrWaypoints[ind].setDistance(d1+d2);
+		}
+		else {
+			// Loop destination's VFR points
+			for (var destInd=0; destInd<DestVfrWaypoints.length; ++destInd) {
+				var d2 = calcDistanceFrom(vfrWaypoints[ind].lat, vfrWaypoints[ind].lon, DestVfrWaypoints[destInd].lat, DestVfrWaypoints[destInd].lon);
+				//debug_log("sortNearestFirst - - " + vfrWaypoints[ind].name + " - " + DestVfrWaypoints[destInd].name + " = " + d2 + " km");
+	
+				var d3 = calcDistanceFrom(DestVfrWaypoints[destInd].lat, DestVfrWaypoints[destInd].lon, dest.lat, dest.lon);
+				//debug_log("sortNearestFirst - -  " + DestVfrWaypoints[destInd].name + " - " + dest.icao + " = " + d3 + " km");
+				
+				if ((min_dist > d1+d2+d3) || (min_dist == -1)) {
+					min_dist = d1+d2+d3;
+					vfrWaypoints[ind].setDistance(min_dist);
+				}
+			}
+		}
+
+		//debug_log("sortNearestFirst - Distance via " + vfrWaypoints[ind].name + " = " + vfrWaypoints[ind].getDistance() + " km");
+	}
+	vfrWaypoints.sort(waypointDistanceSort);
+	//debug_log("sortNearestFirst - Done" );
+}
+
+
+/*
+// Old version of sorting... It is too simple, and gives incorrect results sometimes.
+function sortNearestFirstOld(array, lat, lon) {
 	//debug_log("sortNearestFirst");
 	for (var ind=0; ind<array.length; ++ind) {
 		array[ind].calcDistanceFrom(lat, lon);
@@ -1783,7 +1851,7 @@ function sortNearestFirst(array, lat, lon) {
 	array.sort(waypointDistanceSort);
 	return array;
 }
-
+*/
 
 function fillVfrWaypointSelectionData(elSelection, dep, dest) {
 	//debug_log("fillVfrWaypointSelectionData");
@@ -1791,10 +1859,11 @@ function fillVfrWaypointSelectionData(elSelection, dep, dest) {
 
 	var vfrWaypoints = getVfrWayPointsByName( dep.vfrPoints );
 	if (vfrWaypoints.length == 0) {
-		//debug_log("fillVfrWaypointSelectionData - vfrWaypoints not yet ready");
+		//debug_log("fillVfrWaypointSelectionData - " + dep.icao + " does not have VFR points");
 		return;
 	}
-	sortNearestFirst(vfrWaypoints, dest.lat, dest.lon);
+	//sortNearestFirstOld(vfrWaypoints, dest.lat, dest.lon);
+	sortNearestFirst(vfrWaypoints, dep, dest);
 
 	// Empty ref point
 	appendOption(elSelection, "-", "");
@@ -2101,7 +2170,6 @@ function drawAirspace(ctx, coordinates, bottom) {
 		ctx.globalAlpha=0.5;
 	} 
 	else if (bot[0] == "FL") { // Airspaces from FL xx (typically FL 65 ->)
-		// TODO filter high airspaces out if user has selected
 		ctx.strokeStyle = 'blue';
 		ctx.fillStyle = 'lightblue';
 		ctx.globalAlpha=0.2;
@@ -2441,7 +2509,7 @@ function onChangeDepartureAd() {
 	var destAerodrome = getAerodromeByIndex( dest.value );
 	
 	document.getElementById("route_departure_ad").innerHTML = depAerodrome.icao + " (" + depAerodrome.name + ")";
-	
+
 	fillVfrWaypointSelectionData(document.getElementById("route_departure_rep"), depAerodrome, destAerodrome);
 	fillVfrWaypointSelectionData(document.getElementById("route_destination_rep"), destAerodrome, depAerodrome);
 	$('#route_departure_rep').selectmenu('refresh');
