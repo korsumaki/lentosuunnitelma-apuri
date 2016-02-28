@@ -278,6 +278,7 @@ test( "JSON validity check", function( assert ) {
 			AerodromesFilename = "";
 			ZZZZFieldsFilename = "";
 			AirspaceFilename = "";
+			EE_AerodromesFilename = "";
 			
 			var prevDate = new Date();
 			var firstDateWithinRange = 0;
@@ -308,26 +309,31 @@ test( "JSON validity check", function( assert ) {
 					AerodromesFilename = "";
 					ZZZZFieldsFilename = "";
 					AirspaceFilename = "";
+					EE_AerodromesFilename = "";
 
 					AerodromesFilename = data.data[i].aerodromes;
 					ZZZZFieldsFilename = data.data[i].zzzzfields;
 					VFRPortFilename = data.data[i].vfrpoints;
 					AirspaceFilename = data.data[i].airspace;
+					EE_AerodromesFilename = data.data[i].EE_aerodromes;
 					console.log( "file1: " + AerodromesFilename);
 					console.log( "file2: " + ZZZZFieldsFilename);
 					console.log( "file3: " + VFRPortFilename);
 					console.log( "file4: " + AirspaceFilename);
+					console.log( "file5: " + EE_AerodromesFilename);
 				}
 				else { 
 					equal(firstDateWithinRange, 1, "First date should be included in ranges");
 				}
 				notEqual(data.data[i].vfrpoints, "", "vfrpoints not empty (during loop)");
 				notEqual(data.data[i].aerodromes, "", "aerodromes not empty (during loop)");
+				notEqual(data.data[i].EE_aerodromes, "", "EE_aerodromes not empty (during loop)");
 				notEqual(data.data[i].zzzzfields, "", "zzzzfields not empty (during loop)");
 				notEqual(data.data[i].airspace, "", "airspace not empty (during loop)");
 
 				notEqual(data.data[i].vfrpoints, undefined, "vfrpoints exists (during loop)");
 				notEqual(data.data[i].aerodromes, undefined, "aerodromes exists (during loop)");
+				notEqual(data.data[i].EE_aerodromes, undefined, "EE_aerodromes exists (during loop)");
 				notEqual(data.data[i].zzzzfields, undefined, "zzzzfields exists (during loop)");
 				notEqual(data.data[i].airspace, undefined, "airspace exists (during loop)");
 				
@@ -351,6 +357,16 @@ test( "JSON validity check", function( assert ) {
 						}
 					}).fail(function() {
 						ok( 0 == "1", "Failure in aerodromes file loading." );
+					});
+				$.get(data.data[i].EE_aerodromes, 
+					function(data, textStatus, jqXHR) {
+						console.log( "EE_aerodromes success" );
+						actualValidFileCount++;
+						if (actualValidFileCount == expectedFileCount) {
+							done();
+						}
+					}).fail(function() {
+						ok( 0 == "1", "Failure in EE_aerodromes file loading." );
 					});
 				$.get(data.data[i].zzzzfields, 
 					function(data, textStatus, jqXHR) {
@@ -377,10 +393,12 @@ test( "JSON validity check", function( assert ) {
 			console.log( "check filenames are not empty" );
 			notEqual(VFRPortFilename, "", "VFR port filename is not empty (after selection)");
 			notEqual(AerodromesFilename, "", "Aerodromes filename is not empty (after selection)");
+			notEqual(EE_AerodromesFilename, "", "EE_AerodromesFilename filename is not empty (after selection)");
 			notEqual(ZZZZFieldsFilename, "", "ZZZZ fields filename is not empty (after selection)");
 			notEqual(AirspaceFilename, "", "Airspace filename is not empty (after selection)");
 			notEqual(VFRPortFilename, undefined, "VFR port filename exists (after selection)");
 			notEqual(AerodromesFilename, undefined, "Aerodromes filename exists (after selection)");
+			notEqual(EE_AerodromesFilename, undefined, "EE_Aerodromes filename exists (after selection)");
 			notEqual(ZZZZFieldsFilename, undefined, "ZZZZ fields filename exists (after selection)");
 			notEqual(AirspaceFilename, undefined, "Airspace filename exists (after selection)");
 			console.log( "check filenames check done" );
@@ -441,4 +459,36 @@ test( "getVerticalAlignment", function() {
 	equal( getVerticalAlignment(                 outcode_TOP_RIGHT                                          ), 1 );
 	equal( getVerticalAlignment(outcode_TOP_LEFT                                                            ), 1 );
 });
+
+// getCountryByICAO(icao)
+test( "getCountryByICAO", function() {
+	equal( getCountryByICAO('EFTP'), 'EF' );
+	equal( getCountryByICAO('EFTS'), 'EF' );
+	equal( getCountryByICAO('EERI'), 'EE' );
+	equal( getCountryByICAO('ESST'), 'ES' );
+	equal( getCountryByICAO('ZZZZ'), 'EF' );
+
+	equal( getCountryByICAO('efts'), 'EF' );
+	equal( getCountryByICAO('eeri'), 'EE' );
+	equal( getCountryByICAO('esst'), 'ES' );
+	equal( getCountryByICAO('zzzz'), 'EF' );
+
+	//equal( getCountryByICAO('zzz'), 'EF' );
+});
+
+// get_ACC_STR_by_country(country)
+test( "get_ACC_STR_by_country", function() {
+	equal( get_ACC_STR_by_country('EF'), 'ACC' );
+	equal( get_ACC_STR_by_country('EE'), 'TALLINN ACC' );
+	//equal( get_ACC_STR_by_country('ES'), 'ACC' );
+});
+
+
+// get_ACC_STR_WITH_PHONE_by_country(country)
+test( "get_ACC_STR_WITH_PHONE_by_country", function() {
+	equal( get_ACC_STR_WITH_PHONE_by_country('EF'), 'ACC +35832865172 ' );
+	equal( get_ACC_STR_WITH_PHONE_by_country('EE'), 'TALLINN ACC +3726258254 ' );
+	//equal( get_ACC_STR_WITH_PHONE_by_country('ES'), 'ACC +35832865172 ' );
+});
+
 
