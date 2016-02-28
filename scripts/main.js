@@ -42,42 +42,115 @@
  * 		+ hae open-data
  * 			+ metar yms.
  * 			- tallenna localstorageen myöhempää käyttöä varten
-
-TODO:
-
-Android
-	Väärä päivämäärä:
-		ERROR: aerodromeXmlResponseHandler - error: status=200
-		- voi tarkoittaa että laitteen päivämäärä on pielessä
-		- lisää virheilmoitukseen nimi mitä tiedostoa oltiin lukemassa
-		- virheilmoitus jos nimi ei ole valid
-		+ jos today on ennen ensimmäistäkään päivämäärää, herjaa laitteen väärästä pvm asetuksesta.
-
-Android Chrome:
-	+ lentokenttä symboli ei näy oikein (jollain kentällä näkyy)
-		+ toimisiko 8-kulmio (tai joku muu symboli) paremmin joka paikassa? Tornikentälle eri kuin korpikentälle? ZZZZ vielä joku omansa? Ilmailukartan oikeat symbolit?
-
-Android Intenet:
-	+ location päivitys ei valmistu koskaan -> valmistuu kun location on sallittuna
-
-Kehitys
-	- sijainti -nappi 
-		+ keltaisella kun sijaintia haetaan
-		- punaisella jos sijaintia ei ole saatu (denied yms.)
-		- vihreällä jos ok sijainti
-	- Perustiedot -nappi
-		- vihreällä/punaisella
-	- graafi
-		+ symbolien sijainnit fiksusti
-
-+ kokeile graafin toimintaa tabletilla -> ok
-
-Note: automaattinen skaalaus muuttaisi myös symbolien (ja tekstin) kokoa?
-
+ * 
+ * - BUG: when resize is changed during settings screen, canvas is resized to minimum size.
+ * 
+ * Kehitys
+ * 	- sijainti -nappi 
+ * 		+ keltaisella kun sijaintia haetaan
+ * 		- punaisella jos sijaintia ei ole saatu (denied yms.)
+ * 		- vihreällä jos ok sijainti
+ * 	- Perustiedot -nappi
+ * 		- vihreällä/punaisella
+ * 	- graafi
+ * 		+ symbolien sijainnit fiksusti
  * 
  * - poista timestampit minimoitavasta koodista
  * - Muista päivittää kooditiedoston nimi! Kannattaa olla versionumero yms. varmistamassa uuden tiedoston lataamista.
  * + minimization: http://closure-compiler.appspot.com/home
+ */
+
+
+/*
+Muutoksia:
+
+- Mukana olevat kentät: http://eaip.eans.ee/2016-02-04/html/eAIP/EE-AD-1.3-en-GB.html#AD-1.3
+
+- Kentän ollessa Virossa (puhelimella ja radiolla tehtäviin) ARR ja DEP tietoihin lisätään TALLINN
+  PHONE ACC -> PHONE TALLINN ACC
+  RTF ACC -> RTF TALLINN ACC
+
+- 18 kenttään itse päivitettävä EET tieto
+  - EET/PAIKKAHHMM
+
+- käyttäjän on päivitettävä oma puhelinnumero kansainväliseen muotoon +358nnnnnnnnn (plussa jää plaanilomakkeelle mentäessä pois)
+
+- Notam linkit (alareunan "Tehdyt lentosuunnitelmat" ja siitä oikean reunan "i" nappi) toimii myös Viron kentille (mikäli ko. kentän notam löytyy Finavian bulletin palvelusta)
+
+- Lennon­valmistelu­tiedot kohdassa olevat Metarit ja TAF toimii myös Viron kentille
+
+- "RAKETTIPELASTUSVARJO" on vaihdettu muotoon "PYROTECHNICS ON BOARD"
+
+
+
+ * Naapurimaat
+ * - Tarviiko olla mainittu TALLINN ACC?
+ *   PHONE ACC -> PHONE TALLINN ACC
+ *   RTF ACC -> RTF TALLINN ACC
+ * 
+ * Phase 1
+ * + settings switch Naapurimaiden kentät
+ *   + otherFieldsEnabled
+ * + isEverythingReady, add check for other aerodromes
+ * + handlePositionUpdate add branch for other aerodromes
+ * + VfrRepArray and OtherVfrRepArray handling to isEverythingReady
+ * + add "data/EE_aerodromes_04FEB2016.json" to validity.json file
+ *   + update unit test for validation
+ * 
+ * + ACC jaksot
+ * + ACC puhelinnumero <- voisi olla mukana maan kenttädatassa
+ *   + TALLINN ACC
+ *     + +372 625 8254
+ *     + http://eaip.eans.ee/2016-02-04/html/eAIP/EE-GEN-3.3-en-GB.html#GEN-3.3
+ * + aktivointi ja päättämistekstit varioidaan kyseisen maan mukaan.
+ * + tekstit englanniksi
+ *   + rakettipelastusvarjo
+ * + oman puhelinnumeron kansainvälinen muoto? Käyttäjän tulee laittaa itse oikea muoto perustietoihin. Plussa poistuu automaattisesti.
+ * 
+ * + Tarkista tuorein tieto, Effective 04 FEB 2016
+ *   - http://eaip.eans.ee/2016-02-04/html/index-en-GB.html
+ * 
+ * + Uudet kentät
+ *   http://eaip.eans.ee/2016-02-04/html/eAIP/EE-AD-1.3-en-GB.html#AD-1.3
+ *   + EEKL Koigi 585146N 0254451E
+ *   + EEAA Antsla 574940N 0262940E
+ * + poista piste TALLINN ACC jaksosta...
+ * 
+ * + dummy EET täyttäminen tarvittaessa kohtaan 18 + note sen päivittämisestä
+ *   - EET/PaikkaHHMM
+ * + notam linkit: https://ais.fi/ais/bulletins/eettvfr.htm#EETN
+ * 
+ * 
+ * Phase 2
+ * - maiden väliset ilm. pisteet, Viron AIP:stä, kartasta. Ruotsin suuntaan pisteet löytyy suomen AIP:stä.
+ *   - http://eaip.eans.ee/2015-12-10/graphics/eAIP/AIRAC-AMDT-11-2015/ENR-ENRC-12112015.pdf
+ *     - katso uusin versio
+ *   - ANC kartta: http://eaip.eans.ee/files/ESTONIAN_VFR_2015_CHART.pdf
+ *   -> tiedostoon
+ * - UI: jos eri maan kentät, lisää reitti osuuteen uusi vfr piste lista
+ * - modausta tarvitaan ylimääräisen reittipisteen takia
+ *   - reitin pituuden laskenta, optimointi
+ * - EET ajan laskenta
+ *   - onnistuu helposti jos on rajalla oleva välipiste
+ * 
+ * + Free route airspace?
+ *   - http://eaip.eans.ee/2015-12-10/html/eAIC/EE-eAIC-2015-04-A-en-GB.html?amdt=show
+ *   - Additional point can either be a navaid (as published in ENR 4.1) or a significant point (as published in ENR 4.4) in the national AIPs of Estonia, Finland, Latvia or Norway.
+ * 
+ * 
+ * https://aim.eans.ee/index.php?option=com_content&view=article&id=129&Itemid=2&lang=en
+ * 
+ * + Change FREQ for Tallinn FIR E sector. New FREQ 127.175 MHz.
+ * + Change FREQ for Tallinn FIR W sector. New FREQ 134.325 MHz.
+ * 
+ * 
+ * Phase 3
+ * - ilmatilat?
+ * 
+ * + UTF-8 merkistö?? Ääkköset?
+ *   + toimii kun kopioi alkuperäisestä lähteestä sellaisenaan...
+ *   + tarviiko conversio koodia modata, että data kulkisi alusta loppuun oikein?
+ * 
  */
 
 
@@ -92,12 +165,15 @@ Note: automaattinen skaalaus muuttaisi myös symbolien (ja tekstin) kokoa?
  * 
  */
 
-var log="Ohjelmakoodi päivätty: 2016-02-05<br>";
+var log="Ohjelmakoodi päivätty: 2016-02-27<br>";
+var CurrentVfrRepArray;
 var VfrRepArray;
+var OtherVfrRepArray; // Viro
 
 var CurrentAerodromeArray; // Contains either Official or Official+ZZZZ fields, depending on user selection.
 var OfficialAerodromeArray;
 var ZZZZFieldArray;
+var OtherAerodromeArray; // Viro
 
 var gPosition_lat;
 var gPosition_lon;
@@ -113,6 +189,7 @@ var VFRPortFilename = "";
 var AerodromesFilename = "";
 var ZZZZFieldsFilename = "";
 var AirspaceFilename = "";
+var EE_AerodromesFilename = ""; // Viron kentät
 
 // These sizes will change based on screen size
 var CANVAS_WIDTH = 300;
@@ -129,14 +206,18 @@ var SCREEN_MARGINAL = 20; // Screen marginal size %
 var UNOFFICIAL_AERODROME="ZZZZ";
 var UNOFFICIAL_AERODROME_INDEX=0; // This field index is used when ZZZZ place name was written manually, not from xml.
 
-var BY_PHONE_ON_GROUND_STR = "PHONE ACC ";
-var BY_PHONE_ON_GROUND_STR_WITH_PHONE = "PHONE ACC 032865172 "; 
-var BY_RTF_ON_AIR_STR = "RTF ACC "; // ACC freq is updated later
+//var BY_PHONE_ON_GROUND_STR = "PHONE ACC ";
+//var BY_PHONE_ON_GROUND_STR_WITH_PHONE = "PHONE ACC 032865172 "; 
+//var BY_RTF_ON_AIR_STR = "RTF ACC "; // ACC freq is updated later
+
+var BY_PHONE_STR = "PHONE ";
+var BY_RTF_STR = "RTF "; // ACC freq is updated later
 var BY_TWR = "- (torni)";
 
 var NOTE_TO_ADD_ACC_FREQ_STR = "LISÄÄ_ACC_JAKSO";
 
-var PYROTECHNICS_NOTE_REMARKS = "rakettipelastusvarjo";
+//var PYROTECHNICS_NOTE_REMARKS = "rakettipelastusvarjo";
+var PYROTECHNICS_NOTE_REMARKS = "pyrotechnics on board";
 
 var OPENAVIATIONDATA_APIKEY = "mkXQV7UpiiBgOVjxbTzioYfpOlNVtEtg";
 
@@ -173,6 +254,47 @@ function debug_timestamp_ready(str, start_time)
 function getFlightTimeOverride() {
 	return overrideFlightTime;
 }
+
+
+// Get country part of ICAO code (=2 first letters)
+function getCountryByICAO(icao) {
+	if (icao.length != 4) {
+		debug_log("ERROR: getCountryByICAO: icao='" + icao + "' is not valid. Expected 4 characters.");
+	}
+	var country = icao.substr(0,2).toUpperCase();;
+	// Let's assume ZZZZ fields are in Finland.
+	if (country == 'ZZ') {
+		country = 'EF'; 
+	}
+	return country;
+}
+
+
+function get_ACC_STR_WITH_PHONE_by_country(country) {
+	switch(country)
+	{
+	case 'EF': return "ACC +35832865172 ";
+	case 'EE': return "TALLINN ACC +3726258254 ";
+	default:
+		debug_log("ERROR: get_ACC_STR_WITH_PHONE_by_country: country '" + country + "' no yet handled.'");
+		return "ACC +35832865172 ";
+		break;
+	}
+}
+
+function get_ACC_STR_by_country(country) {
+	switch(country)
+	{
+	case 'EF': return "ACC";
+	case 'EE': return "TALLINN ACC";
+	default:
+		debug_log("ERROR: get_ACC_STR_by_country: country '" + country + "' no yet handled.'");
+		return "ACC";
+		break;
+	}
+}
+
+
 
 function setFlightTimeOverride(value) {
 	//debug_log("setFlightTimeOverride:" + value);
@@ -243,7 +365,7 @@ function continueIfEverythingIsReady() {
 	}
 	debug_timestamp_ready("total startup (all but position)", total_startup_start_time);
 
-	if (OfficialAerodromeArray !== undefined && ZZZZFieldArray !== undefined &&gPosition_lat !== undefined) {
+	if (OfficialAerodromeArray !== undefined && ZZZZFieldArray !== undefined && gPosition_lat !== undefined) {
 		//debug_log("continueIfEverythingIsReady() - new handlePositionUpdate");
 		handlePositionUpdate(gPosition_lat, gPosition_lon);
 	}
@@ -302,13 +424,23 @@ function handlePositionUpdate(lat, lon) {
 		//debug_log("handlePositionUpdate() - ZZZZFieldArray is not ready.");
 		return;
 	}
+	if (document.getElementById("otherFieldsEnabled").value == "enabled") {
+		if (OtherAerodromeArray === undefined) {
+			//debug_log("handlePositionUpdate() - OtherAerodromeArray is not ready.");
+			return;
+		}
+	}
 
+	debug_log("Suomen lentokentät käytössä.");
+	CurrentAerodromeArray = OfficialAerodromeArray;
 	if (document.getElementById("zzzzFieldsEnabled").value == "enabled") {
-		debug_log("Kaikki lentokentät käytössä.");
-		CurrentAerodromeArray = OfficialAerodromeArray.concat(ZZZZFieldArray);
-	} else {
-		debug_log("Vain viralliset lentokentät käytössä.");
-		CurrentAerodromeArray = OfficialAerodromeArray;
+		debug_log("Epäviralliset lentopaikat käytössä.");
+		CurrentAerodromeArray = CurrentAerodromeArray.concat(ZZZZFieldArray);
+	}
+	
+	if (document.getElementById("otherFieldsEnabled").value == "enabled") {
+		debug_log("Viron lentokentät käytössä.");
+		CurrentAerodromeArray = CurrentAerodromeArray.concat(OtherAerodromeArray);
 	}
 
 
@@ -643,6 +775,19 @@ function loadXMLDoc(filename, handler) {
 	xhttp.send();
 }
 
+function combineVfrPointArrays() {
+	//debug_log("combineVfrPointArrays()");
+	if (VfrRepArray !== undefined) {
+		CurrentVfrRepArray = VfrRepArray;
+		//debug_log("combineVfrPointArrays() - VfrRepArray added");
+		
+		if (OtherVfrRepArray !== undefined) {
+			//debug_log("combineVfrPointArrays() - OtherVfrRepArray added");
+			CurrentVfrRepArray = CurrentVfrRepArray.concat(OtherVfrRepArray);
+		}
+	}
+}
+
 function vfrPortReadyHandler(xmlDoc) {
 	var vfrPortReadyHandler_start_time = debug_timestamp_start("vfrPortReadyHandler");
 
@@ -674,8 +819,8 @@ function vfrPortReadyHandler(xmlDoc) {
 	}
 	debug_log( "=> " + VfrRepArray.length + " VFR ilmoittautumispistettä.");
 
-	//continueIfEverythingIsReady();  moved to end of zzzzFieldReadyHandler
-
+	combineVfrPointArrays();
+	
 	debug_timestamp_ready("vfrPortReadyHandler", vfrPortReadyHandler_start_time);
 	
 	//debug_log( "Loading unofficial airfields...");
@@ -802,7 +947,66 @@ function zzzzFieldReadyHandler(xmlDoc) {
 }
 
 
+// Handle aerodromes from other countries
+function aerodromeJsonHandler(data) {
+	OtherAerodromeArray = new Array();
+	OtherVfrRepArray = new Array();
+	
+	debug_log( "Viron lentokenttätiedot ja VFR pisteet päivätty: " + data.created);
+	
+	for (var i=0; i<data.aerodrome.length; ++i) {
+		var name = data.aerodrome[i].name;
+		var icao = data.aerodrome[i].icao;
+		var atc = data.aerodrome[i].atc;
+		var tmp_acc = data.aerodrome[i].acc;
+		var acc = tmp_acc.replace(".", " ");
+		//debug_log( tmp_acc + " -> " + acc );
 
+
+		var lat = data.aerodrome[i].lat;
+		var lon = data.aerodrome[i].lon;
+		
+		var vfrPoints = data.aerodrome[i].vfrpoint;
+		var vfrPointsArray = new Array();
+		for (var j=0; j<vfrPoints.length; ++j) {
+			
+			vfrPointsArray.push( data.aerodrome[i].vfrpoint[j].name);
+			
+			OtherVfrRepArray.push(new Waypoint(data.aerodrome[i].vfrpoint[j].name, 
+				DMS_to_Decimal(data.aerodrome[i].vfrpoint[j].lat), 
+				DMS_to_Decimal(data.aerodrome[i].vfrpoint[j].lon)));
+			//debug_log( "vfr point: " + data.aerodrome[i].vfrpoint[j].name );
+		}
+		
+		//debug_log("new Aerodrome:" + name + " - " + vfrPointsArray);
+		OtherAerodromeArray.push(new Aerodrome(name, icao, 
+				lat, lon,
+				atc,
+				acc,
+				vfrPointsArray));
+	}
+	debug_log( "=> " + OtherAerodromeArray.length + " Viron lentokenttää.");
+	debug_log( "=> " + OtherVfrRepArray.length + " Viron VFR ilmoittautumispistettä.");
+	//CurrentVfrRepArray = CurrentVfrRepArray.concat(OtherVfrRepArray); 
+	
+	combineVfrPointArrays();
+	continueIfEverythingIsReady();
+
+	//debug_log( "aerodromeJsonHandler: end");
+}
+
+function loadAerodromeJson() {
+	// Load only if needed
+	if (document.getElementById("otherFieldsEnabled").value == "enabled") {
+		$.getJSON(EE_AerodromesFilename,
+			function(data, textStatus, jqXHR) {
+				aerodromeJsonHandler(data);
+			}).fail(function() {
+				alert("Virhe '" + EE_AerodromesFilename + "' tiedoston lataamisessa. Kokeile ladata sivu uudestaan. Jos vika ei poistu, ota yhteyttä Lentosuunnitelma-apurin tekijään.");
+			}).always(function() {
+			});
+	}
+}
 
 
 function removeOptions(elSelect) {
@@ -829,23 +1033,6 @@ function appendOption(elSelect, text, value) {
 }
 
 
-/*
-function getAerodromeByName(aerodrome) {
-	debug_log("OBSOLETE: getAerodromeByName(): " + aerodrome);
-	if (CurrentAerodromeArray === undefined) {
-		debug_log("NOTE: getAerodromeByName(): CurrentAerodromeArray not yet loaded");
-		return null;
-	}
-	for (var i=0; i<CurrentAerodromeArray.length; ++i) {
-		if (aerodrome == CurrentAerodromeArray[i].icao) {
-			return CurrentAerodromeArray[i];
-		}
-	}
-	debug_log("ERROR: getAerodromeByName(): " + aerodrome + " not found.");
-	return null;
-}
-*/
-
 function getAerodromeByIndex(index) {
 	//debug_log("NEW: getAerodromeByIndex(): " + index);
 	if (CurrentAerodromeArray === undefined) {
@@ -863,14 +1050,14 @@ function getAerodromeByIndex(index) {
 
 
 function getVfrWayPointByName( name ) {
-	if (VfrRepArray === undefined) {
-		//debug_log("NOTE: getVfrWayPointByName(): VfrRepArray not yet loaded");
+	if (CurrentVfrRepArray === undefined) {
+		//debug_log("NOTE: getVfrWayPointByName(): CurrentVfrRepArray not yet loaded");
 		return null;
 	}
 
-	for (var wptInd=0; wptInd<VfrRepArray.length; ++wptInd) {
-		if (name == VfrRepArray[wptInd].name) {
-			return VfrRepArray[wptInd];
+	for (var wptInd=0; wptInd<CurrentVfrRepArray.length; ++wptInd) {
+		if (name == CurrentVfrRepArray[wptInd].name) {
+			return CurrentVfrRepArray[wptInd];
 		}
 	}
 	return null;
@@ -1268,6 +1455,20 @@ function onChangeZzzzFieldsEnabled() {
 	localStorage.setItem( "zzzzFieldsEnabled", document.getElementById("zzzzFieldsEnabled").value);
 	handlePositionUpdate(gPosition_lat, gPosition_lon);
 }
+function onChangeOtherFieldsEnabled() {
+	//debug_log("onChangeOtherFieldsEnabled - " + document.getElementById("otherFieldsEnabled").value);
+	localStorage.setItem( "otherFieldsEnabled", document.getElementById("otherFieldsEnabled").value);
+
+	// Check if file is loaded, load if needed.
+	if (document.getElementById("otherFieldsEnabled").value == "enabled") {
+		if (OtherAerodromeArray === undefined) {
+			loadAerodromeJson();
+			return;
+		}
+	}
+
+	handlePositionUpdate(gPosition_lat, gPosition_lon);
+}
 
 
 function convertOldSettings() {
@@ -1402,6 +1603,11 @@ function updateFromLocalStorage() {
 	if (zzzzEnabled !== null) {
 		document.getElementById("zzzzFieldsEnabled").value = zzzzEnabled;
 	}
+	var otherEnabled = localStorage.getItem("otherFieldsEnabled");
+	if (otherEnabled !== null) {
+		//ebug_log("otherFieldsEnabled=" + otherEnabled);
+		document.getElementById("otherFieldsEnabled").value = otherEnabled;
+	}
 	//createFlyingTimeTable();
 	
 	updateAircraftSelectionList();
@@ -1435,7 +1641,7 @@ function isAllSettingsAvailable() {
 		var tel = document.getElementById("pilotTel").value;
 		var color = document.getElementById("aircraftColor").value;
 		
-		if (/*gSelectedFlyingTimeStr===undefined && */ gCalculatedFlyingTimeStr===undefined) { //GlobalFlyingTimeStr
+		if (gCalculatedFlyingTimeStr===undefined) {
 			//alert("GlobalFlyingTimeStr");
 			return false;
 		}
@@ -1618,13 +1824,14 @@ function initStoredPlanPageHandler() {
 		//$('#openNotamButton').text("Notam: " + storedPlans[ind].destination); //( "<button onclick='openNotam('" + storedPlans[ind].destination + "')' data-inline='true' data-mini='true'>Notam: " + storedPlans[ind].destination + "</button>");
 		//$('#openNotamButton').button('refresh');
 		
-		if (storedPlans[ind].activation_method !== BY_PHONE_ON_GROUND_STR_WITH_PHONE && 
-			storedPlans[ind].completion_method !== BY_PHONE_ON_GROUND_STR_WITH_PHONE) {
-			$('#callAccButton').hide();
-		}
-		else {
+		// TODO check if there is way to do this check?
+		//if (storedPlans[ind].activation_method !== BY_PHONE_ON_GROUND_STR_WITH_PHONE && 
+		//	storedPlans[ind].completion_method !== BY_PHONE_ON_GROUND_STR_WITH_PHONE) {
+		//	$('#callAccButton').hide();
+		//}
+		//else {
 			$('#callAccButton').show();
-		}
+		//}
 	});
 }
 
@@ -1684,9 +1891,10 @@ function loadValidityJson()
 					ZZZZFieldsFilename = data.data[i].zzzzfields;
 					VFRPortFilename = data.data[i].vfrpoints;
 					AirspaceFilename = data.data[i].airspace;
+					EE_AerodromesFilename = data.data[i].EE_aerodromes;
 				}
 			}
-			if (AerodromesFilename == "" && ZZZZFieldsFilename == "" && VFRPortFilename == "") {
+			if (AerodromesFilename == "" && ZZZZFieldsFilename == "" && VFRPortFilename == "" && EE_AerodromesFilename == "") {
 				alert("En löydä kenttätietoja tälle päivämäärälle (en muista kovin vanhoja juttuja). Tarkista laitteesi päivämääräasetus.");
 			}
 		}).fail(function() {
@@ -1711,6 +1919,7 @@ function loadAirspaceJson()
 function onLoad()
 {
 	window.addEventListener('resize', resizeCanvas, false);
+	updateFromLocalStorage();
 	loadValidityJson();
 	resizeCanvas();
 }
@@ -1723,6 +1932,7 @@ function onStartup() {
 
 	aerodromeXml_start_time = debug_timestamp_start("aerodromeXml load start");
 	loadXMLDoc(AerodromesFilename, aerodromeXmlResponseHandler);
+	loadAerodromeJson();
 
 	if (navigator.geolocation) {
 		updateCurrentLocation();
@@ -1735,7 +1945,6 @@ function onStartup() {
 		$('#location-button').removeClass('location-waiting').addClass('location-not-available');
 	}
 	
-	updateFromLocalStorage();
 	onChangeFlightLv();
 	
 	updateStoredPlanList();
@@ -1890,8 +2099,8 @@ function updatePlanActivationMethods(elSelection, ad) {
 	if (ad.atc == "yes") {
 		appendOption(elSelection, BY_TWR, "twr");
 	}
-	appendOption(elSelection, "Puhelimella maassa (ACC)", "phoneOnGound");
-	appendOption(elSelection, "Radiolla ilmassa (ACC, " + ad.acc + ")", "rtfOnAir");
+	appendOption(elSelection, "Puhelimella maassa (" + get_ACC_STR_by_country(getCountryByICAO(ad.icao)) + ")", "phoneOnGound");
+	appendOption(elSelection, "Radiolla ilmassa (" + get_ACC_STR_by_country(getCountryByICAO(ad.icao)) + " " + ad.acc + ")", "rtfOnAir");
 }
 
 
@@ -2153,6 +2362,34 @@ function drawAirfield(ctx, x, y, name, outcode) {
 	//debug_log("drawAirfield: " + name + ", textAlign=" + ctx.textAlign);
 	ctx.fillText(name,x,y+text_y);
 }
+
+
+
+function drawAllAirfields(ctx) {
+	//debug_log("drawAllAirfields()");
+	if (CurrentAerodromeArray === undefined) {
+		//debug_log("NOTE: drawAllAirfields(): CurrentAerodromeArray not yet loaded");
+		return;
+	}
+
+	ctx.beginPath();
+
+	var size = 3;
+	for (var i = 1; i<CurrentAerodromeArray.length; ++i) {
+		var y = scaleToScreenY(CurrentAerodromeArray[i].lat);
+		var x = scaleToScreenX(CurrentAerodromeArray[i].lon);
+		
+		ctx.moveTo( x-size, y );
+		ctx.lineTo( x+size, y );
+		ctx.moveTo( x, y-size );
+		ctx.lineTo( x, y+size );
+	}
+	ctx.closePath();
+	ctx.strokeStyle = 'gray';
+	ctx.stroke();
+}
+
+
 
 function drawArrow(ctx, x1, y1, x2, y2, direction) {
 	ctx.moveTo(x1,y1);
@@ -2462,6 +2699,7 @@ function updateMapData(routeArray) {
 			prev=routeArray[i];
 		}
 	}
+	// Special handling for visualizing local flight, and extra special for Malmi ;)
 	if (routeArray[0] == routeArray[3] && routeArray[1] == null && routeArray[2] == null) {
 		// http://www.w3schools.com/tags/tryit.asp?filename=tryhtml5_canvas_quadraticcurveto
 		if (routeArray[0].icao == "EFHF") {
@@ -2495,6 +2733,9 @@ function updateMapData(routeArray) {
 		}
 	}
 	debug_timestamp_ready("draw route", timestamp_draw_route);
+	
+	// Draw all airfields
+	drawAllAirfields(ctx);
 }
 
 
@@ -2907,6 +3148,9 @@ function updateFlightPlanLink() {
 	if (minutes<10) timeStr += "0";
 	timeStr += minutes;
 	
+	var dep_icao = getAerodromeByIndex( document.getElementById("departure").value ).icao;
+	var dest_icao = getAerodromeByIndex( document.getElementById("destination").value ).icao;
+
 	var linkStart = "http://ais.fi/C/flightplan/efpl_lomake/";
 	var linkString = "&id=" + 		document.getElementById("aircraftIdentification").value;
 	linkString += "&rules=V"; // + 		document.getElementById("flightRules").value;
@@ -2915,7 +3159,7 @@ function updateFlightPlanLink() {
 	linkString += "&cat=L"; // + 		document.getElementById("wakeTurbulenceCat").value;
 	linkString += "&equipment=" + 	document.getElementById("equipment").value;
 	linkString += "&ssr=" + 		document.getElementById("ssr").value;
-	linkString += "&ad=" + 			getAerodromeByIndex( document.getElementById("departure").value ).icao;
+	linkString += "&ad=" + 			dep_icao;
 	linkString += "&time=" +		timeStr;
 	linkString += "&spd=" + 		document.getElementById("aircraftSpeedUnit").value;
 	linkString += "&speed=" + 		document.getElementById("aircraftSpeed").value;
@@ -2946,7 +3190,7 @@ function updateFlightPlanLink() {
 	
 	linkString += routeStr;
 	
-	linkString += "&dad=" + getAerodromeByIndex( document.getElementById("destination").value ).icao;
+	linkString += "&dad=" + dest_icao;
 	
 	// Check FlightTimeOverride
 	if (updateFlyingTimeValues() == false) {
@@ -3005,16 +3249,23 @@ function updateFlightPlanLink() {
 		//debug_log("PBN/" + pbn);
 		other += "PBN%252F" + pbn + " ";
 	}
+	
+	// If country is changing, then EET information must be added.
+	if (getCountryByICAO(dep_icao) != getCountryByICAO(dest_icao)) {
+		other += "EET%252FPaikkaHHMM" + " ";
+		alertText += "\nEET tiedon paikka ja aika (FIR-rajan tunnuskohta ja arvioitu lentoaika siihen)";
+		showAlertText = true;
+	}
 
 	other += "RMK%252F";
 	if (document.getElementById("planActivationMethod").value == "phoneOnGound") {
-		other += "DEP " + BY_PHONE_ON_GROUND_STR;
+		other += "DEP " + BY_PHONE_STR + get_ACC_STR_by_country(getCountryByICAO(dep_icao) ) + " ";
 	}
 	else if (document.getElementById("planActivationMethod").value == "rtfOnAir") {
 		var dep=document.getElementById("departure");
 		var depAerodrome = getAerodromeByIndex( dep.value );
 		//debug_log("dep acc =" + depAerodrome.acc);
-		other += "DEP " + BY_RTF_ON_AIR_STR + depAerodrome.acc + " ";
+		other += "DEP " + BY_RTF_STR + get_ACC_STR_by_country(getCountryByICAO(dep_icao)) + " " + depAerodrome.acc + " ";
 		
 		if (depAerodrome.acc == NOTE_TO_ADD_ACC_FREQ_STR) {
 			alertText += "\nLähtöpaikan ACC jakso.";
@@ -3023,13 +3274,13 @@ function updateFlightPlanLink() {
 	}
 
 	if (document.getElementById("planCompletionMethod").value == "phoneOnGound") {
-		other += "ARR " + BY_PHONE_ON_GROUND_STR;
+		other += "ARR " + BY_PHONE_STR + get_ACC_STR_by_country(getCountryByICAO(dest_icao)) + " ";
 	}
 	else if (document.getElementById("planCompletionMethod").value == "rtfOnAir") {
 		var dest=document.getElementById("destination");
 		var destAerodrome = getAerodromeByIndex( dest.value );
 		//debug_log("dest acc =" + destAerodrome.acc);
-		other += "ARR " + BY_RTF_ON_AIR_STR + destAerodrome.acc + " ";
+		other += "ARR " + BY_RTF_STR + get_ACC_STR_by_country(getCountryByICAO(dest_icao)) + " " + destAerodrome.acc + " ";
 		
 		if (destAerodrome.acc == NOTE_TO_ADD_ACC_FREQ_STR) {
 			alertText += "\nLaskupaikan ACC jakso.";
@@ -3167,26 +3418,29 @@ function getPlanForStoring() {
 	timeStr += hours;
 	if (minutes<10) timeStr += "0";
 	timeStr += minutes;
+
+	var dep_icao = getAerodromeByIndex( document.getElementById("departure").value ).icao;
+	var dest_icao = getAerodromeByIndex( document.getElementById("destination").value ).icao;
 	
 	if (document.getElementById("planActivationMethod").value == "phoneOnGound") {
-		plan.activation_method = BY_PHONE_ON_GROUND_STR_WITH_PHONE;
+		plan.activation_method = BY_PHONE_STR + get_ACC_STR_WITH_PHONE_by_country(getCountryByICAO(dep_icao));
 	}
 	else if (document.getElementById("planActivationMethod").value == "rtfOnAir") {
 		var dep=document.getElementById("departure");
 		var depAerodrome = getAerodromeByIndex( dep.value );
-		plan.activation_method = BY_RTF_ON_AIR_STR + depAerodrome.acc + " ";
+		plan.activation_method = BY_RTF_STR + get_ACC_STR_by_country(getCountryByICAO(dep_icao)) + " " + depAerodrome.acc + " ";
 	}
 	else {
 		plan.activation_method = BY_TWR;
 	}
 
 	if (document.getElementById("planCompletionMethod").value == "phoneOnGound") {
-		plan.completion_method = BY_PHONE_ON_GROUND_STR_WITH_PHONE;
+		plan.completion_method = BY_PHONE_STR + get_ACC_STR_WITH_PHONE_by_country(getCountryByICAO(dest_icao));
 	}
 	else if (document.getElementById("planCompletionMethod").value == "rtfOnAir") {
 		var dest=document.getElementById("destination");
 		var destAerodrome = getAerodromeByIndex( dest.value );
-		plan.completion_method = BY_RTF_ON_AIR_STR + destAerodrome.acc + " ";
+		plan.completion_method = BY_RTF_STR + get_ACC_STR_by_country(getCountryByICAO(dest_icao)) + " " + destAerodrome.acc + " ";
 	}
 	else {
 		plan.completion_method = BY_TWR;
@@ -3197,13 +3451,13 @@ function getPlanForStoring() {
 	//plan.takeoff_time = timeStr;
 	plan.identification = document.getElementById("aircraftIdentification").value;
 	// TODO add coordinates to departure and destination (later)
-	plan.departure = getAerodromeByIndex( document.getElementById("departure").value ).icao;
+	plan.departure = dep_icao;
 	plan.dep_name = getAerodromeByIndex( document.getElementById("departure").value ).name;
 	plan.dep_route = document.getElementById("route_departure_rep").value;
 	var route = document.getElementById("route").value;
 	plan.route = $( '<p>'+ route +'</p>').text(); // Remove html from input field...
 	plan.dest_route = document.getElementById("route_destination_rep").value;
-	plan.destination = getAerodromeByIndex( document.getElementById("destination").value ).icao;
+	plan.destination = dest_icao;
 	plan.dest_name = getAerodromeByIndex( document.getElementById("destination").value ).name;
 	
 	var flight_level = document.getElementById("flight_lv").value;
@@ -3281,11 +3535,15 @@ function onClickFlightPlanLinkButton() {
 
 function getNotamLink(icao) {
 	if (icao >= 'EFAA' && icao <='EFLP') {
-		return "http://www.ais.fi/ais/bulletins/envfra.htm#" + icao;
+		return "https://ais.fi/ais/bulletins/envfra.htm#" + icao;
 	}
 	else if (icao >= 'EFMA' && icao <='EFYL') {
-		return "http://www.ais.fi/ais/bulletins/envfrm.htm#" + icao;
+		return "https://ais.fi/ais/bulletins/envfrm.htm#" + icao;
 	}
+	else if (icao >= 'EEAA' && icao <='EEZZ') { // AA and ZZ are just to include all letters...
+		return "https://ais.fi/ais/bulletins/eettvfr.htm#" + icao;
+	}
+	return "https://ais.fi/ais/bulletins/";
 }
 
 /*function openNotam() {
