@@ -12,13 +12,7 @@
  * - uusi tekstikenttä, plaanin aktivointi, muu tapa (RTF PIRKKALA TWR 118 700)
  * - jos reitti jää tyhjäksi, lisää siihen DCT, paitsi jos lähtö ja määräkenttä on samoja... silloin note että "lisää siihen jotain, esim. TC"
  * 
- * - xml latauksen ja parsinnan kellotus
- * 		- loppu-alku -ajan tulostus
- * 		- 
- * 
  * - refresh jossain muualla kuin pääsivulla aiheuttaa erroreita -> jquery vaiheessa voisi koittaa korjata
- * 
- * + lisää koodin muuttamispäivämäärä lokitukseen?
  * 
  * - tee samat oikeellisuustarkistukset kuin finavialla on?
  * 		- tutki mitä siellä tarkistetaan.
@@ -30,18 +24,6 @@
  * 
  * - review and update comments
  * 
- * + poista päivämääräfeikkaus ennen julkaisua
- * 
- * 
- * - OFP, Lennonvalmistelu - aukeava osio
- * 		+ laskelma-taulukkoon lentosuunnat
- * 		- tallenna suunnat localstorageen
- * 		+ piirrä graafi lentosuunnista
- * 		+ linkki nav wrng pdf fileen.
- * 
- * 		+ hae open-data
- * 			+ metar yms.
- * 			- tallenna localstorageen myöhempää käyttöä varten
  * 
  * - BUG: when resize is changed during settings screen, canvas is resized to minimum size.
  * 
@@ -121,6 +103,21 @@ Muutoksia:
  * + notam linkit: https://ais.fi/ais/bulletins/eettvfr.htm#EETN
  * 
  * 
+ * 
+ * + BUG: Tsau - kysyin tänään briefingistä ja apuri lisää muutamia ylimääräisiä välilyöntejä mm. reitin ja PIC-nimen ympärille. Tsekkaas
+ *   + puhelinnumeron + jää tyhjäksi, voisi filtteröidä pois
+ *     'DEP/ILVESJOKI 6219N 02242E DEST/REKIKOSKI HUITTINEN 6112N 02253E RMK/DEP RTF ACC 127 100 ARR PHONE ACC PIC TEL  358505580335'
+ *   + reitti, jos vapaamuotoista tekstiä ei ole kirjoitettu
+ *     'PALLO  TALVI'
+ *   + pelkkä yksi ilmoittautumispiste
+ *   / lentoajan perässä? ei näytä johtuvan apurista
+ * 
+ * MOHNI 595349N 0253506E
+ * BALTI 595415N 0251506E
+ * DOBAN 594758N 0242709E
+ * PETOT 593040N 0230831E
+ * OSTOT 591715N 0221043E
+ * 
  * Phase 2
  * - maiden väliset ilm. pisteet, Viron AIP:stä, kartasta. Ruotsin suuntaan pisteet löytyy suomen AIP:stä.
  *   - http://eaip.eans.ee/2015-12-10/graphics/eAIP/AIRAC-AMDT-11-2015/ENR-ENRC-12112015.pdf
@@ -165,7 +162,7 @@ Muutoksia:
  * 
  */
 
-var log="Ohjelmakoodi päivätty: 2016-02-27<br>";
+var log="Ohjelmakoodi päivätty: 2016-02-28<br>";
 var CurrentVfrRepArray;
 var VfrRepArray;
 var OtherVfrRepArray; // Viro
@@ -3177,17 +3174,25 @@ function updateFlightPlanLink() {
 	linkString += "&route=";
 	var routeStr="";
 	if (document.getElementById("route_departure_rep").value !== "") {
-		routeStr += document.getElementById("route_departure_rep").value + " ";
+		routeStr += document.getElementById("route_departure_rep").value;
 	}
-	routeStr += document.getElementById("route").value;
+	if (document.getElementById("route").value !== "") {
+		if (routeStr.length > 0) { // Add space if needed
+			routeStr += " ";
+		}
+		routeStr += document.getElementById("route").value;
+	}
 	if (document.getElementById("route_destination_rep").value !== "") {
-		routeStr += " " + document.getElementById("route_destination_rep").value;
+		if (routeStr.length > 0) { // Add space if needed
+			routeStr += " ";
+		}
+		routeStr += document.getElementById("route_destination_rep").value;
 	}
 	// Check if route is empty, then add space.
 	if (routeStr == "") {
 		routeStr += " ";
 	}
-	
+
 	linkString += routeStr;
 	
 	linkString += "&dad=" + dest_icao;
@@ -3288,14 +3293,17 @@ function updateFlightPlanLink() {
 		}
 	}
 
-	other += "PIC TEL " + document.getElementById("pilotTel").value;
+	// Remove possible '+' from phone number. It was interpreted as additional space in FPL form.
+	var pilotTel = document.getElementById("pilotTel").value;
+	//debug_log("pilotTel 1 '" + pilotTel + "'");
+	if (pilotTel[0] == '+') {
+		pilotTel = pilotTel.substr(1, pilotTel.length-1);
+	}
+	//debug_log("pilotTel 2 '" + pilotTel + "'");
+	
+	other += "PIC TEL " + pilotTel;
 
 	linkString += "&other=" + other;
-	
-
-
-
-
 	
 	var endurance="";
 	var enduranceSelection = document.getElementsByName("enduranceHour");
@@ -3337,7 +3345,7 @@ function updateFlightPlanLink() {
 	}
 	
 	linkString += "&pic=" + document.getElementById("pilot").value;
-	linkString += "&tel=" + document.getElementById("pilotTel").value;
+	linkString += "&tel=" + pilotTel;
 	linkString += "&filed=" + document.getElementById("pilot").value;
 	
 	
