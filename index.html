@@ -74,6 +74,14 @@
 					</legend>
 					<input id="route" type="text" data-mini="true" placeholder="Reitin muut määritykset tai käännepisteet" />
 				</fieldset>
+				<fieldset data-role="controlgroup" id="route_fir_point_container" data-mini="true">
+					<legend>
+						FIR rajan ylitys
+					</legend>
+					<select id="route_fir_point" onchange="createFlyingTimeTable()" data-mini="true" >
+						<option value="none">(nothing to show)</option>
+					</select>
+				</fieldset>
 				<fieldset data-role="controlgroup" data-mini="true">
 					<legend>
 					</legend>
@@ -486,7 +494,7 @@
 			
 			
 			<h3>Tietoa</h3>
-			<p>Käyttöliittymä päivätty: 2016-02-27<br>
+			<p>Käyttöliittymä päivätty: 2016-03-01<br>
 			<span id="log">Log</span>
 			</p>
 

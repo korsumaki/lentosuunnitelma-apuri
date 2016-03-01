@@ -118,21 +118,38 @@ Muutoksia:
  * PETOT 593040N 0230831E
  * OSTOT 591715N 0221043E
  * 
+ * NOTES
+ * - hide id = route_fir_point_container, silloin kun kent‰t on samassa maassa
+ * - show id = route_fir_point_container, silloin kun on valittu eri maissa olevat kent‰t
+ * getFirPointByName
+ * 
+ * 
  * Phase 2
  * - maiden v‰liset ilm. pisteet, Viron AIP:st‰, kartasta. Ruotsin suuntaan pisteet lˆytyy suomen AIP:st‰.
  *   - http://eaip.eans.ee/2015-12-10/graphics/eAIP/AIRAC-AMDT-11-2015/ENR-ENRC-12112015.pdf
  *     - katso uusin versio
- *   - ANC kartta: http://eaip.eans.ee/files/ESTONIAN_VFR_2015_CHART.pdf
+ *   + ANC kartta: http://eaip.eans.ee/files/ESTONIAN_VFR_2015_CHART.pdf
  *   -> tiedostoon
- * - UI: jos eri maan kent‰t, lis‰‰ reitti osuuteen uusi vfr piste lista
- * - modausta tarvitaan ylim‰‰r‰isen reittipisteen takia
- *   - reitin pituuden laskenta, optimointi
- * - EET ajan laskenta
+ * + UI: jos eri maan kent‰t, lis‰‰ reitti osuuteen uusi vfr piste lista
+ * + modausta tarvitaan ylim‰‰r‰isen reittipisteen takia
+ * + reitin k‰sittely
+ *   + laskelmat -taulukon t‰yttˆ
+ *   + pituuksien laskenta
+ *   + reittikartan piirt‰minen
+ * + EET ajan laskenta
  *   - onnistuu helposti jos on rajalla oleva v‰lipiste
+ *   + laske
+ *   + p‰ivit‰ plaaniin
+ * + FIR piste mukaan reittikentt‰‰n, myˆs tallennettuun plaaniin
  * 
- * + Free route airspace?
- *   - http://eaip.eans.ee/2015-12-10/html/eAIC/EE-eAIC-2015-04-A-en-GB.html?amdt=show
- *   - Additional point can either be a navaid (as published in ENR 4.1) or a significant point (as published in ENR 4.4) in the national AIPs of Estonia, Finland, Latvia or Norway.
+ * TODO Phase 2
+ * - Parempi reitin kokonaisuuden optimointi FIR pisteen kanssa
+ * - FIR pisteiden tallennus johonkin fiksusti
+ * - merkitse FIR valinta jollain v‰rill‰?
+ * - UI tarkistus
+ *   - Tarviiko FIR lista otsikon?
+ *   - onko muuten fiksu?
+ *   - liian kiinni seuraavassa listassa?
  * 
  * 
  * https://aim.eans.ee/index.php?option=com_content&view=article&id=129&Itemid=2&lang=en
@@ -162,7 +179,7 @@ Muutoksia:
  * 
  */
 
-var log="Ohjelmakoodi p‰iv‰tty: 2016-02-28<br>";
+var log="Ohjelmakoodi p‰iv‰tty: 2016-03-01<br>";
 var CurrentVfrRepArray;
 var VfrRepArray;
 var OtherVfrRepArray; // Viro
@@ -178,6 +195,7 @@ var gPosition_lon;
 var flightPlanLink; // created link to flight plan
 var gCalculatedFlyingTimeStr;
 var gSelectedFlyingTimeStr;
+var gTotalFlightTimeToFirBorder;
 
 var airspaceData;
 
@@ -1426,8 +1444,6 @@ function onChangeAircraftSpeed() {
 
 	//$('#departure').selectmenu('refresh');
 	//$('#destination').selectmenu('refresh');
-
-	//createFlyingTimeTable();
 }
 
 function onChangePilot() {
@@ -1605,7 +1621,6 @@ function updateFromLocalStorage() {
 		//ebug_log("otherFieldsEnabled=" + otherEnabled);
 		document.getElementById("otherFieldsEnabled").value = otherEnabled;
 	}
-	//createFlyingTimeTable();
 	
 	updateAircraftSelectionList();
 }
@@ -2084,6 +2099,81 @@ function fillVfrWaypointSelectionData(elSelection, dep, dest) {
 		elSelection.selectedIndex = 1;
 	}
 }
+
+
+// TODO this is not most accurate sorting...
+// Let's see if this is good enough
+function sortFirPoints(array, dep, dest) {
+	//debug_log("sortFirPoints");
+	for (var ind=0; ind<array.length; ++ind) {
+		var d1 = calcDistanceFrom(array[ind].lat, array[ind].lon, dep.lat, dep.lon);
+		var d2 = calcDistanceFrom(array[ind].lat, array[ind].lon, dest.lat, dest.lon);
+		array[ind].setDistance(d1+d2);
+		//debug_log("sortFirPoints - " + array[ind].name + " " + array[ind].getDistance() + " km" );
+	}
+	array.sort(waypointDistanceSort);
+	return array;
+}
+
+
+function getFIRpoints( depCountry, destCountry ) {
+	//debug_log("getFIRpoints between countries " + depCountry + " and "+ destCountry);
+
+	// TODO load this data from file at the same time than other countries fields
+	var FirPointArray = new Array();
+	FirPointArray.push(new Waypoint("MOHNI", DMS_to_Decimal("595349N"), DMS_to_Decimal("0253506E")));
+	FirPointArray.push(new Waypoint("BALTI", DMS_to_Decimal("595415N"), DMS_to_Decimal("0251506E")));
+	FirPointArray.push(new Waypoint("DOBAN", DMS_to_Decimal("594758N"), DMS_to_Decimal("0242709E")));
+	FirPointArray.push(new Waypoint("PETOT", DMS_to_Decimal("593040N"), DMS_to_Decimal("0230831E")));
+	FirPointArray.push(new Waypoint("OSTOT", DMS_to_Decimal("591715N"), DMS_to_Decimal("0221043E")));
+
+	//debug_log("getFIRpoints return");
+	return FirPointArray;
+}
+
+function getFirPointByName( name ) {
+	var array = getFIRpoints("EF", "EE"); // TODO hardcoded for development time testing. This should be read from global table, which contains all FIR points.
+
+	for (var wptInd=0; wptInd<array.length; ++wptInd) {
+		if (name == array[wptInd].name) {
+			return array[wptInd];
+		}
+	}
+	return null;
+}
+
+
+
+function fillFIRwaypointSelectionData(elSelection, dep, dest) {
+	//debug_log("fillFIRwaypointSelectionData");
+
+	removeOptions(elSelection);
+	// Show or hide FIR point container based on countries
+	if (getCountryByICAO(dep.icao) == getCountryByICAO(dest.icao)) {
+		$('#route_fir_point_container').slideUp();
+		return;
+	}
+	else {
+		$('#route_fir_point_container').slideDown();
+	}
+
+	var firWaypoints = getFIRpoints( getCountryByICAO(dep.icao), getCountryByICAO(dest.icao) );
+	if (firWaypoints.length == 0) {
+		debug_log("fillFIRwaypointSelectionData - I don't know FIR points between countries " + getCountryByICAO(dep.icao) + " and "+ getCountryByICAO(dest.icao) + ".");
+		return;
+	}
+	
+	sortFirPoints(firWaypoints, dep, dest);
+	
+	// Empty ref point
+	// Future option, with DCT route we should calculate coordinates and time for that point.
+	//appendOption(elSelection, "-", "");
+	
+	for (var i=0; i<firWaypoints.length; ++i) {
+		appendOption(elSelection, firWaypoints[i].name, firWaypoints[i].name);
+	}
+}
+
 
 
 // 	x		torniin
@@ -2681,14 +2771,14 @@ function updateMapData(routeArray) {
 			outcode |= getOutcode(routeArray[i].lon, routeArray[i].lat, next.lon, next.lat);
 			//debug_log("outcode=" + outcode);
 			
-			if (i==0 || i==3) { // Airfields are first and fourth items
+			if (i==0 || i==routeArray.length-1) { // Airfields are first and last items
 				var name = routeArray[i].icao;
 				if (name == "ZZZZ") {
 					name += "-" + routeArray[i].name;
 				}
 				drawAirfield(ctx, scaleToScreenX(routeArray[i].lon), scaleToScreenY(routeArray[i].lat), name, outcode);
 			}
-			if (i==1 || i==2) { // VFR points are second and third items
+			else {     // VFR or FIR points are all other than first and last items
 				drawVfrPoint(ctx, scaleToScreenX(routeArray[i].lon), scaleToScreenY(routeArray[i].lat), routeArray[i].name, outcode);
 			}
 			// Route
@@ -2697,7 +2787,7 @@ function updateMapData(routeArray) {
 		}
 	}
 	// Special handling for visualizing local flight, and extra special for Malmi ;)
-	if (routeArray[0] == routeArray[3] && routeArray[1] == null && routeArray[2] == null) {
+	if (routeArray[0] == routeArray[routeArray.length-1] && routeArray[1] == null && routeArray[2] == null && routeArray[3] == null) {
 		// http://www.w3schools.com/tags/tryit.asp?filename=tryhtml5_canvas_quadraticcurveto
 		if (routeArray[0].icao == "EFHF") {
 			ctx.beginPath();
@@ -2735,7 +2825,6 @@ function updateMapData(routeArray) {
 	drawAllAirfields(ctx);
 }
 
-
 function onChangeDepartureAd() {
 	//debug_log("onChangeDepartureAd");
 	var dep=document.getElementById("departure");
@@ -2752,6 +2841,9 @@ function onChangeDepartureAd() {
 	fillVfrWaypointSelectionData(document.getElementById("route_destination_rep"), destAerodrome, depAerodrome);
 	$('#route_departure_rep').selectmenu('refresh');
 	$('#route_destination_rep').selectmenu('refresh');
+	
+	fillFIRwaypointSelectionData(document.getElementById("route_fir_point"), depAerodrome, destAerodrome);
+	$('#route_fir_point').selectmenu('refresh');
 	
 	updatePlanActivationMethods( document.getElementById("planActivationMethod"), depAerodrome );
 	$('#planActivationMethod').selectmenu('refresh');
@@ -2783,6 +2875,9 @@ function onChangeDestinationAd() {
 	fillVfrWaypointSelectionData(document.getElementById("route_destination_rep"), destAerodrome, depAerodrome);
 	$('#route_departure_rep').selectmenu('refresh');
 	$('#route_destination_rep').selectmenu('refresh');
+
+	fillFIRwaypointSelectionData(document.getElementById("route_fir_point"), depAerodrome, destAerodrome);
+	$('#route_fir_point').selectmenu('refresh');
 
 	updatePlanActivationMethods( document.getElementById("planCompletionMethod"), destAerodrome );
 	$('#planCompletionMethod').selectmenu('refresh');
@@ -2959,12 +3054,14 @@ function createFlyingTimeTable() {
 	
 	var dep=document.getElementById("departure").value;
 	var dep_rep=document.getElementById("route_departure_rep").value;
+	var fir_rep=document.getElementById("route_fir_point").value;
 	var dest_rep=document.getElementById("route_destination_rep").value;
 	var dest=document.getElementById("destination").value;
 	
 	var array=new Array();
 	array.push(getAerodromeByIndex(dep));
 	array.push(getVfrWayPointByName(dep_rep));
+	array.push(getFirPointByName(fir_rep));
 	array.push(getVfrWayPointByName(dest_rep));
 	array.push(getAerodromeByIndex(dest));
 	
@@ -3012,6 +3109,12 @@ function createFlyingTimeTable() {
 
 			var legDist = calcDistanceFrom(prev.lat, prev.lon, array[i].lat, array[i].lon);
 			totalDist += legDist;
+			
+			// This means FIR point. Let's take up flight time, it is used later in EET field in FPL
+			if (i==2) { // Hard coded value for third item... Assuming that it is FIR point.
+				gTotalFlightTimeToFirBorder = getTimeFromDistance(totalDist, aircraftSpeed);
+			}
+			
 			row = rowBegin;
 
 			if (array[i].icao === undefined) {
@@ -3171,6 +3274,7 @@ function updateFlightPlanLink() {
 	}
 	linkString += "&level=" + level;
 	
+	// Combine route
 	linkString += "&route=";
 	var routeStr="";
 	if (document.getElementById("route_departure_rep").value !== "") {
@@ -3181,6 +3285,12 @@ function updateFlightPlanLink() {
 			routeStr += " ";
 		}
 		routeStr += document.getElementById("route").value;
+	}
+	if (document.getElementById("route_fir_point").value !== "") {
+		if (routeStr.length > 0) { // Add space if needed
+			routeStr += " ";
+		}
+		routeStr += document.getElementById("route_fir_point").value;
 	}
 	if (document.getElementById("route_destination_rep").value !== "") {
 		if (routeStr.length > 0) { // Add space if needed
@@ -3257,9 +3367,9 @@ function updateFlightPlanLink() {
 	
 	// If country is changing, then EET information must be added.
 	if (getCountryByICAO(dep_icao) != getCountryByICAO(dest_icao)) {
-		other += "EET%252FPaikkaHHMM" + " ";
-		alertText += "\nEET tiedon paikka ja aika (FIR-rajan tunnuskohta ja arvioitu lentoaika siihen)";
-		showAlertText = true;
+		var firPoint = document.getElementById("route_fir_point").value;
+		// Calculate flight time to FIR point
+		other += "EET%252F" + firPoint + convertFlyingTimeToString(gTotalFlightTimeToFirBorder) + " ";
 	}
 
 	other += "RMK%252F";
@@ -3464,6 +3574,11 @@ function getPlanForStoring() {
 	plan.dep_route = document.getElementById("route_departure_rep").value;
 	var route = document.getElementById("route").value;
 	plan.route = $( '<p>'+ route +'</p>').text(); // Remove html from input field...
+	if (plan.route.length != 0) {
+		plan.route += " ";
+	}
+	plan.route += document.getElementById("route_fir_point").value;
+
 	plan.dest_route = document.getElementById("route_destination_rep").value;
 	plan.destination = dest_icao;
 	plan.dest_name = getAerodromeByIndex( document.getElementById("destination").value ).name;
