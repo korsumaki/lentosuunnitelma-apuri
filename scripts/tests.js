@@ -239,7 +239,6 @@ test( "Metar JSON Parsing", function() {
 	equal( metar.data.EFTP.raw, "EFTP 211850Z AUTO 22001KT CAVOK 05\/01 Q1019"  );
 	//debug_log("METAR: metar.data.EFTP.raw=" + metar.data.EFTP.raw);
 
-	// TODO find way to read metar.data.EFTP.raw without hardcoding EFTP...
 	var sel = "EFTP";
 	equal( metar.data[sel].station, "EFTP"  );
 });
@@ -279,6 +278,7 @@ test( "JSON validity check", function( assert ) {
 			ZZZZFieldsFilename = "";
 			AirspaceFilename = "";
 			EE_AerodromesFilename = "";
+			FirPointsFilename = "";
 			
 			var prevDate = new Date();
 			var firstDateWithinRange = 0;
@@ -310,17 +310,20 @@ test( "JSON validity check", function( assert ) {
 					ZZZZFieldsFilename = "";
 					AirspaceFilename = "";
 					EE_AerodromesFilename = "";
+					FirPointsFilename = "";
 
 					AerodromesFilename = data.data[i].aerodromes;
 					ZZZZFieldsFilename = data.data[i].zzzzfields;
 					VFRPortFilename = data.data[i].vfrpoints;
 					AirspaceFilename = data.data[i].airspace;
 					EE_AerodromesFilename = data.data[i].EE_aerodromes;
+					FirPointsFilename = data.data[i].FirPoints;
 					console.log( "file1: " + AerodromesFilename);
 					console.log( "file2: " + ZZZZFieldsFilename);
 					console.log( "file3: " + VFRPortFilename);
 					console.log( "file4: " + AirspaceFilename);
 					console.log( "file5: " + EE_AerodromesFilename);
+					console.log( "file6: " + FirPointsFilename);
 				}
 				else { 
 					equal(firstDateWithinRange, 1, "First date should be included in ranges");
@@ -330,12 +333,14 @@ test( "JSON validity check", function( assert ) {
 				notEqual(data.data[i].EE_aerodromes, "", "EE_aerodromes not empty (during loop)");
 				notEqual(data.data[i].zzzzfields, "", "zzzzfields not empty (during loop)");
 				notEqual(data.data[i].airspace, "", "airspace not empty (during loop)");
+				notEqual(data.data[i].FirPoints, "", "FirPoints not empty (during loop)");
 
 				notEqual(data.data[i].vfrpoints, undefined, "vfrpoints exists (during loop)");
 				notEqual(data.data[i].aerodromes, undefined, "aerodromes exists (during loop)");
 				notEqual(data.data[i].EE_aerodromes, undefined, "EE_aerodromes exists (during loop)");
 				notEqual(data.data[i].zzzzfields, undefined, "zzzzfields exists (during loop)");
 				notEqual(data.data[i].airspace, undefined, "airspace exists (during loop)");
+				notEqual(data.data[i].FirPoints, undefined, "FirPoints exists (during loop)");
 				
 				// Check that file actually founds
 				$.get(data.data[i].vfrpoints, 
@@ -368,6 +373,16 @@ test( "JSON validity check", function( assert ) {
 					}).fail(function() {
 						ok( 0 == "1", "Failure in EE_aerodromes file loading." );
 					});
+				$.get(data.data[i].FirPoints, 
+					function(data, textStatus, jqXHR) {
+						console.log( "FirPoints success" );
+						actualValidFileCount++;
+						if (actualValidFileCount == expectedFileCount) {
+							done();
+						}
+					}).fail(function() {
+						ok( 0 == "1", "Failure in FirPoints file loading." );
+					});
 				$.get(data.data[i].zzzzfields, 
 					function(data, textStatus, jqXHR) {
 						console.log( "zzzzfields success" );
@@ -396,11 +411,15 @@ test( "JSON validity check", function( assert ) {
 			notEqual(EE_AerodromesFilename, "", "EE_AerodromesFilename filename is not empty (after selection)");
 			notEqual(ZZZZFieldsFilename, "", "ZZZZ fields filename is not empty (after selection)");
 			notEqual(AirspaceFilename, "", "Airspace filename is not empty (after selection)");
+			notEqual(FirPointsFilename, "", "FirPoints filename is not empty (after selection)");
+
 			notEqual(VFRPortFilename, undefined, "VFR port filename exists (after selection)");
 			notEqual(AerodromesFilename, undefined, "Aerodromes filename exists (after selection)");
 			notEqual(EE_AerodromesFilename, undefined, "EE_Aerodromes filename exists (after selection)");
 			notEqual(ZZZZFieldsFilename, undefined, "ZZZZ fields filename exists (after selection)");
 			notEqual(AirspaceFilename, undefined, "Airspace filename exists (after selection)");
+			notEqual(FirPointsFilename, undefined, "FirPoints filename exists (after selection)");
+
 			console.log( "check filenames check done" );
 
 		}).fail(function() {

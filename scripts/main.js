@@ -119,17 +119,16 @@ Muutoksia:
  * OSTOT 591715N 0221043E
  * 
  * NOTES
- * - hide id = route_fir_point_container, silloin kun kentät on samassa maassa
- * - show id = route_fir_point_container, silloin kun on valittu eri maissa olevat kentät
- * getFirPointByName
+ * + hide id = route_fir_point_container, silloin kun kentät on samassa maassa
+ * + show id = route_fir_point_container, silloin kun on valittu eri maissa olevat kentät
  * 
  * 
  * Phase 2
- * - maiden väliset ilm. pisteet, Viron AIP:stä, kartasta. Ruotsin suuntaan pisteet löytyy suomen AIP:stä.
+ * + maiden väliset ilm. pisteet, Viron AIP:stä, kartasta. Ruotsin suuntaan pisteet löytyy suomen AIP:stä.
  *   - http://eaip.eans.ee/2015-12-10/graphics/eAIP/AIRAC-AMDT-11-2015/ENR-ENRC-12112015.pdf
  *     - katso uusin versio
  *   + ANC kartta: http://eaip.eans.ee/files/ESTONIAN_VFR_2015_CHART.pdf
- *   -> tiedostoon
+ *     -> tiedostoon
  * + UI: jos eri maan kentät, lisää reitti osuuteen uusi vfr piste lista
  * + modausta tarvitaan ylimääräisen reittipisteen takia
  * + reitin käsittely
@@ -144,12 +143,21 @@ Muutoksia:
  * 
  * TODO Phase 2
  * - Parempi reitin kokonaisuuden optimointi FIR pisteen kanssa
- * - FIR pisteiden tallennus johonkin fiksusti
- * - merkitse FIR valinta jollain värillä?
+ * + FIR pisteiden tallennus johonkin fiksusti
+ *   + oma tiedosto missä pisteelle on mainittu minkä maiden välillä se on
  * - UI tarkistus
- *   - Tarviiko FIR lista otsikon?
+ *   + merkitse FIR valinta jollain erityisellä värillä?
+ *   + Tarviiko FIR lista otsikon?
  *   - onko muuten fiksu?
- *   - liian kiinni seuraavassa listassa?
+ *   + liian kiinni seuraavassa listassa? -> lisätty marginaalia
+ * - take care of situation when apuri is started abroad
+ * 
+ * - Tarkista muiden maiden ohjeista miten siellä täytetään EET?
+ * - ZZZZ ohjeessa on eroa Ruotsissa
+ * 
+ * http://demos.jquerymobile.com/1.4.5/body-bar-classes/
+ * <div class="ui-body ui-body-a ui-corner-all">
+ * 
  * 
  * 
  * https://aim.eans.ee/index.php?option=com_content&view=article&id=129&Itemid=2&lang=en
@@ -159,6 +167,13 @@ Muutoksia:
  * 
  * 
  * Phase 3
+ * - Ruotsi
+ *   - VFR Flight in Sweden
+ *     http://www.daec.de/fileadmin/user_upload/files/2012/fachbereiche/luftraum/A3-2007VFR_SCHW..pdf
+ *   - https://www.aro.lfv.se/Editorial/View/IAIP
+ * 
+ * 
+ * 
  * - ilmatilat?
  * 
  * + UTF-8 merkistö?? Ääkköset?
@@ -179,10 +194,12 @@ Muutoksia:
  * 
  */
 
-var log="Ohjelmakoodi päivätty: 2016-03-01<br>";
+var log="Ohjelmakoodi päivätty: 2016-03-04<br>";
 var CurrentVfrRepArray;
 var VfrRepArray;
 var OtherVfrRepArray; // Viro
+var gFirPointArray;
+
 
 var CurrentAerodromeArray; // Contains either Official or Official+ZZZZ fields, depending on user selection.
 var OfficialAerodromeArray;
@@ -205,6 +222,7 @@ var AerodromesFilename = "";
 var ZZZZFieldsFilename = "";
 var AirspaceFilename = "";
 var EE_AerodromesFilename = ""; // Viron kentät
+var FirPointsFilename = "";
 
 // These sizes will change based on screen size
 var CANVAS_WIDTH = 300;
@@ -1010,6 +1028,32 @@ function aerodromeJsonHandler(data) {
 	//debug_log( "aerodromeJsonHandler: end");
 }
 
+
+// Handle FIR points for other countries
+function FirPointsJsonHandler(data) {
+	//debug_log( "FirPointsJsonHandler");
+
+	gFirPointArray = new Array();
+
+	for (var i=0; i<data.FirPoints.length; ++i) {
+		//debug_log( "FirPointsJsonHandler - country " + i + ": " + data.FirPoints[i].country);
+
+		// Create new array for country, if it does not yet exist
+		if (gFirPointArray[data.FirPoints[i].country] == undefined) {
+			//debug_log( "FirPointsJsonHandler - create new array");
+			gFirPointArray[data.FirPoints[i].country] = new Array();
+		} 
+		
+		gFirPointArray[data.FirPoints[i].country].push(new Waypoint(data.FirPoints[i].name, 
+			DMS_to_Decimal(data.FirPoints[i].lat), 
+			DMS_to_Decimal(data.FirPoints[i].lon)));
+	}
+	
+	// TODO this is not needed. but we should take care of situation when this is started abroad
+	//continueIfEverythingIsReady();
+}
+
+
 function loadAerodromeJson() {
 	// Load only if needed
 	if (document.getElementById("otherFieldsEnabled").value == "enabled") {
@@ -1018,6 +1062,13 @@ function loadAerodromeJson() {
 				aerodromeJsonHandler(data);
 			}).fail(function() {
 				alert("Virhe '" + EE_AerodromesFilename + "' tiedoston lataamisessa. Kokeile ladata sivu uudestaan. Jos vika ei poistu, ota yhteyttä Lentosuunnitelma-apurin tekijään.");
+			}).always(function() {
+			});
+		$.getJSON(FirPointsFilename,
+			function(data, textStatus, jqXHR) {
+				FirPointsJsonHandler(data);
+			}).fail(function() {
+				alert("Virhe '" + FirPointsFilename + "' tiedoston lataamisessa. Kokeile ladata sivu uudestaan. Jos vika ei poistu, ota yhteyttä Lentosuunnitelma-apurin tekijään.");
 			}).always(function() {
 			});
 	}
@@ -1904,6 +1955,7 @@ function loadValidityJson()
 					VFRPortFilename = data.data[i].vfrpoints;
 					AirspaceFilename = data.data[i].airspace;
 					EE_AerodromesFilename = data.data[i].EE_aerodromes;
+					FirPointsFilename = data.data[i].FirPoints;
 				}
 			}
 			if (AerodromesFilename == "" && ZZZZFieldsFilename == "" && VFRPortFilename == "" && EE_AerodromesFilename == "") {
@@ -2116,29 +2168,38 @@ function sortFirPoints(array, dep, dest) {
 }
 
 
+// Find FIR points which are between depCountry and destCountry.
+// TODO country could be "EE-EF" and "ES-EF". Then find 'depCountry+"-"+destCountry' and vise versa
 function getFIRpoints( depCountry, destCountry ) {
 	//debug_log("getFIRpoints between countries " + depCountry + " and "+ destCountry);
 
-	// TODO load this data from file at the same time than other countries fields
-	var FirPointArray = new Array();
-	FirPointArray.push(new Waypoint("MOHNI", DMS_to_Decimal("595349N"), DMS_to_Decimal("0253506E")));
-	FirPointArray.push(new Waypoint("BALTI", DMS_to_Decimal("595415N"), DMS_to_Decimal("0251506E")));
-	FirPointArray.push(new Waypoint("DOBAN", DMS_to_Decimal("594758N"), DMS_to_Decimal("0242709E")));
-	FirPointArray.push(new Waypoint("PETOT", DMS_to_Decimal("593040N"), DMS_to_Decimal("0230831E")));
-	FirPointArray.push(new Waypoint("OSTOT", DMS_to_Decimal("591715N"), DMS_to_Decimal("0221043E")));
-
-	//debug_log("getFIRpoints return");
-	return FirPointArray;
+	var arr = new Array();
+	if (gFirPointArray[destCountry] != undefined) {
+		arr = arr.concat(gFirPointArray[destCountry]);
+	}
+	if (gFirPointArray[depCountry] != undefined) {
+		arr = arr.concat(gFirPointArray[depCountry]);
+	}
+	return arr;
 }
 
 function getFirPointByName( name ) {
-	var array = getFIRpoints("EF", "EE"); // TODO hardcoded for development time testing. This should be read from global table, which contains all FIR points.
-
-	for (var wptInd=0; wptInd<array.length; ++wptInd) {
-		if (name == array[wptInd].name) {
-			return array[wptInd];
+	//debug_log("getFirPointByName - searching FIR point: " + name );
+	if (name == "") {
+		return null;
+	}
+	
+	for (var country in gFirPointArray) {
+		//debug_log("getFirPointByName - country: " + country );
+		for (var i=0; i<gFirPointArray[country].length; ++i) {
+			//debug_log("getFirPointByName - name: " + gFirPointArray[country][i].name );
+			if (name == gFirPointArray[country][i].name) {
+				//debug_log("getFirPointByName - found!");
+				return gFirPointArray[country][i];
+			}
 		}
 	}
+	debug_log("ERROR: getFirPointByName - '" + name + "' not found");
 	return null;
 }
 

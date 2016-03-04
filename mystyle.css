@@ -7,3 +7,7 @@ text-align:center;
 .location-not-available, .settings-not-done{
 	background:red !important;
 }
+
+#route_fir_point_container {
+	margin-bottom: 0.5em;
+}
