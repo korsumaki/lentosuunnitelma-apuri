@@ -4,10 +4,11 @@
 		<meta charset="ISO-8859-1">
 		<title>Tietoja Lentosuunnitelma-apurista</title> 
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"> 
-		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
+		<link rel="shortcut icon" href="favicon.ico">
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css" />
 		<link rel="stylesheet" href="mystyle.css" />
-		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-		<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>
 	</head> 
 
 <body>
@@ -63,9 +64,16 @@
 	
 <hr>
 <h2>Erikoistilanteet</h2>
+	<h3>Viron lentopaikat</h3>
+		<p>Apurilla on tiedossa myös Viron lentokentät.
+			Nämä kentät saa käyttöön Perustiedot sivulta kääntämällä "Näytä Viron lentopaikat" valinta päälle.
+			Tämän jälkeen Viron lentopaikat tulee näkyviin Lähtö- ja Laskupaikkojen luetteloon.</p>
+		<p>Kun lähtö- ja laskupaikka ovat eri maissa, tulee reitti-osioon "FIR rajan ylitys" valinta. Tästä valitaan se minkä ilmoittautumispisteen kautta ylitetään FIR raja.
+			Tämän perusteella Apuri täyttää lentosuunnitelman kohtaan 18 EET tiedon.</p>
+
 	<h3>Tunnetut epäviralliset lentopaikat</h3>
 		<p>Apuri tunnistaa myös useita epävirallisia lentopaikkoja ("ZZZZ"), mm. kevytlentopaikat, jääkenttiä ja muita peltokenttiä. 
-			Nämä kentät saa näkyviin Perustiedot sivulta kääntämällä "Näytä myös epäviralliset lentopaikat" valinta päälle.
+			Nämä kentät saa käyttöön Perustiedot sivulta kääntämällä "Näytä epäviralliset lentopaikat" valinta päälle.
 			Tämän jälkeen epäviralliset lentopaikat tulee näkyviin Lähtö- ja Laskupaikkojen luetteloon.</p>
 		<p>Apuri täyttää näidenkin lentopaikkojen tiedot oikein lentosuunnitelmaan (mm. koordinaatit), laskee lentoajat ja tietää ACC sektorit.</p>
 		<p>Vaikka Apuri tunnistaa jonkun epävirallisen lentopaikan, se ei tarkoita että paikka olisi käytettävissä.
@@ -111,13 +119,13 @@
 	<h3>DCT reitti</h3>
 		<p>VFR ilmoittautumispisteen voi jättää tyhjäksi valitsemalla "-", jolloin reitin voi kirjoittaa vapaamuotoisemmin Reitti -kohdassa olevaan tekstikenttään. </p>
 	<h3>Virhetilanteet</h3>
-		<p>On havaittu että jos iPhonessa tai iPadissa on Private Browsing (yksityinen selaus) asetus päällä, Apuri ei pysty toimimaan. Ota Private Browsing pois päältä.</p>
+		<p>Jos iPhonessa tai iPadissa on Private Browsing (yksityinen selaus) asetus päällä, Apuri ei pysty toimimaan. Ota Private Browsing pois päältä.</p>
 	<h3>HAKKI puuttuu Malmin ja Vantaan välistä?</h3>
 		<p>Apurista on poistettu VFR piste HAKKI Malmin ja Vantaan välistä, 
 			siksi ettei Apuri ehdottaisi reittiä Vantaan alueen kautta. Perus-VFR lennot harvemmin menee sen kautta (yleensäkin harvemmin Vantaalle, joka muuten sekin puuttuu).
 			</p>
-	<h3>Apuri ei tunne ilmatilarajoja</h3>
-		<p>Apuri ei tunne ilmatilarajoja. Tämä täytyy ottaa huomioon, kun lentoreitti kiertää jotain rajoittavaa ilmatilaa, esim. Malmilta toimittaessa Vantaan ilmatila.
+	<h3>Apurin reitinvalinta ei tunne ilmatilarajoja</h3>
+		<p>Apurin reitinvalinta ei tunne ilmatilarajoja. Tämä täytyy ottaa huomioon, kun lentoreitti kiertää jotain rajoittavaa ilmatilaa, esim. Malmilta toimittaessa Vantaan ilmatila.
 			Käyttäjän täytyy itse huomioida paljonko lentoaikaa täytyy lisätä kiertämisen takia, ja lisätä lentoaikaa kohdasta "Lentoajan muuttaminen...".
 			</p>
 	<!--h3>Erikoiset laitteet</h3>
