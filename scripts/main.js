@@ -194,7 +194,7 @@ Muutoksia:
  * 
  */
 
-var log="Ohjelmakoodi p‰iv‰tty: 2016-03-04<br>";
+var log="Ohjelmakoodi p‰iv‰tty: 2016-04-03<br>";
 var CurrentVfrRepArray;
 var VfrRepArray;
 var OtherVfrRepArray; // Viro
@@ -1980,9 +1980,30 @@ function loadAirspaceJson()
 		});
 }
 
+function isPrivateBrowsingOn() {
+	var testKey = "Private";
+	//debug_log( "isPrivateBrowsingOn");
+	try
+	{
+		localStorage.setItem(testKey, 'test');
+		localStorage.removeItem(testKey);
+		return false;
+	}
+	catch (error)
+	{
+		return true;
+	}
+}
+
+
 function onLoad()
 {
 	window.addEventListener('resize', resizeCanvas, false);
+	if (isPrivateBrowsingOn()) {
+		var str = "Private Browsing (Yksityinen selaus) on p‰‰ll‰ selaimessasi. Apuri ei voi toimia t‰ss‰ tilassa. Palaa takaisin normaalin tilaan ja lataa sivu uudestaan.";
+		debug_log( str );
+		alert( str );
+	}
 	updateFromLocalStorage();
 	loadValidityJson();
 	resizeCanvas();
