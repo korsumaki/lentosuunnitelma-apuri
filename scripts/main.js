@@ -3806,12 +3806,18 @@ function importSettings(event) {
         reader = new FileReader();
     reader.onload = function() {
         dataStr = reader.result;
-        console.log(dataStr);
-        var data = JSON.parse(dataStr);
-        for(var key in data) {
-            localStorage[key] = data[key];
-        }
-        updateFromLocalStorage();
+        //console.log(dataStr);
+		try {
+	        var data = JSON.parse(dataStr);
+	        for(var key in data) {
+	            localStorage[key] = data[key];
+	        }
+	        updateFromLocalStorage();
+	        onChangeAircraftSpeed();
+	        updateStoredPlanList() ;
+		} catch(err) {
+			alert("Virhe JSON tiedoston lataamisessa. Tiedosto on virheellinen.\n" + err );
+		}
     };
     reader.readAsText(input.files[0]);
 }
