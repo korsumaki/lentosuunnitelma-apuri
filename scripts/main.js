@@ -2036,7 +2036,8 @@ function onStartup() {
 
 	initStoredPlanPageHandler();
 
-	hideOFPContainer();
+   hideOFPContainer();
+
 }
 
 
@@ -3775,3 +3776,48 @@ function getNotamLink(icao) {
 	//https://ais.fi/ais/eaip/html/efet.htm
 //}
 
+
+function exportSettings() {
+    // export all locally stored data into a JSON file
+
+    // http://jsfiddle.net/k56eezxp/
+    var jsonFile = null,
+        _createJsonFileUrl = function(txt) {
+            var data = new Blob([txt], {type: 'application/json'});
+            if(jsonFile !== null) {
+                window.URL.revokeObjectURL(jsonFile);
+            }
+            jsonFile = window.URL.createObjectURL(data);
+            return jsonFile;
+        },
+        link = document.createElement("a");
+    link.setAttribute("download", "fpl-data.json");
+    link.href = _createJsonFileUrl(JSON.stringify(localStorage));
+    document.body.appendChild(link);
+    window.requestAnimationFrame(function() {
+        link.dispatchEvent(new MouseEvent("click"));
+        document.body.removeChild(link);
+    });
+}
+
+function importSettings(event) {
+    var dataStr = "",
+        input = event.target,
+        reader = new FileReader();
+    reader.onload = function() {
+        dataStr = reader.result;
+        //console.log(dataStr);
+		try {
+	        var data = JSON.parse(dataStr);
+	        for(var key in data) {
+	            localStorage[key] = data[key];
+	        }
+	        updateFromLocalStorage();
+	        onChangeAircraftSpeed();
+	        updateStoredPlanList() ;
+		} catch(err) {
+			alert("Virhe JSON tiedoston lataamisessa. Tiedosto on virheellinen.\n" + err );
+		}
+    };
+    reader.readAsText(input.files[0]);
+}
