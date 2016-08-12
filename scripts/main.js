@@ -158,7 +158,15 @@ Muutoksia:
  * http://demos.jquerymobile.com/1.4.5/body-bar-classes/
  * <div class="ui-body ui-body-a ui-corner-all">
  * 
- * 
+ * Jyrkin kommentit
+ * - EET tiedon näyttäminen apurissa (nyt se näkyy vain plaanilla)
+ *   - laskelmat -taulukkoon
+ * - EET tiedon muuttaminen apurissa?
+ *   - hienosäätö jos haluaa tarkan ajan
+ *   - plus ja miinus napit
+ * - vaara-aluekartta ylemmäs, tai muutto niin ettei taulukko resetoidu
+ *   - kommentti että saattaa nollata kenttä- ja reittivalinnat
+ * - Viron ilmatilat
  * 
  * https://aim.eans.ee/index.php?option=com_content&view=article&id=129&Itemid=2&lang=en
  * 
@@ -194,7 +202,7 @@ Muutoksia:
  * 
  */
 
-var log="Ohjelmakoodi päivätty: 2016-04-03<br>";
+var log="Ohjelmakoodi päivätty: 2016-08-11<br>";
 var CurrentVfrRepArray;
 var VfrRepArray;
 var OtherVfrRepArray; // Viro
@@ -2036,8 +2044,7 @@ function onStartup() {
 
 	initStoredPlanPageHandler();
 
-   hideOFPContainer();
-
+	hideOFPContainer();
 }
 
 
