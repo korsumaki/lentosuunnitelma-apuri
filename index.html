@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 	<head> 
-		<meta charset="ISO-8859-1">
 		<title>Lentosuunnitelma</title> 
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"> 
 		<link rel="shortcut icon" href="favicon.ico">
@@ -24,12 +23,12 @@
 		</div> 
 
 		<div data-role="content">
-			<p style='background:pink'>Lentosuunnitelma-apurin sijainti on muuttunut (01/2016), olethan päivittänyt kirjanmerkkisi:<br>
+			<p style='background:pink'>Lentosuunnitelma-apurin sijainti on muuttunut (01/2016), olethan pÃ¤ivittÃ¤nyt kirjanmerkkisi:<br>
 			<a href="http://korsu.mbnet.fi/ilmailu/plan3/">http://korsu.mbnet.fi/ilmailu/plan3/</a></p>
 			<div class="ui-field-contain">
 				<fieldset data-role="controlgroup" data-mini="true">
 					<legend>
-						Lähtöpaikka
+						LÃ¤htÃ¶paikka
 					</legend>
 					<select id="departure" onchange="onChangeDepartureAd()" data-mini="true">
 						<option value="none">(not loaded)</option>
@@ -37,7 +36,7 @@
 				</fieldset>
 				<fieldset data-role="controlgroup" id="zzzz_departure_container" data-mini="true">
 					<legend></legend>
-					<input id="zzzz_departure" type="text" placeholder="Lähtöpaikan nimi" data-mini="true"/>
+					<input id="zzzz_departure" type="text" placeholder="LÃ¤htÃ¶paikan nimi" data-mini="true"/>
 				</fieldset>
 			</div>
 			<div class="ui-field-contain">
@@ -72,7 +71,7 @@
 				<fieldset data-role="controlgroup" data-mini="true">
 					<legend>
 					</legend>
-					<input id="route" type="text" data-mini="true" placeholder="Reitin muut määritykset tai käännepisteet" />
+					<input id="route" type="text" data-mini="true" placeholder="Reitin muut mÃ¤Ã¤ritykset tai kÃ¤Ã¤nnepisteet" />
 				</fieldset>
 				<fieldset data-role="controlgroup" id="route_fir_point_container" data-mini="true">
 					<legend>
@@ -105,8 +104,8 @@
 						<option value="VFR" selected="selected">VFR</option>
 						<option value="F">F (lentopinta)</option>
 						<option value="A">A (korkeus merenpinnasta, 100 jalkaa)</option>
-						<option value="S">S (korkeus std paineella, 10 metriä)</option>
-						<option value="M">M (korkeus merenpinnasta, 10 metriä)</option>
+						<option value="S">S (korkeus std paineella, 10 metriÃ¤)</option>
+						<option value="M">M (korkeus merenpinnasta, 10 metriÃ¤)</option>
 					</select>
 				</fieldset>
 				<fieldset data-role="controlgroup" id="flight_level_container" data-mini="true">
@@ -118,7 +117,7 @@
 			<div class="ui-field-contain">
 				<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
 					<legend>
-						Lähtöaika (kuluttua)
+						LÃ¤htÃ¶aika (kuluttua)
 					</legend>
 					<input type="radio" id="departureTime0h" name="departureTimeHour" value="00" />
 					<label for="departureTime0h">0h</label>
@@ -187,7 +186,7 @@
 			<div class="ui-field-contain">
 				<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
 					<legend>
-						Henkilö&shy;määrä
+						HenkilÃ¶&shy;mÃ¤Ã¤rÃ¤
 					</legend>
 					<input type="radio" id="persons1" name="persons" value="001" checked="checked" />
 					<label for="persons1">1</label>
@@ -212,7 +211,7 @@
 			</div>
 
 			<div class="ui-field-contain">
-				<label for="planCompletionMethod">Päättäminen</label>
+				<label for="planCompletionMethod">PÃ¤Ã¤ttÃ¤minen</label>
 				<select id="planCompletionMethod" data-mini="true">
 					<option value="none">(not loaded)</option>
 				</select>
@@ -286,7 +285,7 @@
 			<div class="ui-field-contain">
 				<fieldset data-role="controlgroup" data-type="horizontal">
 					<legend>Lennon&shy;valmistelu&shy;tiedot</legend>
-					<button onclick="onOFPContainerToggleClick();" class="ui-btn ui-shadow ui-mini" id="OFPContainerToggleButton">Näytä / piilota...</button>
+					<button onclick="onOFPContainerToggleClick();" class="ui-btn ui-shadow ui-mini" id="OFPContainerToggleButton">NÃ¤ytÃ¤ / piilota...</button>
 				</fieldset>
 			</div>
 
@@ -341,7 +340,7 @@
 				<input id="storedPlanAircraftIdentification" type="text" data-mini="true">
 			</div> <!-- fieldcontain -->
 			<div class="ui-field-contain">
-				<label for="storedPlanDeparture">Lähtöpaikka</label>
+				<label for="storedPlanDeparture">LÃ¤htÃ¶paikka</label>
 				<input id="storedPlanDeparture" type="text" data-mini="true">
 			</div> <!-- fieldcontain -->
 			<div class="ui-field-contain">
@@ -357,7 +356,7 @@
 				<input id="storedPlanFlightLevel" type="text" data-mini="true">
 			</div> <!-- fieldcontain -->
 			<div class="ui-field-contain">
-				<label for="storedPlanTakeoffTime">Lähtöaika</label>
+				<label for="storedPlanTakeoffTime">LÃ¤htÃ¶aika</label>
 				<input id="storedPlanTakeoffTime" type="text" data-mini="true">
 			</div> <!-- fieldcontain -->
 			<div class="ui-field-contain">
@@ -369,7 +368,7 @@
 				<input id="storedPlanEndurance" type="text" data-mini="true">
 			</div> <!-- fieldcontain -->
 			<div class="ui-field-contain">
-				<label for="storedPlanPersons">Henkilömäärä</label>
+				<label for="storedPlanPersons">HenkilÃ¶mÃ¤Ã¤rÃ¤</label>
 				<input id="storedPlanPersons" type="text" data-mini="true">
 			</div> <!-- fieldcontain -->
 			<div class="ui-field-contain">
@@ -377,11 +376,11 @@
 				<input id="storedPlanDepMethod" type="text" data-mini="true">
 			</div> <!-- fieldcontain -->
 			<div class="ui-field-contain">
-				<label for="storedPlanArrMethod">Päättäminen</label>
+				<label for="storedPlanArrMethod">PÃ¤Ã¤ttÃ¤minen</label>
 				<input id="storedPlanArrMethod" type="text" data-mini="true">
 			</div> <!-- fieldcontain -->
 			<!--button id='openNotamButton' onclick="openNotam()" data-mini="true">Notam</button--> <!-- data-inline='true' -->
-			<!--button onclick="openAip()" data-mini="true">AIP/VFR suomi (ei vielä käytössä)</button-->
+			<!--button onclick="openAip()" data-mini="true">AIP/VFR suomi (ei vielÃ¤ kÃ¤ytÃ¶ssÃ¤)</button-->
 			<a href="tel:+35832865172" id='callAccButton' class="ui-btn ui-corner-all ui-shadow ui-mini ">Soita ACC<br>+35832865172</a>
 		
 		</div> <!-- content -->
@@ -433,7 +432,7 @@
 					</select>
 				</fieldset>
 				<fieldset data-role="controlgroup" id="equipment_PBN_container" data-mini="true">
-					<legend>Laitteiden PBN lisätiedot</legend>
+					<legend>Laitteiden PBN lisÃ¤tiedot</legend>
 					<input type="text" id="equipmentPBN" placeholder="Kohtaan 18 tulevat PBN/ tiedot" onchange="onChangeEquipmentPBN()" data-mini="true" />
 				</fieldset>
 
@@ -455,8 +454,8 @@
 			</div> <!-- fieldcontain -->
 
 			<div class="ui-field-contain">
-				<label for="aircraftColor">Väri</label>
-				<input id="aircraftColor" type="text" size="7" placeholder="Koneen väri" onchange="onChangeAircraftColor()" data-mini="true">
+				<label for="aircraftColor">VÃ¤ri</label>
+				<input id="aircraftColor" type="text" size="7" placeholder="Koneen vÃ¤ri" onchange="onChangeAircraftColor()" data-mini="true">
 			</div> <!-- fieldcontain -->
 
 			<div class="ui-field-contain">
@@ -468,33 +467,40 @@
 			</div> <!-- fieldcontain -->
 
 			<div class="ui-field-contain">
-				<label for="pilot">Päällikkö</label>
-				<input id="pilot" type="text" size="12" placeholder="Päällikön sukunimi" onchange="onChangePilot()" data-mini="true">
+				<label for="pilot">PÃ¤Ã¤llikkÃ¶</label>
+				<input id="pilot" type="text" size="12" placeholder="PÃ¤Ã¤llikÃ¶n sukunimi" onchange="onChangePilot()" data-mini="true">
 			</div> <!-- fieldcontain -->
 
 			<div class="ui-field-contain">
 				<label for="pilotTel">Puhelin</label>
-				<input id="pilotTel" type="text" size="12" placeholder="Päällikön puhelinnumero" onchange="onChangePilotTel()" data-mini="true">
+				<input id="pilotTel" type="text" size="12" placeholder="PÃ¤Ã¤llikÃ¶n puhelinnumero" onchange="onChangePilotTel()" data-mini="true">
 			</div> <!-- fieldcontain -->
 			
 			<div class="ui-field-contain">
-				<label for="zzzzFieldsEnabled">Näytä epäviralliset lentopaikat:</label>
+				<label for="zzzzFieldsEnabled">NÃ¤ytÃ¤ epÃ¤viralliset lentopaikat:</label>
 				<select name="zzzzFieldsEnabled" id="zzzzFieldsEnabled" onChange="onChangeZzzzFieldsEnabled()" data-role="flipswitch" data-mini="true">
 					<option value="disabled">Off</option>
 					<option value="enabled">On</option>
 				</select>
 			</div> <!-- fieldcontain -->
 			<div class="ui-field-contain">
-				<label for="otherFieldsEnabled">Näytä Viron lentopaikat:</label>
+				<label for="otherFieldsEnabled">NÃ¤ytÃ¤ Viron lentopaikat:</label>
 				<select name="otherFieldsEnabled" id="otherFieldsEnabled" onChange="onChangeOtherFieldsEnabled()" data-role="flipswitch" data-mini="true">
 					<option value="disabled">Off</option>
 					<option value="enabled">On</option>
 				</select>
 			</div> <!-- fieldcontain -->
-			
-			
+			<div class="ui-field-contain">
+				<label for="export-button">Vie tiedot</label>
+				<button onclick="exportSettings()" data-mini="true">fpl-data.json</button>
+			</div> <!-- fieldcontain -->
+			<div class="ui-field-contain">
+				<label for="import-file">Tuo tiedot</label>
+				<input type="file" accept="application/json" id="import-file" onchange="importSettings(event)" />
+			</div> <!-- fieldcontain -->
+
 			<h3>Tietoa</h3>
-			<p>Käyttöliittymä päivätty: 2016-03-02<br>
+			<p>KÃ¤yttÃ¶liittymÃ¤ pÃ¤ivÃ¤tty: 2016-08-11<br>
 			<span id="log">Log</span>
 			</p>
 

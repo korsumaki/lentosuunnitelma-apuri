@@ -127,7 +127,7 @@ EFKT AD 2.17 ATS-ILMATILA
  * - EFKT FIZ LOWER koordinaateista puuttuu yksi viiva rivin lopusta
  * - EFKS TMA koordinaateista puuttuu yksi viiva rivin lopusta
  * - 
- * - EFJY CTA, 2 viimeist‰ koordinaattia (631116N 0263241E - 631924N 0254005E) on virheellisi‰. T‰m‰ n‰ytt‰‰ aiheuttavan Keiteleen nurkille ylim‰‰r‰isen viivan hiukan CTA alueen ulkopuolelle.
+ * - EFJY CTA, 2 viimeist√§ koordinaattia (631116N 0263241E - 631924N 0254005E) on virheellisi√§. T√§m√§ n√§ytt√§√§ aiheuttavan Keiteleen nurkille ylim√§√§r√§isen viivan hiukan CTA alueen ulkopuolelle.
 EFJY CTA
 631924N 0254005E - 630627N 0270241E -
 623159N 0270936E - 620714N 0263435E -
@@ -140,7 +140,7 @@ EFJY CTA
 631116N 0263241E - 631924N 0254005E
 
  * 
- * - EFHA CTR v‰li puuttuu 2000 ja FT v‰list‰
+ * - EFHA CTR v√§li puuttuu 2000 ja FT v√§list√§
  * 
  */ 
 

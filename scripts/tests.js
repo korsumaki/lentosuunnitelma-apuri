@@ -99,19 +99,19 @@ test( "Decimal_to_DMS_lon", function() {
 /*
 <aerodrome lat="" lon=""><icao>ZZZZ</icao><name>Vuotso</name><atc>no</atc><acc>126.100</acc></aerodrome>
 <aerodrome lat="" lon=""><icao>ZZZZ</icao><name>Martiniiskonpalo</name><atc>no</atc><acc>126.100</acc></aerodrome>
-<aerodrome lat="" lon=""><icao>ZZZZ</icao><name>Jäkäläpää</name><atc>no</atc><acc>126.100</acc></aerodrome>
-<aerodrome lat="" lon=""><icao>ZZZZ</icao><name>Haapajärvi</name><atc>no</atc><acc>132.325</acc></aerodrome>
-<aerodrome lat="" lon=""><icao>ZZZZ</icao><name>Karhukangas Ähtäri</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="" lon=""><icao>ZZZZ</icao><name>JÃ¤kÃ¤lÃ¤pÃ¤Ã¤</name><atc>no</atc><acc>126.100</acc></aerodrome>
+<aerodrome lat="" lon=""><icao>ZZZZ</icao><name>HaapajÃ¤rvi</name><atc>no</atc><acc>132.325</acc></aerodrome>
+<aerodrome lat="" lon=""><icao>ZZZZ</icao><name>Karhukangas Ã„htÃ¤ri</name><atc>no</atc><acc>127.100</acc></aerodrome>
 <aerodrome lat="" lon=""><icao>ZZZZ</icao><name>Parkano</name><atc>no</atc><acc>127.100</acc></aerodrome>
-<aerodrome lat="" lon=""><icao>ZZZZ</icao><name>Nummijärvi</name><atc>no</atc><acc>127.100</acc></aerodrome>
-<aerodrome lat="" lon=""><icao>ZZZZ</icao><name>Sorosenperä Ii</name><atc>no</atc><acc>124.200</acc></aerodrome>
+<aerodrome lat="" lon=""><icao>ZZZZ</icao><name>NummijÃ¤rvi</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="" lon=""><icao>ZZZZ</icao><name>SorosenperÃ¤ Ii</name><atc>no</atc><acc>124.200</acc></aerodrome>
 <aerodrome lat="" lon=""><icao>ZZZZ</icao><name>Ummeljoki</name><atc>no</atc><acc>135.525</acc></aerodrome>
-<aerodrome lat="" lon=""><icao>ZZZZ</icao><name>Mänttä</name><atc>no</atc><acc>132.325</acc></aerodrome>
+<aerodrome lat="" lon=""><icao>ZZZZ</icao><name>MÃ¤nttÃ¤</name><atc>no</atc><acc>132.325</acc></aerodrome>
 <aerodrome lat="" lon=""><icao>ZZZZ</icao><name>Ilvesjoki</name><atc>no</atc><acc>127.100</acc></aerodrome>
-<aerodrome lat="" lon=""><icao>ZZZZ</icao><name>Myllykylä Kurikka</name><atc>no</atc><acc>127.100</acc></aerodrome>
-<aerodrome lat="" lon=""><icao>ZZZZ</icao><name>Norinkylä Teuva</name><atc>no</atc><acc>127.100</acc></aerodrome>
-<aerodrome lat="" lon=""><icao>ZZZZ</icao><name>Leivonmäen Höystösensuo Joutsa</name><atc>no</atc><acc>132.325</acc></aerodrome>
-<aerodrome lat="" lon=""><icao>ZZZZ</icao><name>Vähäkyrö</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="" lon=""><icao>ZZZZ</icao><name>MyllykylÃ¤ Kurikka</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="" lon=""><icao>ZZZZ</icao><name>NorinkylÃ¤ Teuva</name><atc>no</atc><acc>127.100</acc></aerodrome>
+<aerodrome lat="" lon=""><icao>ZZZZ</icao><name>LeivonmÃ¤en HÃ¶ystÃ¶sensuo Joutsa</name><atc>no</atc><acc>132.325</acc></aerodrome>
+<aerodrome lat="" lon=""><icao>ZZZZ</icao><name>VÃ¤hÃ¤kyrÃ¶</name><atc>no</atc><acc>127.100</acc></aerodrome>
 <aerodrome lat="" lon=""><icao>ZZZZ</icao><name>Pistohiekka Puumala</name><atc>no</atc><acc>135.525</acc></aerodrome>
 <aerodrome lat="" lon=""><icao>ZZZZ</icao><name>Kaamanen</name><atc>no</atc><acc>126.100</acc></aerodrome>
 <aerodrome lat="" lon=""><icao>ZZZZ</icao><name>Valkeakoski</name><atc>no</atc><acc>127.100</acc></aerodrome>
@@ -148,14 +148,14 @@ test( "convertScandinavianLetters", function() {
   equal( convertScandinavianLetters( "a" ), "a" );
   equal( convertScandinavianLetters( "o" ), "o" );
   
-  equal( convertScandinavianLetters( "ä" ), "a" );
-  equal( convertScandinavianLetters( "Ä" ), "A" );
-  equal( convertScandinavianLetters( "Å" ), "A" );
-  equal( convertScandinavianLetters( "ö" ), "o" );
-  equal( convertScandinavianLetters( "Ö" ), "O" );
-  equal( convertScandinavianLetters( "mäki testailee ääkkösiä" ), "maki testailee aakkosia" );
-  equal( convertScandinavianLetters( "ÄÄKKÖSIÄ" ), "AAKKOSIA" );
-  equal( convertScandinavianLetters( "aAäÄåÅoOöÖ" ), "aAaAaAoOoO" );
+  equal( convertScandinavianLetters( "Ã¤" ), "a" );
+  equal( convertScandinavianLetters( "Ã„" ), "A" );
+  equal( convertScandinavianLetters( "Ã…" ), "A" );
+  equal( convertScandinavianLetters( "Ã¶" ), "o" );
+  equal( convertScandinavianLetters( "Ã–" ), "O" );
+  equal( convertScandinavianLetters( "mÃ¤ki testailee Ã¤Ã¤kkÃ¶siÃ¤" ), "maki testailee aakkosia" );
+  equal( convertScandinavianLetters( "Ã„Ã„KKÃ–SIÃ„" ), "AAKKOSIA" );
+  equal( convertScandinavianLetters( "aAÃ¤Ã„Ã¥Ã…oOÃ¶Ã–" ), "aAaAaAoOoO" );
 });
 
 
