@@ -3,23 +3,23 @@
 /*
  * TODO list:
  * 
- * + lentokorkeus valinnat selv‰kielelle (kuten nopeus)
- * - kentt‰listan filtterˆinti kirjoituksen mukaan?
- * 		- mihin tekstikentt‰ sopii
- * 		- miten filtterˆinti k‰yt‰nnˆss‰ toimii
+ * + lentokorkeus valinnat selv√§kielelle (kuten nopeus)
+ * - kentt√§listan filtter√∂inti kirjoituksen mukaan?
+ * 		- mihin tekstikentt√§ sopii
+ * 		- miten filtter√∂inti k√§yt√§nn√∂ss√§ toimii
  * 			- valmis demokoodi, data-native-menu="false"
  * 			http://demos.jquerymobile.com/1.4.4/selectmenu-custom-filter/
- * - uusi tekstikentt‰, plaanin aktivointi, muu tapa (RTF PIRKKALA TWR 118 700)
- * - jos reitti j‰‰ tyhj‰ksi, lis‰‰ siihen DCT, paitsi jos l‰htˆ ja m‰‰r‰kentt‰ on samoja... silloin note ett‰ "lis‰‰ siihen jotain, esim. TC"
+ * - uusi tekstikentt√§, plaanin aktivointi, muu tapa (RTF PIRKKALA TWR 118 700)
+ * - jos reitti j√§√§ tyhj√§ksi, lis√§√§ siihen DCT, paitsi jos l√§ht√∂ ja m√§√§r√§kentt√§ on samoja... silloin note ett√§ "lis√§√§ siihen jotain, esim. TC"
  * 
- * - refresh jossain muualla kuin p‰‰sivulla aiheuttaa erroreita -> jquery vaiheessa voisi koittaa korjata
+ * - refresh jossain muualla kuin p√§√§sivulla aiheuttaa erroreita -> jquery vaiheessa voisi koittaa korjata
  * 
  * - tee samat oikeellisuustarkistukset kuin finavialla on?
- * 		- tutki mit‰ siell‰ tarkistetaan.
- * - jos reitti kentt‰‰n on syˆtetty jotain, pakota tai ohjaa k‰ytt‰j‰ muuttamaan lentoaikaa.
- * - poista html koodit input kentist‰ ennen tiedon k‰ytt‰mist‰!
+ * 		- tutki mit√§ siell√§ tarkistetaan.
+ * - jos reitti kentt√§√§n on sy√∂tetty jotain, pakota tai ohjaa k√§ytt√§j√§ muuttamaan lentoaikaa.
+ * - poista html koodit input kentist√§ ennen tiedon k√§ytt√§mist√§!
  * 
- * - Jatka Lentosuunnitelmaan... napin yl‰puolelle punainen huomautuslaatikko muistuttamaan mit‰ pit‰‰ modata?
+ * - Jatka Lentosuunnitelmaan... napin yl√§puolelle punainen huomautuslaatikko muistuttamaan mit√§ pit√§√§ modata?
  * - avaa notam linkki uuteen ikkunaan?
  * 
  * - review and update comments
@@ -31,14 +31,14 @@
  * 	- sijainti -nappi 
  * 		+ keltaisella kun sijaintia haetaan
  * 		- punaisella jos sijaintia ei ole saatu (denied yms.)
- * 		- vihre‰ll‰ jos ok sijainti
+ * 		- vihre√§ll√§ jos ok sijainti
  * 	- Perustiedot -nappi
- * 		- vihre‰ll‰/punaisella
+ * 		- vihre√§ll√§/punaisella
  * 	- graafi
  * 		+ symbolien sijainnit fiksusti
  * 
  * - poista timestampit minimoitavasta koodista
- * - Muista p‰ivitt‰‰ kooditiedoston nimi! Kannattaa olla versionumero yms. varmistamassa uuden tiedoston lataamista.
+ * - Muista p√§ivitt√§√§ kooditiedoston nimi! Kannattaa olla versionumero yms. varmistamassa uuden tiedoston lataamista.
  * + minimization: http://closure-compiler.appspot.com/home
  */
 
@@ -46,20 +46,20 @@
 /*
 Muutoksia:
 
-- Mukana olevat kent‰t: http://eaip.eans.ee/2016-02-04/html/eAIP/EE-AD-1.3-en-GB.html#AD-1.3
+- Mukana olevat kent√§t: http://eaip.eans.ee/2016-02-04/html/eAIP/EE-AD-1.3-en-GB.html#AD-1.3
 
-- Kent‰n ollessa Virossa (puhelimella ja radiolla teht‰viin) ARR ja DEP tietoihin lis‰t‰‰n TALLINN
+- Kent√§n ollessa Virossa (puhelimella ja radiolla teht√§viin) ARR ja DEP tietoihin lis√§t√§√§n TALLINN
   PHONE ACC -> PHONE TALLINN ACC
   RTF ACC -> RTF TALLINN ACC
 
-- 18 kentt‰‰n itse p‰ivitett‰v‰ EET tieto
+- 18 kentt√§√§n itse p√§ivitett√§v√§ EET tieto
   - EET/PAIKKAHHMM
 
-- k‰ytt‰j‰n on p‰ivitett‰v‰ oma puhelinnumero kansainv‰liseen muotoon +358nnnnnnnnn (plussa j‰‰ plaanilomakkeelle ment‰ess‰ pois)
+- k√§ytt√§j√§n on p√§ivitett√§v√§ oma puhelinnumero kansainv√§liseen muotoon +358nnnnnnnnn (plussa j√§√§ plaanilomakkeelle ment√§ess√§ pois)
 
-- Notam linkit (alareunan "Tehdyt lentosuunnitelmat" ja siit‰ oikean reunan "i" nappi) toimii myˆs Viron kentille (mik‰li ko. kent‰n notam lˆytyy Finavian bulletin palvelusta)
+- Notam linkit (alareunan "Tehdyt lentosuunnitelmat" ja siit√§ oikean reunan "i" nappi) toimii my√∂s Viron kentille (mik√§li ko. kent√§n notam l√∂ytyy Finavian bulletin palvelusta)
 
-- Lennon≠valmistelu≠tiedot kohdassa olevat Metarit ja TAF toimii myˆs Viron kentille
+- Lennon¬≠valmistelu¬≠tiedot kohdassa olevat Metarit ja TAF toimii my√∂s Viron kentille
 
 - "RAKETTIPELASTUSVARJO" on vaihdettu muotoon "PYROTECHNICS ON BOARD"
 
@@ -71,7 +71,7 @@ Muutoksia:
  *   RTF ACC -> RTF TALLINN ACC
  * 
  * Phase 1
- * + settings switch Naapurimaiden kent‰t
+ * + settings switch Naapurimaiden kent√§t
  *   + otherFieldsEnabled
  * + isEverythingReady, add check for other aerodromes
  * + handlePositionUpdate add branch for other aerodromes
@@ -80,37 +80,37 @@ Muutoksia:
  *   + update unit test for validation
  * 
  * + ACC jaksot
- * + ACC puhelinnumero <- voisi olla mukana maan kentt‰datassa
+ * + ACC puhelinnumero <- voisi olla mukana maan kentt√§datassa
  *   + TALLINN ACC
  *     + +372 625 8254
  *     + http://eaip.eans.ee/2016-02-04/html/eAIP/EE-GEN-3.3-en-GB.html#GEN-3.3
- * + aktivointi ja p‰‰tt‰mistekstit varioidaan kyseisen maan mukaan.
+ * + aktivointi ja p√§√§tt√§mistekstit varioidaan kyseisen maan mukaan.
  * + tekstit englanniksi
  *   + rakettipelastusvarjo
- * + oman puhelinnumeron kansainv‰linen muoto? K‰ytt‰j‰n tulee laittaa itse oikea muoto perustietoihin. Plussa poistuu automaattisesti.
+ * + oman puhelinnumeron kansainv√§linen muoto? K√§ytt√§j√§n tulee laittaa itse oikea muoto perustietoihin. Plussa poistuu automaattisesti.
  * 
  * + Tarkista tuorein tieto, Effective 04 FEB 2016
  *   - http://eaip.eans.ee/2016-02-04/html/index-en-GB.html
  * 
- * + Uudet kent‰t
+ * + Uudet kent√§t
  *   http://eaip.eans.ee/2016-02-04/html/eAIP/EE-AD-1.3-en-GB.html#AD-1.3
  *   + EEKL Koigi 585146N 0254451E
  *   + EEAA Antsla 574940N 0262940E
  * + poista piste TALLINN ACC jaksosta...
  * 
- * + dummy EET t‰ytt‰minen tarvittaessa kohtaan 18 + note sen p‰ivitt‰misest‰
+ * + dummy EET t√§ytt√§minen tarvittaessa kohtaan 18 + note sen p√§ivitt√§misest√§
  *   - EET/PaikkaHHMM
  * + notam linkit: https://ais.fi/ais/bulletins/eettvfr.htm#EETN
  * 
  * 
  * 
- * + BUG: Tsau - kysyin t‰n‰‰n briefingist‰ ja apuri lis‰‰ muutamia ylim‰‰r‰isi‰ v‰lilyˆntej‰ mm. reitin ja PIC-nimen ymp‰rille. Tsekkaas
- *   + puhelinnumeron + j‰‰ tyhj‰ksi, voisi filtterˆid‰ pois
+ * + BUG: Tsau - kysyin t√§n√§√§n briefingist√§ ja apuri lis√§√§ muutamia ylim√§√§r√§isi√§ v√§lily√∂ntej√§ mm. reitin ja PIC-nimen ymp√§rille. Tsekkaas
+ *   + puhelinnumeron + j√§√§ tyhj√§ksi, voisi filtter√∂id√§ pois
  *     'DEP/ILVESJOKI 6219N 02242E DEST/REKIKOSKI HUITTINEN 6112N 02253E RMK/DEP RTF ACC 127 100 ARR PHONE ACC PIC TEL  358505580335'
- *   + reitti, jos vapaamuotoista teksti‰ ei ole kirjoitettu
+ *   + reitti, jos vapaamuotoista teksti√§ ei ole kirjoitettu
  *     'PALLO  TALVI'
- *   + pelkk‰ yksi ilmoittautumispiste
- *   / lentoajan per‰ss‰? ei n‰yt‰ johtuvan apurista
+ *   + pelkk√§ yksi ilmoittautumispiste
+ *   / lentoajan per√§ss√§? ei n√§yt√§ johtuvan apurista
  * 
  * MOHNI 595349N 0253506E
  * BALTI 595415N 0251506E
@@ -119,53 +119,53 @@ Muutoksia:
  * OSTOT 591715N 0221043E
  * 
  * NOTES
- * + hide id = route_fir_point_container, silloin kun kent‰t on samassa maassa
- * + show id = route_fir_point_container, silloin kun on valittu eri maissa olevat kent‰t
+ * + hide id = route_fir_point_container, silloin kun kent√§t on samassa maassa
+ * + show id = route_fir_point_container, silloin kun on valittu eri maissa olevat kent√§t
  * 
  * 
  * Phase 2
- * + maiden v‰liset ilm. pisteet, Viron AIP:st‰, kartasta. Ruotsin suuntaan pisteet lˆytyy suomen AIP:st‰.
+ * + maiden v√§liset ilm. pisteet, Viron AIP:st√§, kartasta. Ruotsin suuntaan pisteet l√∂ytyy suomen AIP:st√§.
  *   - http://eaip.eans.ee/2015-12-10/graphics/eAIP/AIRAC-AMDT-11-2015/ENR-ENRC-12112015.pdf
  *     - katso uusin versio
  *   + ANC kartta: http://eaip.eans.ee/files/ESTONIAN_VFR_2015_CHART.pdf
  *     -> tiedostoon
- * + UI: jos eri maan kent‰t, lis‰‰ reitti osuuteen uusi vfr piste lista
- * + modausta tarvitaan ylim‰‰r‰isen reittipisteen takia
- * + reitin k‰sittely
- *   + laskelmat -taulukon t‰yttˆ
+ * + UI: jos eri maan kent√§t, lis√§√§ reitti osuuteen uusi vfr piste lista
+ * + modausta tarvitaan ylim√§√§r√§isen reittipisteen takia
+ * + reitin k√§sittely
+ *   + laskelmat -taulukon t√§ytt√∂
  *   + pituuksien laskenta
- *   + reittikartan piirt‰minen
+ *   + reittikartan piirt√§minen
  * + EET ajan laskenta
- *   - onnistuu helposti jos on rajalla oleva v‰lipiste
+ *   - onnistuu helposti jos on rajalla oleva v√§lipiste
  *   + laske
- *   + p‰ivit‰ plaaniin
- * + FIR piste mukaan reittikentt‰‰n, myˆs tallennettuun plaaniin
+ *   + p√§ivit√§ plaaniin
+ * + FIR piste mukaan reittikentt√§√§n, my√∂s tallennettuun plaaniin
  * 
  * TODO Phase 2
  * - Parempi reitin kokonaisuuden optimointi FIR pisteen kanssa
  * + FIR pisteiden tallennus johonkin fiksusti
- *   + oma tiedosto miss‰ pisteelle on mainittu mink‰ maiden v‰lill‰ se on
+ *   + oma tiedosto miss√§ pisteelle on mainittu mink√§ maiden v√§lill√§ se on
  * - UI tarkistus
- *   + merkitse FIR valinta jollain erityisell‰ v‰rill‰?
+ *   + merkitse FIR valinta jollain erityisell√§ v√§rill√§?
  *   + Tarviiko FIR lista otsikon?
  *   - onko muuten fiksu?
- *   + liian kiinni seuraavassa listassa? -> lis‰tty marginaalia
+ *   + liian kiinni seuraavassa listassa? -> lis√§tty marginaalia
  * - take care of situation when apuri is started abroad
  * 
- * - Tarkista muiden maiden ohjeista miten siell‰ t‰ytet‰‰n EET?
+ * - Tarkista muiden maiden ohjeista miten siell√§ t√§ytet√§√§n EET?
  * - ZZZZ ohjeessa on eroa Ruotsissa
  * 
  * http://demos.jquerymobile.com/1.4.5/body-bar-classes/
  * <div class="ui-body ui-body-a ui-corner-all">
  * 
  * Jyrkin kommentit
- * - EET tiedon n‰ytt‰minen apurissa (nyt se n‰kyy vain plaanilla)
+ * - EET tiedon n√§ytt√§minen apurissa (nyt se n√§kyy vain plaanilla)
  *   - laskelmat -taulukkoon
  * - EET tiedon muuttaminen apurissa?
- *   - hienos‰‰tˆ jos haluaa tarkan ajan
+ *   - hienos√§√§t√∂ jos haluaa tarkan ajan
  *   - plus ja miinus napit
- * - vaara-aluekartta ylemm‰s, tai muutto niin ettei taulukko resetoidu
- *   - kommentti ett‰ saattaa nollata kentt‰- ja reittivalinnat
+ * - vaara-aluekartta ylemm√§s, tai muutto niin ettei taulukko resetoidu
+ *   - kommentti ett√§ saattaa nollata kentt√§- ja reittivalinnat
  * - Viron ilmatilat
  * 
  * https://aim.eans.ee/index.php?option=com_content&view=article&id=129&Itemid=2&lang=en
@@ -184,9 +184,9 @@ Muutoksia:
  * 
  * - ilmatilat?
  * 
- * + UTF-8 merkistˆ?? ƒ‰kkˆset?
- *   + toimii kun kopioi alkuper‰isest‰ l‰hteest‰ sellaisenaan...
- *   + tarviiko conversio koodia modata, ett‰ data kulkisi alusta loppuun oikein?
+ * + UTF-8 merkist√∂?? √Ñ√§kk√∂set?
+ *   + toimii kun kopioi alkuper√§isest√§ l√§hteest√§ sellaisenaan...
+ *   + tarviiko conversio koodia modata, ett√§ data kulkisi alusta loppuun oikein?
  * 
  */
 
@@ -198,11 +198,11 @@ Muutoksia:
  * geojson
  * + datan voi tarkistaa kartalla
  * - oma formaatti voisi olla tiiviimpi
- * - koordinaatit t‰ytyy convertoida
+ * - koordinaatit t√§ytyy convertoida
  * 
  */
 
-var log="Ohjelmakoodi p‰iv‰tty: 2016-08-11<br>";
+var log="Ohjelmakoodi p√§iv√§tty: 2016-08-11<br>";
 var CurrentVfrRepArray;
 var VfrRepArray;
 var OtherVfrRepArray; // Viro
@@ -229,7 +229,7 @@ var VFRPortFilename = "";
 var AerodromesFilename = "";
 var ZZZZFieldsFilename = "";
 var AirspaceFilename = "";
-var EE_AerodromesFilename = ""; // Viron kent‰t
+var EE_AerodromesFilename = ""; // Viron kent√§t
 var FirPointsFilename = "";
 
 // These sizes will change based on screen size
@@ -255,7 +255,7 @@ var BY_PHONE_STR = "PHONE ";
 var BY_RTF_STR = "RTF "; // ACC freq is updated later
 var BY_TWR = "- (torni)";
 
-var NOTE_TO_ADD_ACC_FREQ_STR = "LISƒƒ_ACC_JAKSO";
+var NOTE_TO_ADD_ACC_FREQ_STR = "LIS√Ñ√Ñ_ACC_JAKSO";
 
 //var PYROTECHNICS_NOTE_REMARKS = "rakettipelastusvarjo";
 var PYROTECHNICS_NOTE_REMARKS = "pyrotechnics on board";
@@ -472,15 +472,15 @@ function handlePositionUpdate(lat, lon) {
 		}
 	}
 
-	debug_log("Suomen lentokent‰t k‰ytˆss‰.");
+	debug_log("Suomen lentokent√§t k√§yt√∂ss√§.");
 	CurrentAerodromeArray = OfficialAerodromeArray;
 	if (document.getElementById("zzzzFieldsEnabled").value == "enabled") {
-		debug_log("Ep‰viralliset lentopaikat k‰ytˆss‰.");
+		debug_log("Ep√§viralliset lentopaikat k√§yt√∂ss√§.");
 		CurrentAerodromeArray = CurrentAerodromeArray.concat(ZZZZFieldArray);
 	}
 	
 	if (document.getElementById("otherFieldsEnabled").value == "enabled") {
-		debug_log("Viron lentokent‰t k‰ytˆss‰.");
+		debug_log("Viron lentokent√§t k√§yt√∂ss√§.");
 		CurrentAerodromeArray = CurrentAerodromeArray.concat(OtherAerodromeArray);
 	}
 
@@ -498,7 +498,7 @@ function handlePositionUpdate(lat, lon) {
 				lon);
 	}
 	CurrentAerodromeArray.sort(waypointDistanceSort);
-	debug_log("Nykyinen sijainti " + Math.round(CurrentAerodromeArray[1].distance) + " km kent‰lt‰ " +
+	debug_log("Nykyinen sijainti " + Math.round(CurrentAerodromeArray[1].distance) + " km kent√§lt√§ " +
 			CurrentAerodromeArray[1].name + ", " + CurrentAerodromeArray[1].icao);
 
 	PopulateSelections();
@@ -837,8 +837,8 @@ function vfrPortReadyHandler(xmlDoc) {
 		if (metadata.length >0) {
 			var dateStr = metadata[0].getElementsByTagName("time")[0].childNodes[0].nodeValue;
 			var d = new Date(dateStr);
-			//debug_log( "VFR ilmoittautumispisteet p‰iv‰tty: " + d.toLocaleDateString() );
-			debug_log( "VFR ilmoittautumispisteet p‰iv‰tty: " + d.getFullYear() +"-"+ (d.getMonth()+1) +"-"+ d.getDate() );
+			//debug_log( "VFR ilmoittautumispisteet p√§iv√§tty: " + d.toLocaleDateString() );
+			debug_log( "VFR ilmoittautumispisteet p√§iv√§tty: " + d.getFullYear() +"-"+ (d.getMonth()+1) +"-"+ d.getDate() );
 		}
 	} catch(err) {
 		debug_log("Could not read xml date: " + err);
@@ -858,7 +858,7 @@ function vfrPortReadyHandler(xmlDoc) {
 			VfrRepArray.push(new Waypoint(wptName, lat, lon));
 		}
 	}
-	debug_log( "=> " + VfrRepArray.length + " VFR ilmoittautumispistett‰.");
+	debug_log( "=> " + VfrRepArray.length + " VFR ilmoittautumispistett√§.");
 
 	combineVfrPointArrays();
 	
@@ -873,7 +873,7 @@ function aerodromeReadyHandler(xmlDoc) {
 	try {
 		var gpx_list = xmlDoc.getElementsByTagName("gpx");
 		if (gpx_list.length >0) {
-			debug_log( "Lentokentt‰tiedot p‰iv‰tty: " + gpx_list[0].attributes.getNamedItem("created").value); // FIXED nodeValue -> value
+			debug_log( "Lentokentt√§tiedot p√§iv√§tty: " + gpx_list[0].attributes.getNamedItem("created").value); // FIXED nodeValue -> value
 		}
 	} catch(err) {
 		debug_log("Could not read xml date: " + err);
@@ -885,7 +885,7 @@ function aerodromeReadyHandler(xmlDoc) {
 		OfficialAerodromeArray = new Array();
 
 		// Add ZZZZ
-		OfficialAerodromeArray.push(new Aerodrome("Ep‰virallinen", UNOFFICIAL_AERODROME,
+		OfficialAerodromeArray.push(new Aerodrome("Ep√§virallinen", UNOFFICIAL_AERODROME,
 				"000000N", 
 				"0000000E",
 				"no",
@@ -923,7 +923,7 @@ function aerodromeReadyHandler(xmlDoc) {
 		alert(err);
 	}
 
-	debug_log( "=> " + OfficialAerodromeArray.length + " lentokentt‰‰.");
+	debug_log( "=> " + OfficialAerodromeArray.length + " lentokentt√§√§.");
 
 	debug_timestamp_ready("aerodromeReadyHandler", aerodromeReadyHandler_start_time);
 
@@ -941,7 +941,7 @@ function zzzzFieldReadyHandler(xmlDoc) {
 	try {
 		var gpx_list = xmlDoc.getElementsByTagName("gpx");
 		if (gpx_list.length >0) {
-			debug_log( "Ep‰virallisten lentopaikkojen tiedot p‰iv‰tty: " + gpx_list[0].attributes.getNamedItem("created").value); // FIXED nodeValue -> value
+			debug_log( "Ep√§virallisten lentopaikkojen tiedot p√§iv√§tty: " + gpx_list[0].attributes.getNamedItem("created").value); // FIXED nodeValue -> value
 		}
 	} catch(err) {
 		debug_log("Could not read xml date: " + err);
@@ -979,7 +979,7 @@ function zzzzFieldReadyHandler(xmlDoc) {
 		alert(err);
 	}
 
-	debug_log( "=> " + ZZZZFieldArray.length + " ep‰virallista lentopaikkaa.");
+	debug_log( "=> " + ZZZZFieldArray.length + " ep√§virallista lentopaikkaa.");
 	//OfficialAerodromeArray = OfficialAerodromeArray.concat(ZZZZFieldArray);
 
 	debug_timestamp_ready("zzzzFieldReadyHandler", zzzzFieldReadyHandler_start_time);
@@ -993,7 +993,7 @@ function aerodromeJsonHandler(data) {
 	OtherAerodromeArray = new Array();
 	OtherVfrRepArray = new Array();
 	
-	debug_log( "Viron lentokentt‰tiedot ja VFR pisteet p‰iv‰tty: " + data.created);
+	debug_log( "Viron lentokentt√§tiedot ja VFR pisteet p√§iv√§tty: " + data.created);
 	
 	for (var i=0; i<data.aerodrome.length; ++i) {
 		var name = data.aerodrome[i].name;
@@ -1026,8 +1026,8 @@ function aerodromeJsonHandler(data) {
 				acc,
 				vfrPointsArray));
 	}
-	debug_log( "=> " + OtherAerodromeArray.length + " Viron lentokentt‰‰.");
-	debug_log( "=> " + OtherVfrRepArray.length + " Viron VFR ilmoittautumispistett‰.");
+	debug_log( "=> " + OtherAerodromeArray.length + " Viron lentokentt√§√§.");
+	debug_log( "=> " + OtherVfrRepArray.length + " Viron VFR ilmoittautumispistett√§.");
 	//CurrentVfrRepArray = CurrentVfrRepArray.concat(OtherVfrRepArray); 
 	
 	combineVfrPointArrays();
@@ -1069,14 +1069,14 @@ function loadAerodromeJson() {
 			function(data, textStatus, jqXHR) {
 				aerodromeJsonHandler(data);
 			}).fail(function() {
-				alert("Virhe '" + EE_AerodromesFilename + "' tiedoston lataamisessa. Kokeile ladata sivu uudestaan. Jos vika ei poistu, ota yhteytt‰ Lentosuunnitelma-apurin tekij‰‰n.");
+				alert("Virhe '" + EE_AerodromesFilename + "' tiedoston lataamisessa. Kokeile ladata sivu uudestaan. Jos vika ei poistu, ota yhteytt√§ Lentosuunnitelma-apurin tekij√§√§n.");
 			}).always(function() {
 			});
 		$.getJSON(FirPointsFilename,
 			function(data, textStatus, jqXHR) {
 				FirPointsJsonHandler(data);
 			}).fail(function() {
-				alert("Virhe '" + FirPointsFilename + "' tiedoston lataamisessa. Kokeile ladata sivu uudestaan. Jos vika ei poistu, ota yhteytt‰ Lentosuunnitelma-apurin tekij‰‰n.");
+				alert("Virhe '" + FirPointsFilename + "' tiedoston lataamisessa. Kokeile ladata sivu uudestaan. Jos vika ei poistu, ota yhteytt√§ Lentosuunnitelma-apurin tekij√§√§n.");
 			}).always(function() {
 			});
 	}
@@ -1246,21 +1246,21 @@ function onChangeFlightLevel() {
 
 // Support for multiple aircrafts
 /*
- * + localstoragen latausvaiheessa tarkistetaan onko vanha data k‰ytˆss‰
+ * + localstoragen latausvaiheessa tarkistetaan onko vanha data k√§yt√∂ss√§
  *   +-> konvertoidaan uuteen muotoon, poistetaan vanha data
  * + currentSettingsId
  * + aircraftSettingsTable
- * + listasta valittaessa p‰ivitet‰‰n id jota k‰ytet‰‰n
- * + luettaessa k‰ytet‰‰n oikeaa id:t‰
- * + kirjoitettaessa k‰ytet‰‰n oikeaa id:t‰
- * + select lista p‰ivitet‰‰n 
+ * + listasta valittaessa p√§ivitet√§√§n id jota k√§ytet√§√§n
+ * + luettaessa k√§ytet√§√§n oikeaa id:t√§
+ * + kirjoitettaessa k√§ytet√§√§n oikeaa id:t√§
+ * + select lista p√§ivitet√§√§n 
  *     + tablen perusteella + "Uusi kone"
  *     + alun latausvaiheessa
  *     + onChange tunnus
  *     + refresh
- * + kent‰t tyhjennet‰‰n 
+ * + kent√§t tyhjennet√§√§n 
  *     + asetuksia vaihtaessa
- *     + uutta konetta tehdess‰
+ *     + uutta konetta tehdess√§
  * 
  */
 
@@ -1306,11 +1306,11 @@ function updateAircraftSelectionList() {
 		}
 		var aircraftIdentification = localStorage.getItem( id + "_aircraftIdentification");
 		if (aircraftIdentification == null) {
-			aircraftIdentification = "Nimetˆn";
+			aircraftIdentification = "Nimet√∂n";
 		}
 		appendOption(listElem, aircraftIdentification, id);
 	}
-	appendOption(listElem, "Lis‰‰ kone", "NewAircraft");
+	appendOption(listElem, "Lis√§√§ kone", "NewAircraft");
 
 	listElem.selectedIndex = currentIndex;
 	
@@ -1381,7 +1381,7 @@ function deleteCurrentAircraftSettings() {
 	// remove data from id
 	removeAircraftDataWithPrefix( currentId + "_" );
 	
-	// p‰ivit‰ id
+	// p√§ivit√§ id
 	currentId = table[index];
 	localStorage.setItem( "currentSettingsId", currentId);
 
@@ -1462,7 +1462,7 @@ function onChangeEquipment() {
 	 */
 	if (isPbnNeeded()) {
 		// show PBN field
-		//debug_log("onChangeEquipment - R tieto lˆytyi");
+		//debug_log("onChangeEquipment - R tieto l√∂ytyi");
 		//document.getElementById("equipment_PBN_container").style.display = '';
 		$('#equipment_PBN_container').slideDown();
 	}
@@ -1619,7 +1619,7 @@ function updateFromLocalStorage() {
 	
 	if (isPbnNeeded()) {
 		// show PBN field
-		//debug_log("updateFromLocalStorage - R tieto lˆytyi");
+		//debug_log("updateFromLocalStorage - R tieto l√∂ytyi");
 		//document.getElementById("equipment_PBN_container").style.display = '';
 		$('#equipment_PBN_container').slideDown();
 	}
@@ -1852,10 +1852,10 @@ function updateStoredPlanList() {
 		var text = "<li class='storedPlanListItem'>" //<a href='#'>
 			+ "<a href='#page-stored-plan' onClick='setSelectedStoredPlanIndex(" + i + ")'>"
 			+ "<h2>"+ storedPlans[i].departure + "-" + storedPlans[i].destination + "</h2>"
-			+ "<p class='ui-li-aside'>L‰htˆaika:<br><strong>" + timeStr +"</strong> (sa)</p>"
+			+ "<p class='ui-li-aside'>L√§ht√∂aika:<br><strong>" + timeStr +"</strong> (sa)</p>"
 			+ "<p><strong>Reitti: " + route + "</strong></p>"
 			+ "<p>Lentoaika: " + storedPlans[i].flight_time + "</p>"
-			+ "<p>P‰‰tt‰minen: " + storedPlans[i].completion_method + "</p>"
+			+ "<p>P√§√§tt√§minen: " + storedPlans[i].completion_method + "</p>"
 			+ "</a>";
 		//onclick="onClickFlightPlanLinkButton()"
 		//indow.open( flightPlanLink );
@@ -1914,7 +1914,7 @@ function showOFPContainer() {
 
 function hideOFPContainer() {
 	$('#OFPContainer').slideUp();
-	$('#OFPContainerToggleButton').text("N‰yt‰...");
+	$('#OFPContainerToggleButton').text("N√§yt√§...");
 }
 
 function onOFPContainerToggleClick() {
@@ -1967,10 +1967,10 @@ function loadValidityJson()
 				}
 			}
 			if (AerodromesFilename == "" && ZZZZFieldsFilename == "" && VFRPortFilename == "" && EE_AerodromesFilename == "") {
-				alert("En lˆyd‰ kentt‰tietoja t‰lle p‰iv‰m‰‰r‰lle (en muista kovin vanhoja juttuja). Tarkista laitteesi p‰iv‰m‰‰r‰asetus.");
+				alert("En l√∂yd√§ kentt√§tietoja t√§lle p√§iv√§m√§√§r√§lle (en muista kovin vanhoja juttuja). Tarkista laitteesi p√§iv√§m√§√§r√§asetus.");
 			}
 		}).fail(function() {
-			alert("Virhe validity.json tiedoston lataamisessa. Tiedostoa ei lˆydy tai formaatti on pieless‰. Kokeile ladata sivu uudestaan. Jos vika ei poistu, ota yhteytt‰ Lentosuunnitelma-apurin tekij‰‰n.");
+			alert("Virhe validity.json tiedoston lataamisessa. Tiedostoa ei l√∂ydy tai formaatti on pieless√§. Kokeile ladata sivu uudestaan. Jos vika ei poistu, ota yhteytt√§ Lentosuunnitelma-apurin tekij√§√§n.");
 		}).always(function() {
 			onStartup();
 		});
@@ -1982,7 +1982,7 @@ function loadAirspaceJson()
 		function(data, textStatus, jqXHR) {
 			airspaceData = data;
 		}).fail(function() {
-			alert("Virhe airspace.json tiedoston lataamisessa. Tiedostoa ei lˆydy tai formaatti on pieless‰. Kokeile ladata sivu uudestaan. Jos vika ei poistu, ota yhteytt‰ Lentosuunnitelma-apurin tekij‰‰n.");
+			alert("Virhe airspace.json tiedoston lataamisessa. Tiedostoa ei l√∂ydy tai formaatti on pieless√§. Kokeile ladata sivu uudestaan. Jos vika ei poistu, ota yhteytt√§ Lentosuunnitelma-apurin tekij√§√§n.");
 		}).always(function() {
 			//onStartup();
 		});
@@ -2008,7 +2008,7 @@ function onLoad()
 {
 	window.addEventListener('resize', resizeCanvas, false);
 	if (isPrivateBrowsingOn()) {
-		var str = "Private Browsing (Yksityinen selaus) on p‰‰ll‰ selaimessasi. Apuri ei voi toimia t‰ss‰ tilassa. Palaa takaisin normaalin tilaan ja lataa sivu uudestaan.";
+		var str = "Private Browsing (Yksityinen selaus) on p√§√§ll√§ selaimessasi. Apuri ei voi toimia t√§ss√§ tilassa. Palaa takaisin normaalin tilaan ja lataa sivu uudestaan.";
 		debug_log( str );
 		alert( str );
 	}
@@ -2049,7 +2049,7 @@ function onStartup() {
 
 
 function fakeCurrentLocation() {
-	debug_log("Todellista sijaintia ei saada. K‰ytet‰‰n sijaintina Tamperetta...");
+	debug_log("Todellista sijaintia ei saada. K√§ytet√§√§n sijaintina Tamperetta...");
 	gPosition_lat = 61.49816;
 	gPosition_lon = 23.761055;
 	
@@ -2081,8 +2081,8 @@ function updateCurrentLocation() {
 
 /*
 // Idea:
-// etsit‰‰n vain p1 (l‰htˆkent‰n VFR piste) mink‰ kautta tulee lyhin reitti.
-// p2 (m‰‰r‰kent‰n VFR piste) haetaan (toisesta suunnasta) erikseen samanlaisella kutsulla
+// etsit√§√§n vain p1 (l√§ht√∂kent√§n VFR piste) mink√§ kautta tulee lyhin reitti.
+// p2 (m√§√§r√§kent√§n VFR piste) haetaan (toisesta suunnasta) erikseen samanlaisella kutsulla
 min_dist = -1
 for p1 in dep points 
 	d1 = distance(dep, p1)
@@ -2090,7 +2090,7 @@ for p1 in dep points
 		d2 = distance(p1, p2)
 		d3 = distance(p2, dest)
 		if min_dist > d1+d2+d3 or min_dist == -1
-			min_points = p1 // <- haetaan vain parasta p1:st‰
+			min_points = p1 // <- haetaan vain parasta p1:st√§
 			min_dist = d1+d2+d3
  */
 
@@ -2594,7 +2594,7 @@ function drawAirspace(ctx, coordinates, bottom) {
 		ctx.globalAlpha=0.4;
 	}
 	else { // undef
-		debug_log("ERROR: drawAirspace: tuntematon ilmatilan alareunan merkint‰ '" + bottom + "'");
+		debug_log("ERROR: drawAirspace: tuntematon ilmatilan alareunan merkint√§ '" + bottom + "'");
 		ctx.strokeStyle = 'red';
 		ctx.fillStyle = 'red';
 		ctx.globalAlpha=0.7;
@@ -3138,7 +3138,7 @@ function createFlyingTimeTable() {
 	}
 	
 	if (aircraftSpeed == 0) {
-		document.getElementById("flyingTime").innerHTML = '<a href="#page-plan-settings">T‰yt‰ Perustiedot sivulle puuttuvat tiedot!</a>';
+		document.getElementById("flyingTime").innerHTML = '<a href="#page-plan-settings">T√§yt√§ Perustiedot sivulle puuttuvat tiedot!</a>';
 		return;
 	}	
 	
@@ -3224,7 +3224,7 @@ function createFlyingTimeTable() {
 	}
 	
 	row = rowBegin;
-	row += headerCellBegin + "Yhteens‰" + headerCellEnd;
+	row += headerCellBegin + "Yhteens√§" + headerCellEnd;
 	row += headerCellBegin + Math.round(getDistanceInCurrentUnit(totalDist)) + " " + distanceUnitText + headerCellEnd;
 	row += headerCellBegin + getTimeFromDistance(totalDist, aircraftSpeed) + " min" + headerCellEnd;
 	row += rowEnd;
@@ -3254,10 +3254,10 @@ function createFlyingTimeTable() {
 	// Convert scandinavian letters
 function convertScandinavianLetters( str ) {
 	var retStr = str;
-	retStr = retStr.replace(/[‰Â]/g, "a");
-	retStr = retStr.replace(/[ƒ≈]/g, "A");
-	retStr = retStr.replace(/ˆ/g, "o");
-	retStr = retStr.replace(/÷/g, "O");
+	retStr = retStr.replace(/[√§√•]/g, "a");
+	retStr = retStr.replace(/[√Ñ√Ö]/g, "A");
+	retStr = retStr.replace(/√∂/g, "o");
+	retStr = retStr.replace(/√ñ/g, "O");
 	return retStr;
 }
 
@@ -3283,11 +3283,11 @@ function updateFlyingTimeValues() {
 			}
 		}
 		if (flightTimeOverrideStr.length !== 4) {
-			alert("Itse m‰‰riteltyyn lentoaikaan t‰ytyy antaa sek‰ tunnit ett‰ minuutit!");
+			alert("Itse m√§√§riteltyyn lentoaikaan t√§ytyy antaa sek√§ tunnit ett√§ minuutit!");
 			return false;
 		}
 		if (Number(flightTimeOverrideStr) < Number(gSelectedFlyingTimeStr)) {
-			alert("Itse m‰‰ritellyksi lentoajaksi ei voi antaa v‰hemp‰‰ kuin laskelmassa on laskettu!");
+			alert("Itse m√§√§ritellyksi lentoajaksi ei voi antaa v√§hemp√§√§ kuin laskelmassa on laskettu!");
 			return false;
 		}
 		gSelectedFlyingTimeStr = flightTimeOverrideStr;
@@ -3315,7 +3315,7 @@ function updateFlightPlanLink() {
 		}
 	}
 	if (departureTimeHour + departureTimeMin === 0) {
-		alert("L‰htˆaika ei voi olla heti.\nMuuta l‰htˆaika j‰rkev‰ksi.");
+		alert("L√§ht√∂aika ei voi olla heti.\nMuuta l√§ht√∂aika j√§rkev√§ksi.");
 		return false;
 	}
 	var d = new Date();
@@ -3409,7 +3409,7 @@ function updateFlightPlanLink() {
 	
 	// Add departure and/or destination places into 18: field, if using ZZZZ airfield.
 	//18: DEP/NUMMIJARVI DEST/AHTARI
-	var alertText = "Muista p‰ivitt‰‰ lomakkeen kentt‰‰n 18:";
+	var alertText = "Muista p√§ivitt√§√§ lomakkeen kentt√§√§n 18:";
 	var showAlertText = false;
 	
 	var departureValue = document.getElementById("departure").value;
@@ -3436,7 +3436,7 @@ function updateFlightPlanLink() {
 		other += "DEST%252F" + document.getElementById("zzzz_destination").value + " ";
 		
 		// TODO note user to manually add coordinates
-		//alertText += "\nM‰‰r‰kent‰n koordinaatit (ddmmN dddmmE).";
+		//alertText += "\nM√§√§r√§kent√§n koordinaatit (ddmmN dddmmE).";
 		//showAlertText = true;
 	}
 	else {
@@ -3473,7 +3473,7 @@ function updateFlightPlanLink() {
 		other += "DEP " + BY_RTF_STR + get_ACC_STR_by_country(getCountryByICAO(dep_icao)) + " " + depAerodrome.acc + " ";
 		
 		if (depAerodrome.acc == NOTE_TO_ADD_ACC_FREQ_STR) {
-			alertText += "\nL‰htˆpaikan ACC jakso.";
+			alertText += "\nL√§ht√∂paikan ACC jakso.";
 			showAlertText = true;
 		}
 	}
@@ -3611,7 +3611,7 @@ function getPlanForStoring() {
 		}
 	}
 	if (departureTimeHour + departureTimeMin === 0) {
-		alert("L‰htˆaika ei voi olla heti.\nMuuta l‰htˆaika j‰rkev‰ksi.");
+		alert("L√§ht√∂aika ei voi olla heti.\nMuuta l√§ht√∂aika j√§rkev√§ksi.");
 		return false;
 	}
 	var d = new Date();
@@ -3739,7 +3739,7 @@ function onClickFlightPlanLinkButton() {
 			alert("Lentosuunnitelman luominen ei onnistunut.\n" + err );
 		}
 	} else {
-		alert("Perustietoja puuttuu viel‰.\nLis‰‰ puuttuvat tiedot Perustiedot sivulle, niin lentosuunnitelma saadaan t‰ytetty‰ oikein.");
+		alert("Perustietoja puuttuu viel√§.\nLis√§√§ puuttuvat tiedot Perustiedot sivulle, niin lentosuunnitelma saadaan t√§ytetty√§ oikein.");
 		window.open( "#page-plan-settings", "_self" );
 	}
 }

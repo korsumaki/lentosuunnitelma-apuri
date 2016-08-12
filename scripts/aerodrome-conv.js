@@ -15,28 +15,28 @@
 
 /*
 GEN 1.2 - 2
-1.6 Suomeen saapuminen ja Suomesta l‰hteminen
-1.6.1 Rajan yli lent‰minen
+1.6 Suomeen saapuminen ja Suomesta l√§hteminen
+1.6.1 Rajan yli lent√§minen
 1.6.1.1 Suomen valtion ilmatilaan saapuvan ilma-aluksen
-tulee noudattaa tarkoin lentosuunnitelmassa esitetty‰ lentoreitti‰
-sek‰ s‰‰t‰‰ lentonsa siten, ett‰ rajan yli lent‰minen
-tapahtuu mahdollisimman l‰hell‰ laskettua ylitysaikaa. Jos
+tulee noudattaa tarkoin lentosuunnitelmassa esitetty√§ lentoreitti√§
+sek√§ s√§√§t√§√§ lentonsa siten, ett√§ rajan yli lent√§minen
+tapahtuu mahdollisimman l√§hell√§ laskettua ylitysaikaa. Jos
 lento tapahtuu AIP:n ENR 3:ssa annettujen ATS-reittien ulkopuolella,
-on lentoreitti suunniteltava siten, ett‰ se noudattaa
+on lentoreitti suunniteltava siten, ett√§ se noudattaa
 suorinta mahdollista lentosuuntaa maarajan tai aluemeren
 ulkorajan ylityskohdasta lentosuunnitelmassa ilmoitettuun
-laskupaikkaan tai liittymiskohtaan ATS-reitill‰ (ks. AIP, ENR
-1.10, lentosuunnitelman sis‰ltˆ).
+laskupaikkaan tai liittymiskohtaan ATS-reitill√§ (ks. AIP, ENR
+1.10, lentosuunnitelman sis√§lt√∂).
 
-1.6.1.3 Kun kysymyksess‰ on Suomen/Ruotsin tai Suomen/Norjan
-v‰lisen rajan yli lent‰minen, suositellaan julkaistujen
+1.6.1.3 Kun kysymyksess√§ on Suomen/Ruotsin tai Suomen/Norjan
+v√§lisen rajan yli lent√§minen, suositellaan julkaistujen
 ATS-reittien tai seuraavien koordinaattipisteiden
-k‰ytt‰mist‰:
+k√§ytt√§mist√§:
 
 
 
 
-ENR 1.10, lentosuunnitelman sis‰ltˆ).
+ENR 1.10, lentosuunnitelman sis√§lt√∂).
 
 */
 
