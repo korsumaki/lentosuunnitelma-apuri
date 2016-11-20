@@ -5,6 +5,7 @@
  * - Trim spaces from raw data (EFJO CTR bottom level was 'SFC ')
  * 
  * http://geojsonlint.com/
+ * http://geojson.io/
  * http://geojson.org/geojson-spec.html
  */
 var outputJson ="";
