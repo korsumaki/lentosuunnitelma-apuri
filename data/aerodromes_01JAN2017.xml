@@ -2,7 +2,7 @@
 <gpx
 version="1.6"
 creator="Markku Korsumaki"
-created="2016-09-15"
+created="2017-01-01"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns="http://www.topografix.com/GPX/1/1"
 xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
@@ -15,6 +15,7 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 <aerodrome lat="640647N" lon="0253015E"><icao>EFHP</icao><name>Haapavesi</name><atc>no</atc><acc>124.200</acc></aerodrome>
 <aerodrome lat="645812N" lon="0244218E"><icao>EFHL</icao><name>Hailuoto</name><atc>no</atc><acc>124.200</acc></aerodrome>
 <aerodrome lat="595044N" lon="0230456E"><icao>EFHN</icao><name>Hanko</name><atc>no</atc><acc>132.675</acc></aerodrome>
+<aerodrome lat="601514N" lon="0250239E"><icao>EFHF</icao><name>Helsinki-Malmi</name><atc>no</atc><acc>127.425</acc><vfrpoint>DEGER</vfrpoint><vfrpoint>NOKKA</vfrpoint><vfrpoint>RASTI</vfrpoint></aerodrome>
 <aerodrome lat="603916N" lon="0245252E"><icao>EFHV</icao><name>Hyvinkää</name><atc>no</atc><acc>127.425</acc></aerodrome>
 <aerodrome lat="614125N" lon="0230427E"><icao>EFHM</icao><name>Hämeenkyrö</name><atc>no</atc><acc>127.100</acc></aerodrome>
 <aerodrome lat="633755N" lon="0270720E"><icao>EFII</icao><name>Iisalmi</name><atc>no</atc><acc>132.325</acc></aerodrome>
@@ -66,7 +67,6 @@ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/
 <aerodrome lat="640317N" lon="0244331E"><icao>EFYL</icao><name>Ylivieska</name><atc>no</atc><acc>124.200</acc></aerodrome>
 <aerodrome lat="682152N" lon="0232539E"><icao>EFET</icao><name>Enontekiö</name><atc>yes</atc><acc>126.100</acc><vfrpoint>GALDO</vfrpoint><vfrpoint>HIRVA</vfrpoint><vfrpoint>JOHKA</vfrpoint><vfrpoint>KATKA</vfrpoint><vfrpoint>OUNAS</vfrpoint></aerodrome>
 <aerodrome lat="615123N" lon="0244721E"><icao>EFHA</icao><name>Halli</name><atc>yes</atc><acc>132.325</acc><vfrpoint>HAAVI</vfrpoint><vfrpoint>PIHLA</vfrpoint><vfrpoint>TALVI</vfrpoint><vfrpoint>VILPU</vfrpoint></aerodrome>
-<aerodrome lat="601514N" lon="0250239E"><icao>EFHF</icao><name>Helsinki-Malmi</name><atc>yes</atc><acc>127.425</acc><vfrpoint>DEGER</vfrpoint><vfrpoint>NOKKA</vfrpoint><vfrpoint>RASTI</vfrpoint></aerodrome>
 <aerodrome lat="683639N" lon="0272450E"><icao>EFIV</icao><name>Ivalo</name><atc>yes</atc><acc>126.100</acc><vfrpoint>HAMPI</vfrpoint><vfrpoint>LAANI</vfrpoint><vfrpoint>MAHLA</vfrpoint><vfrpoint>VASKI</vfrpoint></aerodrome>
 <aerodrome lat="623932N" lon="0293728E"><icao>EFJO</icao><name>Joensuu</name><atc>yes</atc><acc>135.525</acc><vfrpoint>KONTI</vfrpoint><vfrpoint>LIPPI</vfrpoint><vfrpoint>POLVI</vfrpoint><vfrpoint>SUHMU</vfrpoint></aerodrome>
 <aerodrome lat="622403N" lon="0254022E"><icao>EFJY</icao><name>Jyväskylä</name><atc>yes</atc><acc>132.325</acc><vfrpoint>POHJA</vfrpoint><vfrpoint>RUOKE</vfrpoint><vfrpoint>SAHRA</vfrpoint><vfrpoint>TARVA</vfrpoint></aerodrome>

@@ -24,6 +24,14 @@
 		"airspace":   "data/airspace_10NOV2016.json",
 		"EE_aerodromes": "data/EE_aerodromes_04FEB2016.json",
 		"FirPoints": "data/fir_points.json"
+	}, {
+		"validFrom":  "2017-01-01T00:00:00Z",
+		"aerodromes": "data/aerodromes_01JAN2017.xml",
+		"zzzzfields": "data/zzzz_fields_28MAY2015.xml",
+		"vfrpoints":  "data/EF_VFRREP_05JAN2017.xml",
+		"airspace":   "data/airspace_01JAN2017.json",
+		"EE_aerodromes": "data/EE_aerodromes_04FEB2016.json",
+		"FirPoints": "data/fir_points.json"
 	}
 	]
 } 
