@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head> 
+		<meta charset="UTF-8">
 		<title>Lentosuunnitelma</title> 
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"> 
 		<link rel="shortcut icon" href="favicon.ico">
@@ -23,8 +24,8 @@
 		</div> 
 
 		<div data-role="content">
-			<p style='background:pink'>Lentosuunnitelma-apurin sijainti on muuttunut (01/2016), olethan päivittänyt kirjanmerkkisi:<br>
-			<a href="http://korsu.mbnet.fi/ilmailu/plan3/">http://korsu.mbnet.fi/ilmailu/plan3/</a></p>
+			<!--p style='background:pink'>Lentosuunnitelma-apurin sijainti on muuttunut (01/2016), olethan päivittänyt kirjanmerkkisi:<br>
+			<a href="http://korsu.mbnet.fi/ilmailu/plan3/">http://korsu.mbnet.fi/ilmailu/plan3/</a></p-->
 			<div class="ui-field-contain">
 				<fieldset data-role="controlgroup" data-mini="true">
 					<legend>
@@ -309,7 +310,11 @@
 				</fieldset-->
 				<fieldset data-role="controlgroup" data-type="horizontal">
 					<legend>NAV WRNG -kartta</legend>
-					<a href="https://ais.fi/ais/bulletins/wrng1map.pdf" rel="external" data-ajax="false">Ammunnat ja vaara-alueet (pdf kartta)</a>
+					<!--a href="https://ais.fi/ais/bulletins/wrng1map.pdf" rel="external" data-ajax="false">Ammunnat ja vaara-alueet (pdf kartta)</a><br-->
+					<button onclick="onClickNAV_WRNG_map()" data-mini="true">Ammunnat ja vaara-alueet (pdf kartta)</button>
+					<button onclick="onClickAup_map()" data-mini="true">AUP kartta</button>
+					<button onclick="onClickAup()" data-mini="true">AUP (nykyinen)</button>
+					<button onclick="onClickAupNext()" data-mini="true">AUP (seuraava)</button>
 				</fieldset>
 				<!-- https://ais.fi/ais/bulletins/wrng1map.pdf -->
 			</div>
@@ -500,7 +505,7 @@
 			</div> <!-- fieldcontain -->
 
 			<h3>Tietoa</h3>
-			<p>Käyttöliittymä päivätty: 2016-08-11<br>
+			<p>Käyttöliittymä päivätty: 2017-02-06<br>
 			<span id="log">Log</span>
 			</p>
 

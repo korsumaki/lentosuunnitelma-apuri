@@ -3,6 +3,38 @@
 /*
  * TODO list:
  * 
+ * 2FEB2017
+ * - RMK muutokset aktivointiin ja päättämiseen
+ *   + oletuksena puhelin (ei merkintöjä plaanille)
+ *   + radio ilmoitukseen ei tarvitse jaksoa (suomessa).
+ *   + tarkista tallinnan ACC:n nimi ja sikäläisen käytännöt? laitetaanko jakso mukaan? -> ei mainintaa
+ *     ACC == RMK/DEP EFIN
+ * + voisiko olla omat tekstit UI:lla ja omat plaanilla
+ * + RMK/DEP ARR EFIN yhdistetty vaihtoehto?
+ * 
+ * - RMK/FPL CLOSING KUKSA EFRO vaihtoehto?, merkitään määränpääksi kohtaan 16 ZZZZ ja lentoajaksi merkitään se aika, joka kuluu lennettäessä valvotun ilmatilan rajalle. 
+ * - generoi viron kentät (mitä muuta pitäisi vielä tarkistaa?)
+ * 
+ * Deploy:
+ * + ota alkuperäiset FTP:llä talteen (index, main.js)
+ * --+ koodi (kokeile merkistöt)
+ * - index (uudet linkit, yläreunan kommentti pois)
+ * - viron kentät
+ * 
+ * 
+ * + BY_PHONE_STR <- muutettu käyttö vain UI:lle
+ * + BY_RTF_STR
+ * 
+ * - testaa
+ *   - lähtö, laskupaikka, zzzz, zzzz tunnettu, viro
+ *   - mitä tulee tallennettuu plaaniin (sama mitä plaanille vai kuvaavampi?)
+ *   - linkkien avaaminen uuteen ikkunaan (windows phone, android, safari) ilman että tiedot hukkuu
+ * 
+ * 
+ * - käytävien valvottujen ilmatilojen listaus 18. kohdan loppuun (PIC TEL jälkeen)
+ *   - odotetaanko ilmatilaan saapumista jos sen mainitsee? -> ei
+ * 
+ * 
  * + lentokorkeus valinnat selväkielelle (kuten nopeus)
  * - kenttälistan filtteröinti kirjoituksen mukaan?
  * 		- mihin tekstikenttä sopii
@@ -202,7 +234,7 @@ Muutoksia:
  * 
  */
 
-var log="Ohjelmakoodi päivätty: 2016-08-11<br>";
+var log="Ohjelmakoodi päivätty: 2017-02-06<br>";
 var CurrentVfrRepArray;
 var VfrRepArray;
 var OtherVfrRepArray; // Viro
@@ -251,16 +283,22 @@ var UNOFFICIAL_AERODROME_INDEX=0; // This field index is used when ZZZZ place na
 //var BY_PHONE_ON_GROUND_STR_WITH_PHONE = "PHONE ACC 032865172 "; 
 //var BY_RTF_ON_AIR_STR = "RTF ACC "; // ACC freq is updated later
 
-var BY_PHONE_STR = "PHONE ";
+var BY_PHONE_STR = "PHONE "; // for UI
 var BY_RTF_STR = "RTF "; // ACC freq is updated later
 var BY_TWR = "- (torni)";
 
-var NOTE_TO_ADD_ACC_FREQ_STR = "LISÄÄ_ACC_JAKSO";
+var NOTE_TO_ADD_ACC_FREQ_STR = "ACC_JAKSO_PUUTTUU";
 
 //var PYROTECHNICS_NOTE_REMARKS = "rakettipelastusvarjo";
 var PYROTECHNICS_NOTE_REMARKS = "pyrotechnics on board";
 
 var OPENAVIATIONDATA_APIKEY = "mkXQV7UpiiBgOVjxbTzioYfpOlNVtEtg";
+
+var NAV_WRNG_map_link = "https://ais.fi/ais/bulletins/wrng1map.pdf";
+var AUP_map_link = "http://archive.finavia.fi/aup-static/aup/kartta.html";
+var AUP_link = "https://archive.finavia.fi/aup-static/aup/aup_uup.pdf";
+var AUP_next_link = "https://archive.finavia.fi/aup-static/aup/aup_uup_nxt.pdf";
+
 
 var overrideFlightTime = true;
 
@@ -310,27 +348,28 @@ function getCountryByICAO(icao) {
 	return country;
 }
 
-
+// This is used in stored plan as reminder
 function get_ACC_STR_WITH_PHONE_by_country(country) {
 	switch(country)
 	{
-	case 'EF': return "ACC +35832865172 ";
+	case 'EF': return "EFIN +35832865172 "; // TODO
 	case 'EE': return "TALLINN ACC +3726258254 ";
 	default:
 		debug_log("ERROR: get_ACC_STR_WITH_PHONE_by_country: country '" + country + "' no yet handled.'");
-		return "ACC +35832865172 ";
+		return "EFIN +35832865172 ";
 		break;
 	}
 }
 
+// This is used in flight plan, UI and stored plan
 function get_ACC_STR_by_country(country) {
 	switch(country)
 	{
-	case 'EF': return "ACC";
+	case 'EF': return "EFIN"; // TODO
 	case 'EE': return "TALLINN ACC";
 	default:
 		debug_log("ERROR: get_ACC_STR_by_country: country '" + country + "' no yet handled.'");
-		return "ACC";
+		return "EFIN";
 		break;
 	}
 }
@@ -2276,8 +2315,8 @@ function updatePlanActivationMethods(elSelection, ad) {
 	if (ad.atc == "yes") {
 		appendOption(elSelection, BY_TWR, "twr");
 	}
-	appendOption(elSelection, "Puhelimella maassa (" + get_ACC_STR_by_country(getCountryByICAO(ad.icao)) + ")", "phoneOnGound");
-	appendOption(elSelection, "Radiolla ilmassa (" + get_ACC_STR_by_country(getCountryByICAO(ad.icao)) + " " + ad.acc + ")", "rtfOnAir");
+	appendOption(elSelection, "Puhelimella (" + get_ACC_STR_by_country(getCountryByICAO(ad.icao)) + ")", "phoneOnGound");
+	appendOption(elSelection, "Radiolla (" + get_ACC_STR_by_country(getCountryByICAO(ad.icao)) + " " + ad.acc + ")", "rtfOnAir");
 }
 
 
@@ -3464,33 +3503,37 @@ function updateFlightPlanLink() {
 
 	other += "RMK%252F";
 	if (document.getElementById("planActivationMethod").value == "phoneOnGound") {
-		other += "DEP " + BY_PHONE_STR + get_ACC_STR_by_country(getCountryByICAO(dep_icao) ) + " ";
+		//other += "DEP " + BY_PHONE_STR + get_ACC_STR_by_country(getCountryByICAO(dep_icao) ) + " "; // TODO
 	}
 	else if (document.getElementById("planActivationMethod").value == "rtfOnAir") {
 		var dep=document.getElementById("departure");
 		var depAerodrome = getAerodromeByIndex( dep.value );
 		//debug_log("dep acc =" + depAerodrome.acc);
-		other += "DEP " + BY_RTF_STR + get_ACC_STR_by_country(getCountryByICAO(dep_icao)) + " " + depAerodrome.acc + " ";
+		//other += "DEP " + /*BY_RTF_STR +*/ get_ACC_STR_by_country(getCountryByICAO(dep_icao)) + " ";// + depAerodrome.acc + " ";
+		other += "DEP ";
 		
-		if (depAerodrome.acc == NOTE_TO_ADD_ACC_FREQ_STR) {
-			alertText += "\nLähtöpaikan ACC jakso.";
-			showAlertText = true;
+		// Check if both completion methods are the same. Use: "RMK/DEP ARR EFIN" -format if both are the same.
+		var add_acc_name = true;
+		if (document.getElementById("planCompletionMethod").value == "rtfOnAir") {
+			var dep_acc_str = get_ACC_STR_by_country(getCountryByICAO(dep_icao));
+			var arr_acc_str = get_ACC_STR_by_country(getCountryByICAO(dest_icao));
+			if (dep_acc_str == arr_acc_str) {
+				add_acc_name = false;
+			}
+		}
+		if (add_acc_name == true) {
+			other += get_ACC_STR_by_country(getCountryByICAO(dep_icao)) + " ";
 		}
 	}
 
 	if (document.getElementById("planCompletionMethod").value == "phoneOnGound") {
-		other += "ARR " + BY_PHONE_STR + get_ACC_STR_by_country(getCountryByICAO(dest_icao)) + " ";
+		//other += "ARR " + BY_PHONE_STR + get_ACC_STR_by_country(getCountryByICAO(dest_icao)) + " "; // TODO
 	}
 	else if (document.getElementById("planCompletionMethod").value == "rtfOnAir") {
 		var dest=document.getElementById("destination");
 		var destAerodrome = getAerodromeByIndex( dest.value );
 		//debug_log("dest acc =" + destAerodrome.acc);
-		other += "ARR " + BY_RTF_STR + get_ACC_STR_by_country(getCountryByICAO(dest_icao)) + " " + destAerodrome.acc + " ";
-		
-		if (destAerodrome.acc == NOTE_TO_ADD_ACC_FREQ_STR) {
-			alertText += "\nLaskupaikan ACC jakso.";
-			showAlertText = true;
-		}
+		other += "ARR " + /*BY_RTF_STR +*/ get_ACC_STR_by_country(getCountryByICAO(dest_icao)) + " "; // + destAerodrome.acc + " ";
 	}
 
 	// Remove possible '+' from phone number. It was interpreted as additional space in FPL form.
@@ -3631,7 +3674,7 @@ function getPlanForStoring() {
 	var dest_icao = getAerodromeByIndex( document.getElementById("destination").value ).icao;
 	
 	if (document.getElementById("planActivationMethod").value == "phoneOnGound") {
-		plan.activation_method = BY_PHONE_STR + get_ACC_STR_WITH_PHONE_by_country(getCountryByICAO(dep_icao));
+		plan.activation_method = BY_PHONE_STR + get_ACC_STR_WITH_PHONE_by_country(getCountryByICAO(dep_icao)); // TODO
 	}
 	else if (document.getElementById("planActivationMethod").value == "rtfOnAir") {
 		var dep=document.getElementById("departure");
@@ -3643,7 +3686,7 @@ function getPlanForStoring() {
 	}
 
 	if (document.getElementById("planCompletionMethod").value == "phoneOnGound") {
-		plan.completion_method = BY_PHONE_STR + get_ACC_STR_WITH_PHONE_by_country(getCountryByICAO(dest_icao));
+		plan.completion_method = BY_PHONE_STR + get_ACC_STR_WITH_PHONE_by_country(getCountryByICAO(dest_icao)); // TODO
 	}
 	else if (document.getElementById("planCompletionMethod").value == "rtfOnAir") {
 		var dest=document.getElementById("destination");
@@ -3726,6 +3769,22 @@ function storeCurrentPlan() {
     updateStoredPlanList();
     //debug_log("stringify = " + JSON.stringify(plan));
 }*/
+
+function onClickNAV_WRNG_map() {
+	window.open( NAV_WRNG_map_link );
+}
+
+function onClickAup_map() {
+	window.open( AUP_map_link );
+}
+
+function onClickAup() {
+	window.open( AUP_link );
+}
+
+function onClickAupNext() {
+	window.open( AUP_next_link );
+}
 
 
 function onClickFlightPlanLinkButton() {
