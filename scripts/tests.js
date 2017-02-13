@@ -511,3 +511,271 @@ test( "get_ACC_STR_WITH_PHONE_by_country", function() {
 });
 
 
+
+
+// Helper for testing floats. Rounding for 3 decimals.
+function about(val) {
+	var accuracy = 1000;
+	return Math.round(val*accuracy)/accuracy;
+}
+
+// getAngle()
+test( "getAngle", function() {
+	equal( about(getAngle(0, 0, 5, 0)), 0 ); // horizontal
+	equal( about(getAngle(0, 0, 0, 5)), 90 ); //vertical
+	
+	equal( about(getAngle(0, 0, 5, 5)), 45 ); // easy one
+	equal( about(getAngle(0, 0, 5, -5)), -45 ); // easy to down
+	
+	equal( about(getAngle(10, 10, 15, 15)), 45 ); // not starting from zero
+	
+	equal( about(getAngle(0, 0, -5, 5)), 90+45 ); // over 90 deg
+	equal( about(getAngle(0, 0, -5, 0)), 90+90 ); // over 90 deg
+	equal( about(getAngle(0, 0, -5, -5)), 90+90+45 ); // over 90 deg
+
+	equal( about(getAngle(0, 0, 1, 5)), 78.690 ); // near but less than 90
+	equal( about(getAngle(0, 0, -1, 5)), 180-78.690 ); // near but over 90
+});
+
+var CANVAS_SIZE = 400;
+var SCALE_SIZE = 20;
+
+// Helper for testing
+function drawLine(x1, y1, x2, y2, linestyle) {
+	var c = document.getElementById("canvas");
+	var ctx = c.getContext("2d");
+
+	x1 *= SCALE_SIZE;
+	y1 *= -SCALE_SIZE;
+	x2 *= SCALE_SIZE;
+	y2 *= -SCALE_SIZE;
+	
+	x1 += CANVAS_SIZE/2;
+	y1 += CANVAS_SIZE/2;
+	x2 += CANVAS_SIZE/2;
+	y2 += CANVAS_SIZE/2;
+	
+	ctx.beginPath();
+	ctx.moveTo(x1,y1);
+	ctx.lineTo(x2,y2);
+	ctx.closePath();
+	ctx.strokeStyle = linestyle;
+	ctx.stroke();
+	//ctx.globalAlpha=1.0;
+	
+}
+
+// Helper for testing
+function clearCanvas() {
+	var c = document.getElementById("canvas");
+	var ctx = c.getContext("2d");
+
+	c.width = CANVAS_SIZE;
+	c.height = CANVAS_SIZE;
+	
+	// Clear screen
+	ctx.clearRect(0,0,CANVAS_SIZE,CANVAS_SIZE);
+}
+
+
+// Helper for testing
+function visualizeCheckReject(p1x, p1y, p2x, p2y, b1x, b1y, b2x, b2y) {
+	drawLine(p1x, p1y, p2x,p2y, 'blue');
+	var linestyle = 'lightgreen';
+	if (isCrossing(p1x, p1y, p2x, p2y, b1x, b1y, b2x, b2y)) {
+		linestyle = 'red';
+	}
+	
+	drawLine(b1x, b1y, b2x,b2y, linestyle);
+}
+
+// checkReject()
+test( "checkReject", function() {
+	
+	equal( checkReject(0,0, 5,0,  5,0, 0,5), false );
+	equal( checkReject(0,0, 5,0,  0,5, 5,0), false );
+	equal( checkReject(0,0, 5,5,  5,0, 0,5), false );
+
+	equal( checkReject(0,0, 4,2,  5,1, 5,3), false );
+	equal( checkReject(0,0, 4,2,  6,1, 6,3), false );
+	equal( checkReject(0,0, 4,2,  7,1, 7,3), true );
+
+	equal( checkReject(0,4, 4,2,  5,1, 5,3), false );
+	equal( checkReject(0,4, 4,2,  6,1, 6,3), false );
+	equal( checkReject(0,4, 4,2,  7,1, 7,3), true );
+
+	equal( checkReject(0,0, 4,2,  1,0, 1,3), false );
+	equal( checkReject(0,0, 4,2,  2,0, 2,3), false );
+	equal( checkReject(0,0, 4,2,  3,0, 3,3), false );
+	
+	equal( checkReject(0,0, 4,2,  -1,1, -1,-1), true );
+	equal( checkReject(0,0, 4,2,  -2,1, -2,-1), true );
+	equal( checkReject(0,0, 4,2,  -3,1, -3,-1), true );
+
+//	clearCanvas();
+	/*visualizeCheckReject(0,0, 4,2,  -3,-1, -3,3);
+	visualizeCheckReject(0,0, 4,2,  -2,-1, -2,3);
+	visualizeCheckReject(0,0, 4,2,  -1,-1, -1,3);
+	visualizeCheckReject(0,0, 4,2,  0,-1, 0,3);
+	visualizeCheckReject(0,0, 4,2,  1,-1, 1,3);
+	visualizeCheckReject(0,0, 4,2,  2,-1, 2,3);
+	visualizeCheckReject(0,0, 4,2,  3,-1, 3,3);
+	visualizeCheckReject(0,0, 4,2,  4,-1, 4,3);
+	visualizeCheckReject(0,0, 4,2,  5,-1, 5,3);
+	visualizeCheckReject(0,0, 4,2,  6,-1, 6,3);
+	visualizeCheckReject(0,0, 4,2,  7,-1, 7,3);
+	*/
+	equal( checkReject(0,0, 4,2,  6, 1, -1, -1), true );
+	
+	//debug_log("random test   ------------------------- ");
+
+	//visualizeCheckReject(0,0, 4,2,  6.594984004111872, -0.752569929246576, -9.306045700727609, -6.364890641735252);
+	//visualizeCheckReject(0,0, 4,2,  6, 1, -4, -2); // fail
+	//visualizeCheckReject(0,0, 4,2,  6, 1, -1, -1);
+
+	/*var px1 = Math.random()*20 - 10;
+	var py1 = Math.random()*20 - 10;
+	var px2 = Math.random()*20 - 10;
+	var py2 = Math.random()*20 - 10;
+	for (var i=0; i<20; ++i) {
+		var x1 = Math.random()*20 - 10;
+		var y1 = Math.random()*20 - 10;
+		var x2 = Math.random()*20 - 10;
+		var y2 = Math.random()*20 - 10;
+		//visualizeCheckReject(0,0, 4,2,  x1,y1,x2,y2);
+		visualizeCheckReject(px1,py1, px2,py2,  x1,y1,x2,y2);
+	}*/
+
+});
+
+
+
+// Helper function for testing. Draws lines to canvas
+function DrawNumOfCrossingLines(p1x, p1y, p2x, p2y, coordinates) {
+	drawLine(p1x, p1y, p2x, p2y, 'red');
+
+	var count = 0;
+	for (var coord=1; coord<coordinates.length; ++coord) {
+		var b1x = coordinates[coord-1][0];
+		var b1y = coordinates[coord-1][1];
+		var b2x = coordinates[coord][0];
+		var b2y = coordinates[coord][1];
+		drawLine(b1x, b1y, b2x,b2y, 'blue');
+		
+		var crossing = isCrossing(p1x, p1y, p2x, p2y, b1x, b1y, b2x, b2y);
+		if (crossing) {
+			count++;
+		}
+	}
+	
+	return count;
+}
+
+test( "numOfCrossingLines", function() {
+	//clearCanvas();
+
+	var airspace = {
+		"type" : "FeatureCollection",
+		"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"name" : "EFTP CTR",
+				"top" : "2000 FT MSL",
+				"bottom" : "SFC"
+			},
+			"geometry" : {
+				"type" : "Polygon",
+				"coordinates" : [[[0, 0], [5, 1], [4, 6], [-1, 5], [0, 0]]]
+			}
+		}]
+	};
+
+	equal( numOfCrossingLines(1,2, 5,0,  airspace.features[0].geometry.coordinates[0]), 1 );
+	equal( numOfCrossingLines(-2,4, 6,3,  airspace.features[0].geometry.coordinates[0]), 2 );
+	equal( numOfCrossingLines(-1,-1, 1,1,  airspace.features[0].geometry.coordinates[0]), 1 );
+	
+	equal( numOfCrossingLines(2.5,1, 2.5,0.5,  airspace.features[0].geometry.coordinates[0]), 1 );
+	equal( numOfCrossingLines(1,2.5, -0.5,2.5,  airspace.features[0].geometry.coordinates[0]), 1 );
+	equal( numOfCrossingLines(1.5,5, 1.5,5.5,  airspace.features[0].geometry.coordinates[0]), 0 ); // not hitting line at this side
+	equal( numOfCrossingLines(4,3.5, 4.5,3.5,  airspace.features[0].geometry.coordinates[0]), 0 ); // not hitting line at this side
+
+});
+
+
+
+
+
+test( "getCrossedAirspaces", function() {
+	var airspace = {
+		"type" : "FeatureCollection",
+		"features" : [{
+			"type" : "Feature",
+			"properties" : {
+				"name" : "EFTP CTR",
+				"top" : "2000 FT MSL",
+				"bottom" : "SFC"
+			},
+			"geometry" : {
+				"type" : "Polygon",
+				"coordinates" : [[[0, 0], [5, 1], [4, 6], [-1, 5], [0, 0]]]
+			}
+		},
+		{
+		"type": "Feature",
+		"properties": {
+			"name": "EFTP TMA EAST",
+			"top": "FL 95",
+			"bottom": "2000 FT MSL"
+		},
+		"geometry": {
+		"type": "Polygon",
+		"coordinates": [[[-2, -2], [7, -2], [5, 8], [-4, 6], [-2, -2]]]
+		}
+		},
+		{
+		"type": "Feature",
+		"properties": {
+		"name": "EFHA CTR",
+		"top": "2000 FT MSL",
+		"bottom": "SFC"
+		},
+		"geometry": {
+		"type": "Polygon",
+		"coordinates": [[[0, -8], [5, -8], [4, -3], [-1, -4], [0, -8]]]
+		}
+		},
+		]
+	};
+	clearCanvas();
+
+	equal( getCrossedAirspaces(1,2, 5,0,  airspace), "EFTP" );
+	var a = getCrossedAirspaces(-5,5, 8,0,  airspace);
+	equal( a.length, 2 );
+	equal( a[0], "EFTP" );
+	equal( a[1], "EFTP" );
+	a = getCrossedAirspaces(2,2, 3,-7,  airspace);
+	equal( a.length, 3 );
+	equal( a[0], "EFTP" );
+	equal( a[1], "EFTP" );
+	equal( a[2], "EFHA" );
+
+	/*equal( getCrossedAirspaces(1,2, 5,0,  airspace), "EFTP CTR" );
+	var a = getCrossedAirspaces(-5,5, 8,0,  airspace);
+	equal( a.length, 2 );
+	equal( a[0], "EFTP CTR" );
+	equal( a[1], "EFTP TMA EAST" );
+	a = getCrossedAirspaces(2,2, 3,-7,  airspace);
+	equal( a.length, 3 );
+	equal( a[0], "EFTP CTR" );
+	equal( a[1], "EFTP TMA EAST" );
+	equal( a[2], "EFHA CTR" );
+	*/
+
+});
+
+
+
+
+
+
+
