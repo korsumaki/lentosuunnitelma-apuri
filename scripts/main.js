@@ -1,6 +1,17 @@
 "use strict";
 
 /*
+ * Change notes:
+ * - RMK muutokset aktivointiin ja päättämiseen korpikentillä ("RMK-kentän käyttö / kohta e")
+ *   - oletuksena puhelimella ACC:lle (=EFIN). Tästä ei tule mitään merkintää plaanille.
+ *   - radiolla ilmoitukseen ei tarvitse jaksoa.
+ * - Ilmatilat otsikko on lisätty Reittikartan alle. Se näyttää minkä ilmatilojen kautta reitti menee.
+ *   Nämä kentät lisätään plaanissa RMK kohdan loppuun (18 kentässä), poislukien lähtö- ja määräkenttä. ("RMK-kentän käyttö / kohta a")
+ *   - jos reittiviiva kulkee EFHK ilmatilan kautta (tai ali), näytetään nappi mistä voi valita EFHK:n lisättäväksi plaanille (jos oikeasti aikoo lentää Helsinki-Vantaan ilmatilassa).
+ * 
+ * - Lennonvalmistelutietoihin on lisätty linkkejä:
+ *   - AUP karttoja yms. Lisäksi linkit on muutettu niin että niissä käymisen ei pitäisi niin helposti poistaa apurille tehtyjä kenttävalintoja.
+ * 
  * TODO list:
  * 
  * 2FEB2017
@@ -15,10 +26,13 @@
  * - RMK/FPL CLOSING KUKSA EFRO vaihtoehto?, merkitään määränpääksi kohtaan 16 ZZZZ ja lentoajaksi merkitään se aika, joka kuluu lennettäessä valvotun ilmatilan rajalle. 
  * - generoi viron kentät (mitä muuta pitäisi vielä tarkistaa?)
  * 
+ * - miksi not secure githubissa?
+ *   - tarkista viimeisimmät github secure domain jutut, onko muutosta?
+ * 
  * Deploy:
  * + ota alkuperäiset FTP:llä talteen (index, main.js)
- * --+ koodi (kokeile merkistöt)
- * - index (uudet linkit, yläreunan kommentti pois)
+ * + koodi (kokeile merkistöt)
+ * + index (uudet linkit, yläreunan kommentti pois)
  * - viron kentät
  * 
  * 
@@ -31,9 +45,7 @@
  *   - linkkien avaaminen uuteen ikkunaan (windows phone, android, safari) ilman että tiedot hukkuu
  * 
  * 
- * - käytävien valvottujen ilmatilojen listaus 18. kohdan loppuun (PIC TEL jälkeen)
- *   - odotetaanko ilmatilaan saapumista jos sen mainitsee? -> ei
- * 
+ * + käytävien valvottujen ilmatilojen listaus 18. kohdan loppuun (PIC TEL jälkeen)
  * 
  * + lentokorkeus valinnat selväkielelle (kuten nopeus)
  * - kenttälistan filtteröinti kirjoituksen mukaan?
@@ -234,7 +246,7 @@ Muutoksia:
  * 
  */
 
-var log="Ohjelmakoodi päivätty: 2017-02-06<br>";
+var log="Ohjelmakoodi päivätty: 2017-02-14<br>";
 var CurrentVfrRepArray;
 var VfrRepArray;
 var OtherVfrRepArray; // Viro
@@ -253,6 +265,8 @@ var flightPlanLink; // created link to flight plan
 var gCalculatedFlyingTimeStr;
 var gSelectedFlyingTimeStr;
 var gTotalFlightTimeToFirBorder;
+var gCrossedAirspaces; 				// List of airspaces which we are going to fly through. String
+
 
 var airspaceData;
 
@@ -298,6 +312,9 @@ var NAV_WRNG_map_link = "https://ais.fi/ais/bulletins/wrng1map.pdf";
 var AUP_map_link = "http://archive.finavia.fi/aup-static/aup/kartta.html";
 var AUP_link = "https://archive.finavia.fi/aup-static/aup/aup_uup.pdf";
 var AUP_next_link = "https://archive.finavia.fi/aup-static/aup/aup_uup_nxt.pdf";
+
+var gEmptyAirspaceLat = "620000N";
+var gEmptyAirspaceLon = "0200000E";
 
 
 var overrideFlightTime = true;
@@ -2987,7 +3004,7 @@ function onChangeDepartureAd() {
 	}
 	
 	// Get Metar, Taf and Notams (in future?) from open data service
-	requestOpenDataDep(depAerodrome.icao);
+	//requestOpenDataDep(depAerodrome.icao);
 }
 
 function onChangeDestinationAd() {
@@ -3023,7 +3040,7 @@ function onChangeDestinationAd() {
 	}
 	
 	// Get Metar, Taf and Notams (in future?) from open data service
-	requestOpenDataDest(destAerodrome.icao);
+	//requestOpenDataDest(destAerodrome.icao);
 }
 
 // distance in km
@@ -3288,7 +3305,80 @@ function createFlyingTimeTable() {
 	setFlightTimeOverride(false);
 	
 	updateMapData(array);
+	
+	updateCrossedAirspaces(array, airspaceData);
 }
+
+
+// From: http://stackoverflow.com/questions/9229645/remove-duplicates-from-javascript-array
+function removeDuplicates(a) {
+    var seen = {};
+    var out = [];
+    var len = a.length;
+    var j = 0;
+    for(var i = 0; i < len; i++) {
+         var item = a[i];
+         if(seen[item] !== 1) {
+               seen[item] = 1;
+               out[j++] = item;
+         }
+    }
+    return out;
+}
+
+
+function updateCrossedAirspacesToMainpage(airspaces) {
+	document.getElementById("crossedAirspaces").innerHTML = airspaces;
+}
+
+
+function updateCrossedAirspaces(array, airspace) {
+	//debug_log("updateCrossedAirspaces()");
+
+	var a = new Array;
+	var prev=array[0];
+	for (var i=1; i<array.length; ++i) {
+		if (array[i] !== null) {
+			if (prev.lat != array[i].lat || prev.lon != array[i].lon) {
+				a = a.concat(getCrossedAirspaces(array[i].lon,array[i].lat, prev.lon,prev.lat,  airspace));
+			}
+		}
+	}
+
+	// Check dep airport (line to non-controlled-airspace)
+	a = a.concat(getOnceCrossedAirspaces(array[0].lon,array[0].lat, DMS_to_Decimal(gEmptyAirspaceLat), DMS_to_Decimal(gEmptyAirspaceLon),  airspace) );
+	
+	a = removeDuplicates(a);
+
+	// If EFHK is included in crossed airspaces, enable checkbox for including it.
+	// Actual EFHK including is done later when plan link is created.
+	var EfhkIndex = a.indexOf("EFHK");
+	if (EfhkIndex > -1) {
+		$('#ToggleEFHKContainer').slideDown();
+		a.splice(EfhkIndex, 1);
+	}
+	else {
+		$('#ToggleEFHKCheckbox').prop('checked', false).checkboxradio('refresh');
+		$('#ToggleEFHKContainer').slideUp();
+	}
+	
+	updateCrossedAirspacesToMainpage(a);
+
+
+	// Remove dep and dest airports, if exists
+	var indexToRemove = a.indexOf(array[0].icao);
+	if (indexToRemove > -1) {
+		a.splice(indexToRemove, 1);
+	}
+	indexToRemove = a.indexOf(array[array.length-1].icao);
+	if (indexToRemove > -1) {
+		a.splice(indexToRemove, 1);
+	}
+	
+	gCrossedAirspaces = a.toString();
+	gCrossedAirspaces = gCrossedAirspaces.replace(/[,]/g, " "); // remove commas ','
+}
+
 
 	// Convert scandinavian letters
 function convertScandinavianLetters( str ) {
@@ -3545,6 +3635,17 @@ function updateFlightPlanLink() {
 	//debug_log("pilotTel 2 '" + pilotTel + "'");
 	
 	other += "PIC TEL " + pilotTel;
+	
+	
+	// Add crossed airspaces at the end of RMK
+	if (gCrossedAirspaces.length != 0) { // Just fine tuning for spaces...
+		other += " " + gCrossedAirspaces;
+	}
+
+	var isEFHKselected = $("#ToggleEFHKCheckbox").is(':checked');
+	if (isEFHKselected) {
+		other += " EFHK";
+	}
 
 	linkString += "&other=" + other;
 	
@@ -3887,3 +3988,123 @@ function importSettings(event) {
     };
     reader.readAsText(input.files[0]);
 }
+
+// ====================================================
+// Detecting used airspaces within route
+// ====================================================
+
+// Get angle in degrees from (x1,y1) to (x2,y2)
+function getAngle(x1, y1, x2, y2) {
+	// debug_log("getAngle(" + x1 + ", "+ y1 + ", " + x2 + ", "+ y2 + ")" );
+
+	var a = y2-y1;
+	var b = x2-x1; // delta x
+	var c = Math.sqrt(a*a + b*b);
+	//debug_log("c= " + c );
+	var angle = toDeg(Math.asin(a/c));
+
+	if (b<0) {
+		angle = 180 - angle;
+	}
+	//debug_log("getAngle(" + x1 + ", "+ y1 + ", " + x2 + ", "+ y2 + ") = " + angle);
+	return angle;
+}
+
+// Check whether given boulderline can be rejected
+// true = 100% sure that line can be rejected
+// false = not yet sure, need to check also from p2->p1 direction.
+function checkReject(p1x, p1y, p2x, p2y, b1x, b1y, b2x, b2y) {
+	//debug_log("checkReject(" + b1x +", "+ b1y +", "+ b2x +", "+ b2y +")" );
+	var lineAng = getAngle(p1x, p1y, p2x, p2y);
+	var b1Ang = getAngle(p1x, p1y, b1x, b1y);
+	var b2Ang = getAngle(p1x, p1y, b2x, b2y);
+
+	var reject = true;
+	if (b1Ang <= lineAng && lineAng <= b2Ang) {
+		//debug_log("between 1");
+		reject = false;
+	}
+	else if (b1Ang >= lineAng && lineAng >= b2Ang) {
+		//debug_log("between 2");
+		reject = false;
+	}
+	else {
+		//debug_log("not between");
+		reject = true;
+	}
+
+	// Invert flag if other angles are on 'other side'
+	if (Math.abs(b1Ang-b2Ang) > 180) {
+		//debug_log("but inverting selection.");
+		reject = !reject;
+	}
+
+	//debug_log("checkReject() -> lineAng=" + lineAng + ", b1Ang="+ b1Ang + ", b2Ang=" + b2Ang + " -> " + reject);
+	return reject;
+}
+
+// Check whether lines (p and b) are crossing each other.
+// Return true if crossing, false if not crossing.
+function isCrossing(p1x, p1y, p2x, p2y, b1x, b1y, b2x, b2y) {
+	var reject = checkReject(p1x, p1y, p2x, p2y, b1x, b1y, b2x, b2y);
+	if (!reject) {
+		reject = checkReject(p2x, p2y, p1x, p1y, b1x, b1y, b2x, b2y);
+	}
+	return !reject;
+}
+
+
+// Count how many lines of airspace given line is crossing.
+function numOfCrossingLines(p1x, p1y, p2x, p2y, coordinates) {
+	var count = 0;
+	for (var coord=1; coord<coordinates.length; ++coord) {
+		var b1x = coordinates[coord-1][0];
+		var b1y = coordinates[coord-1][1];
+		var b2x = coordinates[coord][0];
+		var b2y = coordinates[coord][1];
+
+		var crossing = isCrossing(p1x, p1y, p2x, p2y, b1x, b1y, b2x, b2y);
+		if (crossing) {
+			count++;
+		}
+	}
+	return count;
+}
+
+
+function getCrossedAirspaces(p1x, p1y, p2x, p2y, airspace) {
+	var a = new Array;
+
+	// loop all airspaces
+	for (var feature=0; feature<airspace.features.length; ++feature) {
+		//var count = DrawNumOfCrossingLines(p1x, p1y, p2x, p2y, airspace.features[feature].geometry.coordinates[0]);
+		var count = numOfCrossingLines(p1x, p1y, p2x, p2y, airspace.features[feature].geometry.coordinates[0]);
+		//debug_log("getCrossedAirspaces: " + airspace.features[feature].properties.name + " count=" + count );
+
+		// It *could* be usefull to get SFC started airspaces, vs. all airspaces
+		//airspace.features[feature].properties.bottom
+		if (count > 0) {
+			a.push( airspace.features[feature].properties.name.substr(0,4) );
+			//a.push( airspace.features[feature].properties.name );
+		}
+	}
+	return a;
+}
+
+function getOnceCrossedAirspaces(p1x, p1y, p2x, p2y, airspace) {
+	var a = new Array;
+
+	// loop all airspaces
+	for (var feature=0; feature<airspace.features.length; ++feature) {
+		var count = numOfCrossingLines(p1x, p1y, p2x, p2y, airspace.features[feature].geometry.coordinates[0]);
+
+		// It *could* be usefull to get SFC started airspaces, vs. all airspaces
+		//airspace.features[feature].properties.bottom
+		if (count == 1) {
+			a.push( airspace.features[feature].properties.name.substr(0,4) );
+		}
+	}
+	return a;
+}
+
+

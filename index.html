@@ -24,8 +24,8 @@
 		</div> 
 
 		<div data-role="content">
-			<!--p style='background:pink'>Lentosuunnitelma-apurin sijainti on muuttunut (01/2016), olethan päivittänyt kirjanmerkkisi:<br>
-			<a href="http://korsu.mbnet.fi/ilmailu/plan3/">http://korsu.mbnet.fi/ilmailu/plan3/</a></p-->
+			<p style='background:lightgreen'>Chrome selaimen käyttäjä: Voit käyttää tätä linkkiä niin Apuri saa sijainnin ja toimii taas kunnolla:<br>
+			<a href="https://korsumaki.github.io/lentosuunnitelma-apuri/">https://korsumaki.github.io/lentosuunnitelma-apuri/</a></p>
 			<div class="ui-field-contain">
 				<fieldset data-role="controlgroup" data-mini="true">
 					<legend>
@@ -223,6 +223,15 @@
 				<fieldset data-role="controlgroup" data-type="horizontal">
 					<legend>Reitti&shy;kartta</legend>
 					<canvas id="mapCanvas" style="border:1px solid #000000;">Canvas not supported</canvas>
+				</fieldset>
+				<fieldset data-role="controlgroup" data-type="horizontal"> <!-- data-mini="true"-->
+					<legend>Ilmatilat</legend>
+					<span id="crossedAirspaces"></span>
+				</fieldset>
+				<fieldset data-role="controlgroup" data-type="horizontal" id="ToggleEFHKContainer"> <!-- data-mini="true"-->
+					<legend></legend>
+				    <input type="checkbox" name="ToggleEFHKCheckbox" id="ToggleEFHKCheckbox" data-mini="true">
+				    <label for="ToggleEFHKCheckbox">Lisää EFHK</label>
 				</fieldset>
 
 				<fieldset data-role="controlgroup" data-type="horizontal"> <!-- data-mini="true"-->
@@ -505,7 +514,7 @@
 			</div> <!-- fieldcontain -->
 
 			<h3>Tietoa</h3>
-			<p>Käyttöliittymä päivätty: 2017-02-06<br>
+			<p>Käyttöliittymä päivätty: 2017-02-14<br>
 			<span id="log">Log</span>
 			</p>
 
