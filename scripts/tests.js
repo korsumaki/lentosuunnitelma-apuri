@@ -612,7 +612,7 @@ test( "checkReject", function() {
 	equal( checkReject(0,0, 4,2,  -2,1, -2,-1), true );
 	equal( checkReject(0,0, 4,2,  -3,1, -3,-1), true );
 
-//	clearCanvas();
+	clearCanvas();
 	/*visualizeCheckReject(0,0, 4,2,  -3,-1, -3,3);
 	visualizeCheckReject(0,0, 4,2,  -2,-1, -2,3);
 	visualizeCheckReject(0,0, 4,2,  -1,-1, -1,3);
@@ -624,7 +624,7 @@ test( "checkReject", function() {
 	visualizeCheckReject(0,0, 4,2,  5,-1, 5,3);
 	visualizeCheckReject(0,0, 4,2,  6,-1, 6,3);
 	visualizeCheckReject(0,0, 4,2,  7,-1, 7,3);
-	*/
+*/
 	equal( checkReject(0,0, 4,2,  6, 1, -1, -1), true );
 	
 	//debug_log("random test   ------------------------- ");
@@ -633,7 +633,7 @@ test( "checkReject", function() {
 	//visualizeCheckReject(0,0, 4,2,  6, 1, -4, -2); // fail
 	//visualizeCheckReject(0,0, 4,2,  6, 1, -1, -1);
 
-	/*var px1 = Math.random()*20 - 10;
+	var px1 = Math.random()*20 - 10;
 	var py1 = Math.random()*20 - 10;
 	var px2 = Math.random()*20 - 10;
 	var py2 = Math.random()*20 - 10;
@@ -644,7 +644,7 @@ test( "checkReject", function() {
 		var y2 = Math.random()*20 - 10;
 		//visualizeCheckReject(0,0, 4,2,  x1,y1,x2,y2);
 		visualizeCheckReject(px1,py1, px2,py2,  x1,y1,x2,y2);
-	}*/
+	}
 
 });
 
@@ -746,7 +746,7 @@ test( "getCrossedAirspaces", function() {
 		},
 		]
 	};
-	clearCanvas();
+	//clearCanvas();
 
 	equal( getCrossedAirspaces(1,2, 5,0,  airspace), "EFTP" );
 	var a = getCrossedAirspaces(-5,5, 8,0,  airspace);
@@ -770,6 +770,13 @@ test( "getCrossedAirspaces", function() {
 	equal( a[1], "EFTP TMA EAST" );
 	equal( a[2], "EFHA CTR" );
 	*/
+
+/* TODO
+ EFTP VIILA PETOT KÄRDLA hakee EFTU CTA:n mukaan...
+ - check (from map) should it be? problem in own map?
+ */
+
+
 
 });
 
