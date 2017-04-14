@@ -328,8 +328,33 @@
 				<!-- https://ais.fi/ais/bulletins/wrng1map.pdf -->
 			</div>
 			
-			<button onclick="onClickFlightPlanLinkButton()" data-mini="true">Jatka lentosuunnitelmaan...</button>
-			
+			<form method="POST" target="_blank" action="https://www.ais.fi/fi/lennonvalmistelu-ja-lentosuunnitelmat/fpl-lomake">
+				<input type="hidden" id="form_id" name="id">
+				<input type="hidden" id="form_rules" name="rules">
+				<input type="hidden" id="form_type" name="type">
+				<input type="hidden" id="form_aircraft" name="aircraft">
+				<input type="hidden" id="form_cat" name="cat">
+				<input type="hidden" id="form_equipment" name="equipment">
+				<input type="hidden" id="form_ssr" name="ssr">
+				<input type="hidden" id="form_ad" name="ad">
+				<input type="hidden" id="form_time" name="time">
+				<input type="hidden" id="form_spd" name="spd">
+				<input type="hidden" id="form_speed" name="speed">
+				<input type="hidden" id="form_lv" name="lv">
+				<input type="hidden" id="form_level" name="level">
+				<input type="hidden" id="form_route" name="route">
+				<input type="hidden" id="form_dad" name="dad">
+				<input type="hidden" id="form_eet" name="eet">
+				<input type="hidden" id="form_other" name="other">
+				<input type="hidden" id="form_endurance" name="endurance">
+				<input type="hidden" id="form_person" name="person">
+				<input type="hidden" id="form_markings" name="markings">
+				<input type="hidden" id="form_remarks" name="remarks">
+				<input type="hidden" id="form_pic" name="pic">
+				<input type="hidden" id="form_tel" name="tel">
+				<input type="hidden" id="form_filed" name="filed">
+				<input type="submit" value="Jatka lentosuunnitelmaan..." data-mini="true">
+			</form>
 			<div data-role="collapsible" data-mini="true" data-theme="a" data-content-theme="a"> <!-- b d -->
 				<h4>Tehdyt lentosuunnitelmat</h4>
 				<ul id="storedPlanList" data-role="listview" data-split-theme="a" data-icon="false" data-split-icon="info"> <!-- d -->
