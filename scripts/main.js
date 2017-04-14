@@ -246,7 +246,7 @@ Muutoksia:
  * 
  */
 
-var log="Ohjelmakoodi päivätty: 2017-02-14<br>";
+var log="Ohjelmakoodi päivätty: 2017-04-14<br>";
 var CurrentVfrRepArray;
 var VfrRepArray;
 var OtherVfrRepArray; // Viro
@@ -261,7 +261,6 @@ var OtherAerodromeArray; // Viro
 var gPosition_lat;
 var gPosition_lon;
 
-var flightPlanLink; // created link to flight plan
 var gCalculatedFlyingTimeStr;
 var gSelectedFlyingTimeStr;
 var gTotalFlightTimeToFirBorder;
@@ -1927,6 +1926,34 @@ function updateStoredPlanList() {
 	$("#storedPlanList").listview('refresh');
 }
 
+$(document).ready(function() {
+	//console.log("document ready");
+	$('form').on('submit', function(e){
+		//console.log("submit button");
+		var valid = false;
+
+		// validation code
+		if ( isAllSettingsAvailable() ) {
+			try {
+				if (updateFlightPlanForm()) {
+					storeCurrentPlan();
+					valid = true;
+				}
+
+			} catch(err) {
+				alert("Lentosuunnitelman luominen ei onnistunut.\n" + err );
+			}
+		} else {
+			alert("Perustietoja puuttuu vielä.\nLisää puuttuvat tiedot Perustiedot sivulle, niin lentosuunnitelma saadaan täytettyä oikein.");
+			window.open( "#page-plan-settings", "_self" );
+		}
+
+		if(!valid) {
+			e.preventDefault();
+		}
+	});
+});
+
 // TODO this should be finally in some document.ready() handler?
 function initStoredPlanPageHandler() {
 	// jQuery( ".selector" ).on( "pagebeforeshow", function( event ) { ... } )
@@ -3424,7 +3451,7 @@ function updateFlyingTimeValues() {
 }
 
 
-function updateFlightPlanLink() {
+function updateFlightPlanForm() {
 	// Get current time and add time offset
 	
 	var departureTimeHourSelection = document.getElementsByName("departureTimeHour");
@@ -3449,16 +3476,11 @@ function updateFlightPlanLink() {
 	}
 	var d = new Date();
 	var timeStr="";
-	//debug_log("updateFlightPlanLink() - nyt=" + d.getUTCHours() + ":" + d.getUTCMinutes());
-	//debug_log("updateFlightPlanLink() - off=" + departureTimeHour + ":" + departureTimeMin);
 
 	d.setMinutes( timeNext5mins( d.getMinutes() ) + departureTimeMin );
 	d.setHours( d.getHours() + departureTimeHour);
 	var hours = d.getUTCHours();
 	var minutes = d.getUTCMinutes();
-
-	//debug_log("updateFlightPlanLink() - ====" + d.getUTCHours() + ":" + d.getUTCMinutes());
-
 
 
 
@@ -3470,31 +3492,30 @@ function updateFlightPlanLink() {
 	var dep_icao = getAerodromeByIndex( document.getElementById("departure").value ).icao;
 	var dest_icao = getAerodromeByIndex( document.getElementById("destination").value ).icao;
 
-	var linkStart = "http://ais.fi/C/flightplan/efpl_lomake/";
-	var linkString = "&id=" + 		document.getElementById("aircraftIdentification").value;
-	linkString += "&rules=V"; // + 		document.getElementById("flightRules").value;
-	linkString += "&type=G"; // + 		document.getElementById("flightType").value;
-	linkString += "&aircraft=" + 	document.getElementById("aircraftType").value;
-	linkString += "&cat=L"; // + 		document.getElementById("wakeTurbulenceCat").value;
-	linkString += "&equipment=" + 	document.getElementById("equipment").value;
-	linkString += "&ssr=" + 		document.getElementById("ssr").value;
-	linkString += "&ad=" + 			dep_icao;
-	linkString += "&time=" +		timeStr;
-	linkString += "&spd=" + 		document.getElementById("aircraftSpeedUnit").value;
-	linkString += "&speed=" + 		document.getElementById("aircraftSpeed").value;
-	
-	//linkString += "&lv=VFR";
-	linkString += "&lv=" + document.getElementById("flight_lv").value;
+
+	$("#form_id").val(document.getElementById("aircraftIdentification").value);
+	$("#form_rules").val("V");
+	$("#form_type").val("G");
+	$("#form_aircraft").val(document.getElementById("aircraftType").value);
+	$("#form_cat").val("L");
+	$("#form_equipment").val(document.getElementById("equipment").value);
+	$("#form_ssr").val(document.getElementById("ssr").value);
+	$("#form_ad").val(dep_icao);
+	$("#form_time").val(timeStr);
+	$("#form_spd").val(document.getElementById("aircraftSpeedUnit").value);
+	$("#form_speed").val(document.getElementById("aircraftSpeed").value);
+
+	$("#form_lv").val(document.getElementById("flight_lv").value);
+
 	// FIXED! When VFR is set, also 'level' must contain something. Space is enough!
 	//linkString += "&level= ";
 	var level = document.getElementById("flight_level").value;
 	if (level == "") {
 		level = " ";
 	}
-	linkString += "&level=" + level;
+	$("#form_level").val(level);
 	
 	// Combine route
-	linkString += "&route=";
 	var routeStr="";
 	if (document.getElementById("route_departure_rep").value !== "") {
 		routeStr += document.getElementById("route_departure_rep").value;
@@ -3522,19 +3543,18 @@ function updateFlightPlanLink() {
 		routeStr += " ";
 	}
 
-	linkString += routeStr;
+	$("#form_route").val(convertScandinavianLetters(routeStr));
 	
-	linkString += "&dad=" + dest_icao;
+	$("#form_dad").val(dest_icao);
 	
 	// Check FlightTimeOverride
 	if (updateFlyingTimeValues() == false) {
 		return false;
 	}
 	
-	linkString += "&eet=" + gSelectedFlyingTimeStr;
+	$("#form_eet").val(gSelectedFlyingTimeStr);
 
 	var other="";
-	
 	
 	// Add departure and/or destination places into 18: field, if using ZZZZ airfield.
 	//18: DEP/NUMMIJARVI DEST/AHTARI
@@ -3545,7 +3565,7 @@ function updateFlightPlanLink() {
 	if (departureValue == UNOFFICIAL_AERODROME_INDEX) 
 	{
 		// ZZZZ field with freetext name
-		other += 'DEP%252F' + document.getElementById("zzzz_departure").value + " ";
+		other += 'DEP/' + document.getElementById("zzzz_departure").value + " ";
 		other += CurrentAerodromeArray[UNOFFICIAL_AERODROME_INDEX].latStr + " ";
 		other += CurrentAerodromeArray[UNOFFICIAL_AERODROME_INDEX].lonStr + " ";
 	} 
@@ -3553,7 +3573,7 @@ function updateFlightPlanLink() {
 		var departureAerodrome = getAerodromeByIndex(departureValue);
 		if ( departureAerodrome.icao == UNOFFICIAL_AERODROME) {
 			// ZZZZ field from xml
-			other += 'DEP%252F' + departureAerodrome.name + " ";
+			other += 'DEP/' + departureAerodrome.name + " ";
 			other += departureAerodrome.latStr + " ";
 			other += departureAerodrome.lonStr + " ";
 		}
@@ -3562,7 +3582,7 @@ function updateFlightPlanLink() {
 	
 	var destinationValue = document.getElementById("destination").value;
 	if (destinationValue == UNOFFICIAL_AERODROME_INDEX) {
-		other += "DEST%252F" + document.getElementById("zzzz_destination").value + " ";
+		other += "DEST/" + document.getElementById("zzzz_destination").value + " ";
 		
 		// TODO note user to manually add coordinates
 		//alertText += "\nMääräkentän koordinaatit (ddmmN dddmmE).";
@@ -3572,7 +3592,7 @@ function updateFlightPlanLink() {
 		var destinationAerodrome = getAerodromeByIndex(destinationValue);
 		if ( destinationAerodrome.icao == UNOFFICIAL_AERODROME) {
 			// ZZZZ field from xml
-			other += 'DEST%252F' + destinationAerodrome.name + " ";
+			other += 'DEST/' + destinationAerodrome.name + " ";
 			other += destinationAerodrome.latStr + " ";
 			other += destinationAerodrome.lonStr + " ";
 		}
@@ -3581,17 +3601,17 @@ function updateFlightPlanLink() {
 	if (isPbnNeeded()) {
 		var pbn = document.getElementById("equipmentPBN").value;
 		//debug_log("PBN/" + pbn);
-		other += "PBN%252F" + pbn + " ";
+		other += "PBN/" + pbn + " ";
 	}
 	
 	// If country is changing, then EET information must be added.
 	if (getCountryByICAO(dep_icao) != getCountryByICAO(dest_icao)) {
 		var firPoint = document.getElementById("route_fir_point").value;
 		// Calculate flight time to FIR point
-		other += "EET%252F" + firPoint + convertFlyingTimeToString(gTotalFlightTimeToFirBorder) + " ";
+		other += "EET/" + firPoint + convertFlyingTimeToString(gTotalFlightTimeToFirBorder) + " ";
 	}
 
-	other += "RMK%252F";
+	other += "RMK/";
 	if (document.getElementById("planActivationMethod").value == "phoneOnGound") {
 		//other += "DEP " + BY_PHONE_STR + get_ACC_STR_by_country(getCountryByICAO(dep_icao) ) + " "; // TODO
 	}
@@ -3647,8 +3667,9 @@ function updateFlightPlanLink() {
 		other += " EFHK";
 	}
 
-	linkString += "&other=" + other;
-	
+	$("#form_other").val(convertScandinavianLetters(other));
+
+
 	var endurance="";
 	var enduranceSelection = document.getElementsByName("enduranceHour");
 	for(var i = 0; i < enduranceSelection.length; i++) {
@@ -3669,7 +3690,7 @@ function updateFlightPlanLink() {
 		return false;
 	}
 
-	linkString += "&endurance=" + endurance;
+	$("#form_endurance").val(endurance);
 
 	var persons="";
 	var personsSelection = document.getElementsByName("persons");
@@ -3679,24 +3700,20 @@ function updateFlightPlanLink() {
 			break;
 		}
 	}
-	linkString += "&person=" + persons;
+	$("#form_person").val(persons);
+
 	
-	linkString += "&markings=" + document.getElementById("aircraftColor").value;
+	$("#form_markings").val(convertScandinavianLetters(document.getElementById("aircraftColor").value));
 	
 	if (document.getElementById("pyrotechnicsOnBoard").value == "on")
 	{
-		linkString += "&remarks=" + PYROTECHNICS_NOTE_REMARKS;
+		$("#form_remarks").val(PYROTECHNICS_NOTE_REMARKS);
 	}
 	
-	linkString += "&pic=" + document.getElementById("pilot").value;
-	linkString += "&tel=" + pilotTel;
-	linkString += "&filed=" + document.getElementById("pilot").value;
-	
-	
-	// Convert scandinavian letters
-	linkString = convertScandinavianLetters(linkString);
 
-	flightPlanLink = linkStart + linkString;
+	$("#form_pic").val(convertScandinavianLetters(document.getElementById("pilot").value));
+	$("#form_tel").val(pilotTel);
+	$("#form_filed").val(convertScandinavianLetters(document.getElementById("pilot").value));
 	
 	if (showAlertText) {
 		alert(alertText);
@@ -3704,6 +3721,7 @@ function updateFlightPlanLink() {
 	
 	return true;
 }
+
 
 
 /* 
@@ -3885,23 +3903,6 @@ function onClickAup() {
 
 function onClickAupNext() {
 	window.open( AUP_next_link );
-}
-
-
-function onClickFlightPlanLinkButton() {
-	if ( isAllSettingsAvailable() ) {
-		try {
-			if (updateFlightPlanLink()) {
-				storeCurrentPlan();
-				window.open( flightPlanLink );
-			}
-		} catch(err) {
-			alert("Lentosuunnitelman luominen ei onnistunut.\n" + err );
-		}
-	} else {
-		alert("Perustietoja puuttuu vielä.\nLisää puuttuvat tiedot Perustiedot sivulle, niin lentosuunnitelma saadaan täytettyä oikein.");
-		window.open( "#page-plan-settings", "_self" );
-	}
 }
 
 
