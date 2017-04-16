@@ -318,14 +318,17 @@
 					<p id="notamDestId"></p>
 				</fieldset-->
 				<fieldset data-role="controlgroup" data-type="horizontal">
-					<legend>NAV WRNG -kartta</legend>
-					<!--a href="https://ais.fi/ais/bulletins/wrng1map.pdf" rel="external" data-ajax="false">Ammunnat ja vaara-alueet (pdf kartta)</a><br-->
-					<button onclick="onClickNAV_WRNG_map()" data-mini="true">Ammunnat ja vaara-alueet (pdf kartta)</button>
-					<button onclick="onClickAup_map()" data-mini="true">AUP kartta</button>
+					<legend>NAV WRNG ja AUP</legend>
+					<button onclick="onClickNAV_WRNG_map()" data-mini="true">Ammunnat ja vaara-alueet -kartta (nykyinen)</button>
 					<button onclick="onClickAup()" data-mini="true">AUP (nykyinen)</button>
+					<button onclick="onClickAup_map()" data-mini="true">AUP kartta</button>
+				</fieldset>
+				<fieldset data-role="controlgroup" data-type="horizontal">
+					<legend></legend>
+					<button onclick="onClickNAV_WRNG_next_map()" data-mini="true">Ammunnat ja vaara-alueet -kartta (seuraava)</button>
 					<button onclick="onClickAupNext()" data-mini="true">AUP (seuraava)</button>
 				</fieldset>
-				<!-- https://ais.fi/ais/bulletins/wrng1map.pdf -->
+
 			</div>
 			
 			<form method="POST" target="_blank" action="https://www.ais.fi/fi/lennonvalmistelu-ja-lentosuunnitelmat/fpl-lomake">
@@ -350,6 +353,7 @@
 				<input type="hidden" id="form_person" name="person">
 				<input type="hidden" id="form_markings" name="markings">
 				<input type="hidden" id="form_remarks" name="remarks">
+				<input type="hidden" id="form_e" name="e">
 				<input type="hidden" id="form_pic" name="pic">
 				<input type="hidden" id="form_tel" name="tel">
 				<input type="hidden" id="form_filed" name="filed">
@@ -498,11 +502,13 @@
 			</div> <!-- fieldcontain -->
 
 			<div class="ui-field-contain">
-				<label for="pyrotechnicsOnBoard">Raketti&shy;pelastusvarjo</label>
-				<select name="pyrotechnicsOnBoard" id="pyrotechnicsOnBoard" onChange="onChangePyrotechnicsOnBoard()" data-role="flipswitch" data-mini="true">
-					<option value="off">Off</option>
-					<option value="on">On</option>
-				</select>
+				<fieldset data-role="controlgroup" data-mini="true">
+					<legend>Hätävarusteet</legend>
+					<label for="eltElbaPlb">Hätälähetin (ELT/ELBA/PLB)</label>
+					<input type="checkbox" name="eltElbaPlb" id="eltElbaPlb" onChange="onChangeElt()" data-mini="true">
+					<label for="pyrotechnicsOnBoardCheckbox">Raketti&shy;pelastusvarjo</label>
+					<input type="checkbox" name="pyrotechnicsOnBoardCheckbox" id="pyrotechnicsOnBoardCheckbox" onChange="onChangePyrotechnicsOnBoard()" data-mini="true">
+				</fieldset>
 			</div> <!-- fieldcontain -->
 
 			<div class="ui-field-contain">
@@ -539,7 +545,7 @@
 			</div> <!-- fieldcontain -->
 
 			<h3>Tietoa</h3>
-			<p>Käyttöliittymä päivätty: 2017-02-14<br>
+			<p>Käyttöliittymä päivätty: 2017-04-16<br>
 			<span id="log">Log</span>
 			</p>
 
