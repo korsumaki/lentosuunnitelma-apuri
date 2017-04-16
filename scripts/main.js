@@ -246,7 +246,7 @@ Muutoksia:
  * 
  */
 
-var log="Ohjelmakoodi päivätty: 2017-04-14<br>";
+var log="Ohjelmakoodi päivätty: 2017-04-16<br>";
 var CurrentVfrRepArray;
 var VfrRepArray;
 var OtherVfrRepArray; // Viro
@@ -308,9 +308,10 @@ var PYROTECHNICS_NOTE_REMARKS = "pyrotechnics on board";
 var OPENAVIATIONDATA_APIKEY = "mkXQV7UpiiBgOVjxbTzioYfpOlNVtEtg";
 
 var NAV_WRNG_map_link = "https://ais.fi/ais/bulletins/wrng1map.pdf";
-var AUP_map_link = "http://archive.finavia.fi/aup-static/aup/kartta.html";
-var AUP_link = "https://archive.finavia.fi/aup-static/aup/aup_uup.pdf";
-var AUP_next_link = "https://archive.finavia.fi/aup-static/aup/aup_uup_nxt.pdf";
+var NAV_WRNG_map_next_link = "https://www.ais.fi/ais/bulletins/wrng2map.pdf";
+var AUP_map_link = "https://www.ais.fi/cgi-bin/aup-kartta.cgi";
+var AUP_link = "https://www.ais.fi/aup/aup_uup.pdf";
+var AUP_next_link = "https://www.ais.fi/aup/aup_uup_nxt.pdf";
 
 var gEmptyAirspaceLat = "620000N";
 var gEmptyAirspaceLon = "0200000E";
@@ -368,7 +369,7 @@ function getCountryByICAO(icao) {
 function get_ACC_STR_WITH_PHONE_by_country(country) {
 	switch(country)
 	{
-	case 'EF': return "EFIN +35832865172 "; // TODO
+	case 'EF': return "EFIN +35832865172 ";
 	case 'EE': return "TALLINN ACC +3726258254 ";
 	default:
 		debug_log("ERROR: get_ACC_STR_WITH_PHONE_by_country: country '" + country + "' no yet handled.'");
@@ -381,7 +382,7 @@ function get_ACC_STR_WITH_PHONE_by_country(country) {
 function get_ACC_STR_by_country(country) {
 	switch(country)
 	{
-	case 'EF': return "EFIN"; // TODO
+	case 'EF': return "EFIN";
 	case 'EE': return "TALLINN ACC";
 	default:
 		debug_log("ERROR: get_ACC_STR_by_country: country '" + country + "' no yet handled.'");
@@ -1329,7 +1330,10 @@ function clearAircraftSettingsFields() {
 	document.getElementById("aircraftSpeedUnit").value = "K";
 	document.getElementById("aircraftSpeed").value = "";
 	document.getElementById("aircraftColor").value = "";
-	document.getElementById("pyrotechnicsOnBoard").value = "off";
+
+	$("#pyrotechnicsOnBoardCheckbox").prop("checked",false).checkboxradio("refresh");
+	$("#eltElbaPlb").prop("checked",false).checkboxradio("refresh");
+
 	//try {
 	$('#ssr').selectmenu('refresh');
 	//$('#pyrotechnicsOnBoard').flipswitch('refresh'); // This is moved later, so that previous plane data is not changed...
@@ -1381,7 +1385,7 @@ function onChangeAircraftSettings() {
 	clearAircraftSettingsFields();
 	if (selectedAircraft == "NewAircraft") {
 		addNewAircraftSettings();
-		$('#pyrotechnicsOnBoard').flipswitch('refresh'); // NOTE: This could not be in clearAircraftSettingsFields() as there it would change previous aircrafts pyrotechnicsOnBoard value...
+		// $('#pyrotechnicsOnBoard').flipswitch('refresh'); // NOTE: This could not be in clearAircraftSettingsFields() as there it would change previous aircrafts pyrotechnicsOnBoard value...
 	} else {
 		//debug_log("onChangeAircraftSettings() - selected id: " + selectedAircraft );
 		// update current id
@@ -1408,6 +1412,7 @@ function removeAircraftDataWithPrefix( prefix ) {
 	localStorage.removeItem( prefix + "aircraftSpeed");
 	localStorage.removeItem( prefix + "aircraftColor");
 	localStorage.removeItem( prefix + "pyrotechnicsOnBoard");
+	localStorage.removeItem( prefix + "eltElbaPlb");
 }
 
 function deleteCurrentAircraftSettings() {
@@ -1575,8 +1580,15 @@ function onChangeAircraftColor() {
 
 function onChangePyrotechnicsOnBoard() {
 	var currentId = localStorage.getItem( "currentSettingsId");
-	localStorage.setItem( currentId + "_pyrotechnicsOnBoard", document.getElementById("pyrotechnicsOnBoard").value);
+	localStorage.setItem( currentId + "_pyrotechnicsOnBoard", $('#pyrotechnicsOnBoardCheckbox').is(':checked'));
 }
+
+
+function onChangeElt() {
+	var currentId = localStorage.getItem( "currentSettingsId");
+	localStorage.setItem( currentId + "_eltElbaPlb", $('#eltElbaPlb').is(':checked'));
+}
+
 
 function onChangeZzzzFieldsEnabled() {
 	localStorage.setItem( "zzzzFieldsEnabled", document.getElementById("zzzzFieldsEnabled").value);
@@ -1716,15 +1728,36 @@ function updateFromLocalStorage() {
 		document.getElementById("aircraftColor").value = color;
 	}
 
-	var pyrotechnicsOnBoard = localStorage.getItem(currentId + "_pyrotechnicsOnBoard");
-	if (pyrotechnicsOnBoard === null) {
-		pyrotechnicsOnBoard = "off";
+	var pyrotechnicsOnBoardStr = localStorage.getItem(currentId + "_pyrotechnicsOnBoard");
+	var pyrotechnicsOnBoard = false;
+	if (pyrotechnicsOnBoardStr !== null) {
+		if (pyrotechnicsOnBoardStr == "true") {
+			pyrotechnicsOnBoard = true;
+		}
+		// Handle old values (flipswitch, before checkbox)
+		else if (pyrotechnicsOnBoardStr == "on") {
+			pyrotechnicsOnBoard = true;
+		}
+		else if (pyrotechnicsOnBoardStr == "off") {
+			pyrotechnicsOnBoard = false;
+		}
 	}
-	
-	document.getElementById("pyrotechnicsOnBoard").value = pyrotechnicsOnBoard;
 	try {
-		$('#pyrotechnicsOnBoard').flipswitch('refresh');
+		$("#pyrotechnicsOnBoardCheckbox").prop("checked",pyrotechnicsOnBoard).checkboxradio("refresh");
 	} catch(err) { } // ignore error (it happens in first onload)
+
+
+	var elt_str = localStorage.getItem(currentId + "_eltElbaPlb");
+	var elt = false;
+	if (elt_str !== null) {
+		if (elt_str == "true") {
+			elt = true;
+		}
+	}
+	try {
+		$("#eltElbaPlb").prop("checked",elt).checkboxradio("refresh");
+	} catch(err) { } // ignore error (it happens in first onload)
+
 
 	var zzzzEnabled = localStorage.getItem("zzzzFieldsEnabled");
 	if (zzzzEnabled !== null) {
@@ -3450,10 +3483,41 @@ function updateFlyingTimeValues() {
 	}
 }
 
+// Clear form so that optional selections does not remain selected
+function clearFplForm()
+{
+	$("#form_id").val("");
+	$("#form_rules").val("");
+	$("#form_type").val("");
+	$("#form_aircraft").val("");
+	$("#form_cat").val("");
+	$("#form_equipment").val("");
+	$("#form_ssr").val("");
+	$("#form_ad").val("");
+	$("#form_time").val("");
+	$("#form_spd").val("");
+	$("#form_speed").val("");
+	$("#form_lv").val("");
+	$("#form_level").val("");
+	$("#form_route").val("");
+	$("#form_dad").val("");
+	$("#form_eet").val("");
+	$("#form_other").val("");
+	$("#form_endurance").val("");
+	$("#form_person").val("");
+	$("#form_markings").val("");
+	$("#form_remarks").val("");
+	$("#form_e").val("");
+	$("#form_pic").val("");
+	$("#form_tel").val("");
+	$("#form_filed").val("");
+}
+
 
 function updateFlightPlanForm() {
 	// Get current time and add time offset
-	
+	clearFplForm();
+
 	var departureTimeHourSelection = document.getElementsByName("departureTimeHour");
 	var departureTimeHour=0;
 	for(var i = 0; i < departureTimeHourSelection.length; i++) {
@@ -3613,7 +3677,7 @@ function updateFlightPlanForm() {
 
 	other += "RMK/";
 	if (document.getElementById("planActivationMethod").value == "phoneOnGound") {
-		//other += "DEP " + BY_PHONE_STR + get_ACC_STR_by_country(getCountryByICAO(dep_icao) ) + " "; // TODO
+		//other += "DEP " + BY_PHONE_STR + get_ACC_STR_by_country(getCountryByICAO(dep_icao) ) + " ";
 	}
 	else if (document.getElementById("planActivationMethod").value == "rtfOnAir") {
 		var dep=document.getElementById("departure");
@@ -3637,7 +3701,7 @@ function updateFlightPlanForm() {
 	}
 
 	if (document.getElementById("planCompletionMethod").value == "phoneOnGound") {
-		//other += "ARR " + BY_PHONE_STR + get_ACC_STR_by_country(getCountryByICAO(dest_icao)) + " "; // TODO
+		//other += "ARR " + BY_PHONE_STR + get_ACC_STR_by_country(getCountryByICAO(dest_icao)) + " ";
 	}
 	else if (document.getElementById("planCompletionMethod").value == "rtfOnAir") {
 		var dest=document.getElementById("destination");
@@ -3702,14 +3766,18 @@ function updateFlightPlanForm() {
 	}
 	$("#form_person").val(persons);
 
-	
+
 	$("#form_markings").val(convertScandinavianLetters(document.getElementById("aircraftColor").value));
-	
-	if (document.getElementById("pyrotechnicsOnBoard").value == "on")
+
+	if ($('#pyrotechnicsOnBoardCheckbox').is(':checked'))
 	{
 		$("#form_remarks").val(PYROTECHNICS_NOTE_REMARKS);
 	}
-	
+
+	if ($('#eltElbaPlb').is(':checked'))
+	{
+		$("#form_e").val("E");
+	}
 
 	$("#form_pic").val(convertScandinavianLetters(document.getElementById("pilot").value));
 	$("#form_tel").val(pilotTel);
@@ -3793,7 +3861,7 @@ function getPlanForStoring() {
 	var dest_icao = getAerodromeByIndex( document.getElementById("destination").value ).icao;
 	
 	if (document.getElementById("planActivationMethod").value == "phoneOnGound") {
-		plan.activation_method = BY_PHONE_STR + get_ACC_STR_WITH_PHONE_by_country(getCountryByICAO(dep_icao)); // TODO
+		plan.activation_method = BY_PHONE_STR + get_ACC_STR_WITH_PHONE_by_country(getCountryByICAO(dep_icao));
 	}
 	else if (document.getElementById("planActivationMethod").value == "rtfOnAir") {
 		var dep=document.getElementById("departure");
@@ -3805,7 +3873,7 @@ function getPlanForStoring() {
 	}
 
 	if (document.getElementById("planCompletionMethod").value == "phoneOnGound") {
-		plan.completion_method = BY_PHONE_STR + get_ACC_STR_WITH_PHONE_by_country(getCountryByICAO(dest_icao)); // TODO
+		plan.completion_method = BY_PHONE_STR + get_ACC_STR_WITH_PHONE_by_country(getCountryByICAO(dest_icao));
 	}
 	else if (document.getElementById("planCompletionMethod").value == "rtfOnAir") {
 		var dest=document.getElementById("destination");
@@ -3891,6 +3959,10 @@ function storeCurrentPlan() {
 
 function onClickNAV_WRNG_map() {
 	window.open( NAV_WRNG_map_link );
+}
+
+function onClickNAV_WRNG_next_map() {
+	window.open( NAV_WRNG_map_next_link );
 }
 
 function onClickAup_map() {
